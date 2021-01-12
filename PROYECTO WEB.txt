@@ -1,0 +1,22 @@
+-----------------------------------------------------PRUEBA 1-------------------------------------
+UBICACIÒN DE ARCHIVOS: 	c:\documentos\SPRING PRACTICA  & SQL PRACTICA
+Pasos:
+
+1. Creacion base de datos "enaco_prueba1"
+2. Creacion proyecto Spring "prueba 1"
+	Dependencias Spring Initializr JAVA VERSION 8:
+		-Spring Boot DevTools
+		-Lombok
+		-Spring Web
+		-Thymeleaf
+		-Spring Security
+		-Spring Data JPA 
+		-MySQL Driver
+3.Creaciòn carpetas principales
+	-Controller
+	-Models
+	-Repository
+	-Security:	Continuar programacion para login
+	-Service
+
+		
