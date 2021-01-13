@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +17,9 @@ public class Rol {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_rol;
 
+    @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToOne (mappedBy = "id_rol")
-    private Usuario usuario;
+    @OneToMany (mappedBy = "id_rol")
+    private List<Usuario> usuarios;
 }

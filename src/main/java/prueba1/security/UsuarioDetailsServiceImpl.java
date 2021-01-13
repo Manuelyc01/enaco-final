@@ -6,24 +6,26 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 import prueba1.models.Usuario;
 import prueba1.repository.UsuarioRepository;
 
-public class UsuarioDetailsService implements UserDetailsService {
+@Service
+public class UsuarioDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private final UsuarioRepository usuarioRepository;
 
-    public UsuarioDetailsService(UsuarioRepository usuarioRepository) {
+    public UsuarioDetailsServiceImpl(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String usuario) throws UsernameNotFoundException {
-        Usuario user= usuarioRepository.findByUsuario(usuario);
+    public UserDetails loadUserByUsername(String usua) throws UsernameNotFoundException {
+        Usuario user= usuarioRepository.findByUsua(usua);
         User.UserBuilder builder=null;
 
         if(user != null){
-            builder = User.withUsername(usuario);
+            builder = User.withUsername(usua);
             builder.disabled(false);
             builder.password(user.getPassw());
             builder.authorities(new SimpleGrantedAuthority("ROLE_USER"));

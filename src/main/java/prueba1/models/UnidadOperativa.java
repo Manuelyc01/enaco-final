@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,24 +15,24 @@ import javax.persistence.*;
 public class UnidadOperativa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_UniOpe")
+    @Column(name = "id_Uniope")
     private Integer id_UniOpe;
 
-    @Column(name = "cod_uniOpe")
+    @Column(name = "cod_uniope")
     private String cod_uniOpe;
 
-    @Column(name = "nom_UniOpe")
+    @Column(name = "nom_uniope")
     private String nom_uniOpe;
 
     @Column(name = "direccion")
-    private String direcion;
+    private String direccion;
 
-    @Column(name = "ubigeoUniOpe")
+    @Column(name = "ubigeouniope")
     private String ubigeoUniOpe;
 
     @Column(name = "localidad")
     private String localidad;
 
-    @OneToOne(mappedBy = "id_UniOpe")
-    private Usuario usuario;
+    @OneToMany(mappedBy = "id_UniOpe")
+    private List<Usuario> usuario;
 }

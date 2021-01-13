@@ -7,5 +7,5 @@ import prueba1.models.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer>{
 
-    public Usuario findByUsuario(String usuario);
+    public Usuario findByUsua(String usua);
 }

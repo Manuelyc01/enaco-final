@@ -8,7 +8,7 @@ create table usuario(
     correo varchar(200),
     id_rol int,
     id_UniOpe int,
-    usuario varchar(200),
+    usua varchar(200),
     passw varchar(200),
     id_estado int,
     /*FK*/

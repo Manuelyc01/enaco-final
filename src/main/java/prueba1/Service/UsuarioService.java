@@ -3,5 +3,7 @@ package prueba1.Service;
 import prueba1.models.Usuario;
 
 public interface UsuarioService {
-    public Usuario findByUsuario(String usuario);
+    public Usuario findByUsua(String usua);
+
+    public Usuario registrar(Usuario usuario);
 }

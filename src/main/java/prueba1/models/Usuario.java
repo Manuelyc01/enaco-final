@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -28,22 +29,21 @@ public class Usuario {
     @Column(name = "correo")
     private String correo;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
     private Rol id_rol;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_UniOpe",referencedColumnName = "id_UniOpe")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_Uniope", referencedColumnName = "id_Uniope")
     private UnidadOperativa id_UniOpe;
-
-    @Column(name = "usuario")
-    private String usuario;
 
     @Column(name = "passw")
     private String  passw;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_estado",referencedColumnName = "id_estado")
     private Estado id_estado;
 
+    @Column(name = "usua")
+    private String usua;
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +21,6 @@ public class Estado {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToOne(mappedBy = "id_estado")
-    private Usuario usuario;
+    @OneToMany(mappedBy = "id_estado")
+    private List<Usuario> usuario;
 }
