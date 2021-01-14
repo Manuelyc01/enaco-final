@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="views/head :: head">
+    <title>Title</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">  <h1>BIENVENIDO</h1></div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <div>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-primary mt-3">Cerrar sesión</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="col-md-4"><h4 th:if="${session.usuario!=null}" >Usuario: <span th:text="${session.usuario.nombre}" ></span></h4></div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4"></h3></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <a class="btn btn-primary btn-lg"
+                   th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                   th:href="@{auth/registrar}">Crear Usuario</a>
+                <a  class="btn btn-secondary btn-lg">Lista Usuarios</a>
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+</body>
+</html>

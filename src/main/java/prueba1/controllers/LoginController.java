@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import prueba1.Service.UsuarioService;
 import prueba1.models.Usuario;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class LoginController {
 
@@ -19,25 +21,14 @@ public class LoginController {
     }
 
     @GetMapping("/auth/login")
-    public String login(Model model){
-        model.addAttribute("usuario",new Usuario());
-        return "login";
+    public String login(Model model, HttpSession session){
+
+        if(session.getAttribute("usuario")!=null){
+            return "redirect:/private/index";
+        }else{
+            model.addAttribute("usuario",new Usuario());
+            return "login";
+        }
     }
 
-    @GetMapping("/auth/registrar")
-    public String registroForm(Model model){
-        model.addAttribute("user", new Usuario());
-        return "registro";
-    }
-    @GetMapping("/auth/auth/registrar")
-    public String registrForm(Model model){
-        model.addAttribute("user", new Usuario());
-        return "registro";
-    }
-
-    @PostMapping("/auth/registro")
-    public String registro(Usuario usuario){
-        usuarioService.registrar(usuario);
-        return "redirect:/auth/login";
-    }
 }
