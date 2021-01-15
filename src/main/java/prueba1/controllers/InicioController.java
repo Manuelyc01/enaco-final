@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import prueba1.Service.UsuarioService;
 import prueba1.models.Usuario;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -23,8 +24,14 @@ public class InicioController {
 
 
     @GetMapping("/")
-    public String login(Model model){
-      return "login";
+    public String login(Model model, HttpSession session){
+
+        if(session.getAttribute("usuario")!=null){
+            return "redirect:/private/index";
+        }else{
+            model.addAttribute("usuario",new Usuario());
+            return "login";
+        }
     }
 
 

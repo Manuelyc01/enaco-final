@@ -29,10 +29,11 @@ public class Usuario {
     @Column(name = "correo")
     private String correo;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    //TYPE MERGE usa la misma referencia y persiste la referencia
+    @OneToOne
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
     private Rol id_rol;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "id_Uniope", referencedColumnName = "id_Uniope")
     private UnidadOperativa id_UniOpe;
 
@@ -40,7 +41,7 @@ public class Usuario {
     private String  passw;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "id_estado",referencedColumnName = "id_estado")
     private Estado id_estado;
 

@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import prueba1.models.Estado;
+import prueba1.models.Rol;
 import prueba1.models.Usuario;
 import prueba1.repository.UsuarioRepository;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Service
@@ -31,5 +33,33 @@ public class UsuarioServiceImpl implements UsuarioService{
         usuario.setPassw(bCryptPasswordEncoder.encode(usuario.getPassw()));
         return usuarioRepository.save(usuario);
     }
+    @Override
+    public List<Usuario> listar(){
+        List<Usuario> list = usuarioRepository.findAll();
+        return list;
+    }
+    @Override
+    public void eliminar(Integer id_usuario){
+        usuarioRepository.deleteById(id_usuario);
+    }
+    @Override
+    public Usuario findById(Integer id){
+        return  usuarioRepository.getOne(id);
+    }
+    @Override
+    public void update(Integer id, Usuario usuario){
+        Usuario u1 = usuarioRepository.getOne(id);
 
+        u1.setNombre(usuario.getNombre());
+        u1.setTelefono(usuario.getTelefono());
+        u1.setCorreo(usuario.getCorreo());
+        u1.setId_rol(usuario.getId_rol());
+        u1.setId_UniOpe(usuario.getId_UniOpe());
+        u1.setUsua(usuario.getUsua());
+        u1.setPassw(bCryptPasswordEncoder.encode(usuario.getPassw()));
+        u1.setId_estado(usuario.getId_estado());
+
+        usuarioRepository.save(u1);
+
+    }
 }

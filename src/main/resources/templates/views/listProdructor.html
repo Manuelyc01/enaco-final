@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="views/head :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <table class="table table-bordered" th:fragment="tablaProductor" id="tablaProductor">
+        <thead class="thead-dark" style="background-color: #cde49f">
+        <tr>
+            <th scope="col">Cedula</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">DNI</th>
+            <th scope="col">Nombre del predio</th>
+            <th scope="col">Ubicación</th>
+            <th scope="col">Unidad Operativa</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th>728654153</th>
+            <td>Juan Quisqpe</td>
+            <td>21864598</td>
+            <td>PREDIO</td>
+            <td>CUSCO</td>
+            <td>654321</td>
+            <td>
+                <a class="btn btn-info" >Editar</a>
+                <a class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

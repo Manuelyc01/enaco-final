@@ -33,8 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.
                 authorizeRequests()
-                .antMatchers("/templates/css/**").permitAll()
-                .antMatchers("/auth/**","/public/**").permitAll().anyRequest().authenticated()
+                .antMatchers("/","/public/**","/css/**","/js/**").permitAll().anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/auth/login").defaultSuccessUrl("/private/index",true)
                     .failureUrl("/auth/login?error=true").usernameParameter("usua").passwordParameter("passw")

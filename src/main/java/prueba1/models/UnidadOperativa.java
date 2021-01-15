@@ -33,6 +33,4 @@ public class UnidadOperativa {
     @Column(name = "localidad")
     private String localidad;
 
-    @OneToMany(mappedBy = "id_UniOpe")
-    private List<Usuario> usuario;
 }
