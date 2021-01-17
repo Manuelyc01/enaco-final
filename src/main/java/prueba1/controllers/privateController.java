@@ -74,6 +74,7 @@ public class privateController {
         model.addAttribute("list","yes");
         model.addAttribute("usuarios",usuarios);
 
+
         return "menu";
     }
     //LISTAR PRODUCTOR

@@ -33,7 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.
                 authorizeRequests()
-                .antMatchers("/","/public/**","/css/**","/js/**").permitAll().anyRequest().authenticated()
+                .antMatchers("/","/resources/**","/css/**","/js/**").permitAll()
+                .antMatchers("/static/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/auth/login").defaultSuccessUrl("/private/index",true)
                     .failureUrl("/auth/login?error=true").usernameParameter("usua").passwordParameter("passw")
