@@ -6,7 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/menuStyles.css}">
 
     <title>MENU</title>
         <!--MODEL LISTS-->
@@ -21,7 +26,106 @@
     </script>
     <!--MODEL LISTS END-->
 </head>
-<body>
+<body class="home">
+<div class="container-fluid display-table">
+    <div class="row display-table-row">
+        <div class="col-md-2 col-sm-1 hidden-xs display-table-cell v-align box" id="navigation">
+            <div class="logo">
+                <h1 style="color: white">
+                    ENACO
+                </h1>
+            </div>
+            <div class="navi">
+                <ul>
+                    <li class="active"><a th:href="@{/private/index}"><i class="fa fa-home" aria-hidden="true"></i><span class="hidden-xs hidden-sm">INICIO</span></a></li>
+                    <li>
+                        <a th:href="@{/auth/listaUsuarios}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Usuarios</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/auth/listProductor}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Productores</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/auth/listCostoHC}">
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Costo Hoja de Coca</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-10 col-sm-11 display-table-cell v-align">
+            <!--<button type="button" class="slide-toggle">Slide Toggle</button> -->
+            <div class="row">
+                <header>
+                    <div class="col-md-7">
+                        <nav class="navbar-default pull-left">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="offcanvas" data-target="#side-menu" aria-expanded="false">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                            </div>
+                        </nav>
+                        <div class="search hidden-xs hidden-sm" th:if="${list!=null}" >
+                            <input type="search" class="form-control rounded" id="formUsuario" placeholder="Buscar usuario" aria-label="Search"
+                                   aria-describedby="search-addon" />
+                        </div>
+                        <div class="search hidden-xs hidden-sm" th:if="${listP!=null}" >
+                            <input type="search" class="form-control rounded" id="formProductor" placeholder="Buscar Productor" aria-label="Search"
+                                   aria-describedby="search-addon" />
+                        </div>
+                        <div class="search hidden-xs hidden-sm" th:if="${listC!=null}" >
+                            <input type="search" class="form-control rounded" id="formCosto" aria-label="Search" placeholder="Buscar Hoja de Coca"
+                                   aria-describedby="search-addon" />
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="header-rightside">
+                            <ul class="list-inline header-top pull-right">
+                                <li class="hidden-xs">
+                                    <a class="add-project" style="background-color: #7bb44d;color: black;"
+                                       th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                                       th:href="@{/auth/registrar}">Crear Usuario</a>
+                                </li>
+                                <li>
+                                    <form th:action="@{/logout}" method="post">
+                                        <button type="submit" class="add-project" data-toggle="modal"  style="background-color: #7bb44d">Cerrar sesión</button>
+                                    </form>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </header>
+            </div>
+            <div class="user-dashboard" th:if="${session.usuario!=null}">
+                <h1>Bienvenido, <span th:text="${session.usuario.nombre}" ></span></h1>
+                    <!--LISTAS-->
+                <div class="row" th:if="${list!=null}">
+                    <table th:replace="views/listUsuario :: tablaUsuarios"></table>
+                </div>
+                <div class="row" th:if="${listP!=null}">
+                    <table th:replace="views/listProdructor :: tablaProductor"></table>
+                </div>
+                <div class="row" th:if="${listC!=null}">
+                    <table th:replace="views/listCostoHC :: tablaCostoHC"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script th:src="@{/js/lists.js}"></script>
+</body>
+<!--<body>
     <div class="container">
         <div class="row">
             <div class="col-md-4">  <h1>BIENVENIDO</h1></div>
@@ -82,7 +186,7 @@
         </div>
     </div>
 
-    <!--JS LISTS-->
+    &lt;!&ndash;JS LISTS&ndash;&gt;
     <script th:src="@{/js/lists.js}"></script>
-</body>
+</body>-->
 </html>

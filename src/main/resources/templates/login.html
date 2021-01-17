@@ -1,28 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="views/head :: head">
+<head>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js" integrity="sha256-MCmDSoIMecFUw3f1LicZ/D/yonYAoHrgiep/3pCH9rw="
+            crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+
+    <link type="text/css" rel="stylesheet" th:href="@{/css/loginStyles.css}">
     <title>Login</title>
 </head>
-<body class="text-center">
-
-<div class="modal-dialog text-center">
-    <div class="col-sm-8 main-section">
-        <div class="modal-content">
-            <div th:if="${param.error}" class="alert alert-danger mb-3"> Datos incorrectos</div>
-            <div class="col-12">Login</div>
-            <form id="loginform" th:action="@{/auth/login-post}" method="post">
-                <div class="form-group">
-                    <input class="form-control" type="text"  name="usua" placeholder="username" >
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" name="passw" placeholder="password" >
-                </div>
-                <button class="btn btn-primary" type="submit" style="background-color: #7bb44d" >Login</button>
-            </form>
+<body>
+        <div class="sidenav">
+            <div class="login-main-text">
+                <h2>Compras ENACO<br> Página de inicio</h2>
+                <p>Inicie sesión desde aquí para acceder.</p>
+            </div>
         </div>
-    </div>
-</div>
-
-
+        <div class="main">
+            <div class="col-md-6 col-sm-12">
+                <div class="login-form">
+                    <span th:if="${param.error}" style="color: red"> Datos incorrectos</span>
+                    <form id="loginform" th:action="@{/auth/login-post}" method="post">
+                        <div class="form-group">
+                            <label>Usuario</label>
+                            <input type="text" class="form-control" placeholder="Usuario" name="usua">
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input type="password" class="form-control" placeholder="Contraseña" name="passw">
+                        </div>
+                        <button type="submit" class="btn" style="background-color: #7bb44d">Ingresar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 </body>
 </html>
