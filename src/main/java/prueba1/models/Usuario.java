@@ -29,7 +29,6 @@ public class Usuario {
     @Column(name = "correo")
     private String correo;
 
-    //TYPE MERGE usa la misma referencia y persiste la referencia
     @OneToOne
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
     private Rol id_rol;
@@ -47,4 +46,7 @@ public class Usuario {
 
     @Column(name = "usua")
     private String usua;
+
+    @Column(name = "serie_compra")
+    private String serie_compra;
 }

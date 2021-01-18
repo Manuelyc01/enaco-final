@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             <td>${usuario.telefono}</td>
                             <td>${usuario.correo}</td>
                             <td>${usuario.id_rol.descripcion}</td>
-                            <td></td>
+                            <td>${usuario.id_UniOpe.nom_uniOpe}</td>
                             <td>${usuario.usua}</td>
                             <td>${usuario.id_estado.descripcion}</td>
                             <td>

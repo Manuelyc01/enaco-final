@@ -49,15 +49,18 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     public void update(Integer id, Usuario usuario){
         Usuario u1 = usuarioRepository.getOne(id);
-
+        String s= "";
         u1.setNombre(usuario.getNombre());
         u1.setTelefono(usuario.getTelefono());
         u1.setCorreo(usuario.getCorreo());
         u1.setId_rol(usuario.getId_rol());
         u1.setId_UniOpe(usuario.getId_UniOpe());
         u1.setUsua(usuario.getUsua());
-        u1.setPassw(bCryptPasswordEncoder.encode(usuario.getPassw()));
+        if (usuario.getPassw()!= s){
+            u1.setPassw(bCryptPasswordEncoder.encode(usuario.getPassw()));
+        }
         u1.setId_estado(usuario.getId_estado());
+        u1.setSerie_compra(usuario.getSerie_compra());
 
         usuarioRepository.save(u1);
 

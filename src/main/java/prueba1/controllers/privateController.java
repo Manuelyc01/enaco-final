@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import prueba1.Service.EstadoService;
+import prueba1.Service.UnidadOpeService;
 import prueba1.Service.UsuarioService;
+import prueba1.models.UnidadOperativa;
 import prueba1.models.Usuario;
 
 import javax.servlet.http.HttpSession;
@@ -22,9 +24,13 @@ public class privateController {
     @Autowired
     private final UsuarioService usuarioService;
     @Autowired
+    private final UnidadOpeService unidadOpeService;
+
+    @Autowired
     private final EstadoService estadoService;
-    public privateController(UsuarioService usuarioService, EstadoService estadoService) {
+    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, EstadoService estadoService) {
         this.usuarioService = usuarioService;
+        this.unidadOpeService = unidadOpeService;
         this.estadoService = estadoService;
     }
 
@@ -43,10 +49,14 @@ public class privateController {
     public String registroForm(Model model, Authentication auth ){
         String username=auth.getName();
         Usuario usuario = usuarioService.findByUsua(username);
+        List<UnidadOperativa> listar = unidadOpeService.listar();
+
         //Only admin "1" can register new users
         if(usuario.getId_rol().getId_rol()==1){
             model.addAttribute("user", new Usuario());
-            return "registro";
+            model.addAttribute("unidadesOpe", listar);
+            model.addAttribute("r", 1);
+            return "menu";
         }else{
             return "redirect:/private/index";
         }
@@ -57,8 +67,9 @@ public class privateController {
         if(usuarioService.findByUsua(user)!=null){
             //SI EL USUARIO EXISTE
             model.addAttribute("user",usuario);
-            model.addAttribute("userExist", 1);
-            return "registro";
+            model.addAttribute("userExist", "usuario existe");
+            model.addAttribute("r", 1);
+            return "menu";
         }else {
             usuarioService.registrar(usuario);
             return "redirect:/private/index";
@@ -100,8 +111,13 @@ public class privateController {
     @GetMapping("/auth/editUsuario/{id}")
     public String editarUsuario(@PathVariable Integer id,Model model){
         Usuario u = usuarioService.findById(id);
+
+        List<UnidadOperativa> listar = unidadOpeService.listar();
         model.addAttribute("user",u);
-        return "editar";
+        model.addAttribute("e", 1);
+
+        model.addAttribute("unidadesOpe", listar);
+        return "menu";
     }
     @PostMapping("/auth/update/{id}")
     public String actualizarUsuario(@PathVariable Integer id,Usuario usuario){

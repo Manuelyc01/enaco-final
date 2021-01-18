@@ -118,6 +118,12 @@
                 <div class="row" th:if="${listC!=null}">
                     <table th:replace="views/listCostoHC :: tablaCostoHC"></table>
                 </div>
+                <div class="row" th:if="${r!=null}">
+                    <div th:replace="registro :: registro"></div>
+                </div>
+                <div class="row" th:if="${e!=null}">
+                    <div th:replace="registro :: registro"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -125,68 +131,4 @@
 </div>
 <script th:src="@{/js/lists.js}"></script>
 </body>
-<!--<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">  <h1>BIENVENIDO</h1></div>
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4">
-                <div>
-                    <form th:action="@{/logout}" method="post">
-                        <button  type="submit" class="btn btn-primary mt-3" style="background-color: #7bb44d">Cerrar sesión</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="row" >
-            <div class="col-md-4"><h4 th:if="${session.usuario!=null}" >Usuario: <span th:text="${session.usuario.nombre}" ></span></h4></div>
-            <div class="col-md-4"></div>
-            <div class="col-md-4"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-10">
-                <a class="btn btn-primary btn-lg" style="background-color: #7bb44d;color: black;"
-                   th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                   th:href="@{/auth/registrar}">Crear Usuario</a>
-
-                <a  class="btn btn-secondary btn-lg" style="background-color: #7bb44d; color: black;"
-                    th:href="@{/auth/listaUsuarios}">Lista Usuarios</a>
-
-                <a class="btn btn-secondary btn-lg" style="background-color: #7bb44d;color: black;"
-                   th:href="@{/auth/listProductor}">Productores</a>
-
-                <a  class="btn btn-secondary btn-lg" style="background-color: #7bb44d; color: black;"
-                    th:href="@{/auth/listCostoHC}">Costo Hoja de Coca</a>
-            </div>
-            <div class="col-md-2">
-                <div class="input-group" th:if="${list!=null}" >
-                    <input type="search" class="form-control rounded" id="formUsuario" placeholder="Buscar usuario" aria-label="Search"
-                           aria-describedby="search-addon" />
-                </div>
-                <div class="input-group" th:if="${listP!=null}" >
-                    <input type="search" class="form-control rounded" id="formProductor" placeholder="Buscar Productor" aria-label="Search"
-                       aria-describedby="search-addon" />
-                </div>
-                <div class="input-group" th:if="${listC!=null}" >
-                    <input type="search" class="form-control rounded" id="formCosto" aria-label="Search" placeholder="Buscar Hoja de Coca"
-                           aria-describedby="search-addon" />
-                </div>
-            </div>
-        </div>
-
-        <div class="row" th:if="${list!=null}">
-            <table th:replace="views/listUsuario :: tablaUsuarios"></table>
-        </div>
-        <div class="row" th:if="${listP!=null}">
-            <table th:replace="views/listProdructor :: tablaProductor"></table>
-        </div>
-        <div class="row" th:if="${listC!=null}">
-            <table th:replace="views/listCostoHC :: tablaCostoHC"></table>
-        </div>
-    </div>
-
-    &lt;!&ndash;JS LISTS&ndash;&gt;
-    <script th:src="@{/js/lists.js}"></script>
-</body>-->
 </html>

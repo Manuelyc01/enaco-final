@@ -22,6 +22,7 @@
                 <th scope="col">Unidad Operativa</th>
                 <th scope="col">Usuario</th>
                 <th scope="col">Estado</th>
+                <th scope="col">Serie Compra</th>
             </tr>
             </thead>
             <tbody id="listUsuarios">
@@ -30,9 +31,10 @@
                     <td th:text="*{usuario.telefono}"></td>
                     <td th:text="*{usuario.correo}"></td>
                     <td th:text="*{usuario.id_rol.descripcion}"></td>
-                    <td th:text="*{usuario.id_UniOpe}"></td>
+                    <td th:text="*{usuario.id_UniOpe.nom_uniOpe}"></td>
                     <td th:text="*{usuario.usua}"></td>
                     <td th:text="*{usuario.id_estado.descripcion}"></td>
+                    <td th:text="*{usuario.serie_compra}"></td>
                     <td>
                         <a class="btn btn-info" th:href="@{/auth/editUsuario/{id}(id=${usuario.id_usuario})}">Editar</a>
                         <a class="btn btn-danger" th:href="@{/auth/eliminarUsuario/{id}(id=${usuario.id_usuario})}">Eliminar</a>
