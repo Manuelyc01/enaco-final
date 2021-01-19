@@ -1,11 +1,15 @@
 //ID INPUTS
 document.addEventListener("DOMContentLoaded", function(event) {
+    //INPUT BUSQUEDA
     const formUsuario = document.querySelector('#formUsuario');
-    const formProductor = document.querySelector('#formProductor');
-    const formCosto = document.querySelector('#formCosto');
 
+    //RESULTADOS
     const resultado =document.querySelector('#listUsuarios')
-    var listUsuarios = listUsu;
+
+
+    const listUsuarios = listUsu;
+
+    //FILTRAR USUARIOS
     const filtrar = () =>{
         resultado.innerHTML='';
         const texto = formUsuario.value.toLowerCase();

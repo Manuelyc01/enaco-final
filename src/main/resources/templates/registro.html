@@ -43,14 +43,14 @@
                             <label > Unidad Operativa: </label>
                             <div class="row">
                                 <div class="col-md-4">
-                                <select class="form-control" th:field="*{id_UniOpe}">
+                                <select class="form-control" th:field="*{id_UniOpe}" id="selectUnidadOpe">
                                     <option th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.id_UniOpe}">
                                         <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
                                     </option>
                                 </select>
                             </div>
                                 <div class="col-md-3">
-                                    <input type="search" class="form-control rounded" id="formUsuario" placeholder="Buscar unidad" aria-label="Search"
+                                    <input type="search" class="form-control rounded" id="formUnidadOpe" placeholder="Buscar unidad" aria-label="Search"
                                            aria-describedby="search-addon" />
                                 </div>
                             </div>
@@ -103,14 +103,14 @@
                         <div class="form-group">
                             <label > Unidad Operativa: </label>
                             <div class="row"><div class="col-md-4">
-                                <select class="form-control" th:field="*{id_UniOpe}">
+                                <select class="form-control" th:field="*{id_UniOpe}"  id="selectUnidadOpe">
                                     <option th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.id_UniOpe}">
                                         <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
                                     </option>
                                 </select>
                             </div>
                                 <div class="col-md-3">
-                                    <input type="search" class="form-control rounded" id="formUsuario" placeholder="Buscar unidad" aria-label="Search"
+                                    <input type="search" class="form-control rounded"id="formUnidadOpe" placeholder="Buscar unidad" aria-label="Search"
                                            aria-describedby="search-addon" />
                                 </div>
                             </div>

@@ -16,7 +16,14 @@
     <title>MENU</title>
         <!--MODEL LISTS-->
     <script th:if="${list!=null}" th:inline="javascript" >
-        var listUsu = /*[[${usuarios}]]*/ "listaUsuarios";
+        const listUsu = /*[[${usuarios}]]*/ "listaUsuarios";
+    </script>
+    <script th:if="${r!=null}" th:inline="javascript" >
+        const listUnidadOpe = /*[[${unidadesOpe}]]*/ "unidadesOpe";
+    </script>
+
+    <script th:if="${e!=null}" th:inline="javascript" >
+        const listUnidadOpe = /*[[${unidadesOpe}]]*/ "unidadesOpe";
     </script>
     <script th:if="${listP!=null}" th:inline="javascript" >
         console.log("Lista Productores")
@@ -129,6 +136,8 @@
     </div>
 
 </div>
-<script th:src="@{/js/lists.js}"></script>
+<script th:if="${list!=null}"th:src="@{/js/listsUsuarios.js}"></script>
+<script th:if="${r!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+<script th:if="${e!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
 </body>
 </html>

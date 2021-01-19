@@ -55,7 +55,7 @@ public class privateController {
         if(usuario.getId_rol().getId_rol()==1){
             model.addAttribute("user", new Usuario());
             model.addAttribute("unidadesOpe", listar);
-            model.addAttribute("r", 1);
+            model.addAttribute("r", "yes");
             return "menu";
         }else{
             return "redirect:/private/index";
