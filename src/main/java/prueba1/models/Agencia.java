@@ -5,20 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
-@Table(name = "unidadoperativa")
-public class UnidadOperativa {
-    @Id
-    @Column(name = "cod_uniope")
-    private String cod_uniOpe;
+@Table(name = "agencia")
+public class Agencia {
 
-    @Column(name = "nom_uniope")
-    private String nom_uniOpe;
+    @Id
+    @Column(name = "cod_agencia")
+    private String cod_agencia;
+
+    @Column(name = "nombre")
+    private String nombre;
 
     @Column(name = "direccion")
     private String direccion;
@@ -26,11 +26,11 @@ public class UnidadOperativa {
     @Column(name = "ubigeo")
     private String ubigeo;
 
-    @OneToOne
-    @JoinColumn(name = "cod_agencia",referencedColumnName = "cod_agencia")
-    private Agencia cod_agencia;
-
     @Column(name = "unimedcompra")
     private String uniMedCompra;
+
+    @OneToOne
+    @JoinColumn(name = "cod_sucursal",referencedColumnName = "cod_sucursal")
+    private Sucursal cod_sucursal;
 
 }

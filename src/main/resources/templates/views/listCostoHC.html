@@ -10,7 +10,7 @@
         <thead class="thead-dark" style="background-color: #cde49f">
         <tr>
             <th scope="col">Unidad Operativa</th>
-            <th scope="col">Código de Tipo Hoja</th>
+            <th scope="col">Tipo de Hoja</th>
             <th scope="col">Fecha de Vigencia</th>
             <th scope="col">Precio sin IGV</th>
             <th scope="col">IGV</th>
@@ -18,17 +18,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <th>321654</th>
-            <td>UC1</td>
-            <td>15/04/2022</td>
-            <td>S/50</td>
-            <td>S/16</td>
-            <td>S/66</td>
-            <td>
-                <a class="btn btn-info" >Editar</a>
-                <a class="btn btn-danger">Eliminar</a>
-            </td>
+        <tr th:each="costoHc:${listC}">
+            <th scope="row" th:text="*{costoHc.cod_uniOpe.nom_uniOpe}"></th>
+            <td th:text="*{costoHc.cod_tipoHoja.nombre}"></td>
+            <td></td>
+            <td th:text="*{costoHc.precioSinIgv}"></td>
+            <td th:text="*{costoHc.igv}"></td>
+            <td th:text="*{costoHc.precioConIgv}"></td>
         </tr>
         </tbody>
     </table>

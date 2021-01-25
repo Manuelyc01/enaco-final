@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="views/head :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <table class="table table-bordered" th:fragment="tablaAgencia" id="tablaAgencia">
+        <thead class="thead-dark" style="background-color: #cde49f">
+        <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Direccion</th>
+            <th scope="col">Ubigeo</th>
+            <th scope="col">Unidad de Medida compra</th>
+            <th scope="col">Sucursal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="agencia:${listA}">
+            <th scope="row" th:text="*{agencia.cod_agencia}"></th>
+            <td th:text="*{agencia.nombre}"></td>
+            <td th:text="*{agencia.direccion}"></td>
+            <td></td>
+            <td th:text="*{agencia.uniMedCompra}"></td>
+            <td th:text="*{agencia.cod_sucursal.nombre}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

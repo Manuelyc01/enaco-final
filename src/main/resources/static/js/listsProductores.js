@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(event) {
-    const formProductor=document.querySelector('#formProductor');const list=new Array();
+
+    const formProductor=document.querySelector('#formProductor');
     const btnBuscarP=document.querySelector('#btnBuscarP');
 
     var pageNumber= 1;
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     showProductores();
     const filtar= ()=>{
+        const list=new Array();
         const text= formProductor.value.toLowerCase();
         for (let productor of productores){
             let nombre = productor.nombre.toLowerCase();
@@ -23,9 +25,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 list.push(productor)
             }
         }
-        console.log(list);
         paginar(list);
     }
+    btnBuscarP.addEventListener('click',filtar)
     function paginar(lista){
         var pageCont = Math.ceil(lista.length/pageSize);
 
@@ -64,5 +66,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
             });
         }
     }
-    btnBuscarP.addEventListener('click',filtar)
 });

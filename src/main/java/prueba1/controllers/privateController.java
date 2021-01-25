@@ -8,13 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import prueba1.Service.EstadoService;
-import prueba1.Service.ProductorService;
-import prueba1.Service.UnidadOpeService;
-import prueba1.Service.UsuarioService;
-import prueba1.models.Productor;
-import prueba1.models.UnidadOperativa;
-import prueba1.models.Usuario;
+import prueba1.Service.*;
+import prueba1.models.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -29,13 +24,22 @@ public class privateController {
     private final UnidadOpeService unidadOpeService;
     @Autowired
     private final ProductorService productorService;
+    @Autowired
+    private final CostoHcService costoHcService;
+    @Autowired
+    private final SucursalService sucursalService;
+    @Autowired
+    private final AgenciaService agenciaService;
 
     @Autowired
     private final EstadoService estadoService;
-    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, EstadoService estadoService) {
+    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, CostoHcService costoHcService, SucursalService sucursalService, AgenciaService agenciaService, EstadoService estadoService) {
         this.usuarioService = usuarioService;
         this.unidadOpeService = unidadOpeService;
         this.productorService = productorService;
+        this.costoHcService = costoHcService;
+        this.sucursalService = sucursalService;
+        this.agenciaService = agenciaService;
         this.estadoService = estadoService;
     }
 
@@ -101,7 +105,29 @@ public class privateController {
     //LISTAR COSTO HOJA COCA
     @GetMapping("/auth/listCostoHC")
     public String listarCostoHC(Model model){
-        model.addAttribute("listC","yes");
+        List<CostoHojaCoca> list = costoHcService.list();
+        model.addAttribute("listC",list);
+        return "menu";
+    }
+    //LISTAR SUCURSAL
+    @GetMapping("/auth/listSucursal")
+    public String listarSucursal(Model model){
+        List<Sucursal> list = sucursalService.list();
+        model.addAttribute("listS",list);
+        return "menu";
+    }
+    //LISTAR AGENCIA
+    @GetMapping("/auth/listAgencia")
+    public String listarAgencia(Model model){
+        List<Agencia> list = agenciaService.list();
+        model.addAttribute("listA",list);
+        return "menu";
+    }
+    //LISTAR UNIDAD
+    @GetMapping("/auth/listUnidadOpe")
+    public String listarUnidadOpe(Model model){
+        List<UnidadOperativa> listar = unidadOpeService.listar();
+        model.addAttribute("listU",listar);
         return "menu";
     }
 

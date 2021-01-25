@@ -64,6 +64,24 @@
                             <span class="hidden-xs hidden-sm">Costo Hoja de Coca</span>
                         </a>
                     </li>
+                    <li>
+                        <a th:href="@{/auth/listSucursal}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Sucursal</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/auth/listAgencia}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Agencia</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/auth/listUnidadOpe}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Unidad Operativa</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -126,6 +144,15 @@
                 </div>
                 <div class="row" th:if="${listC!=null}">
                     <table th:replace="views/listCostoHC :: tablaCostoHC"></table>
+                </div>
+                <div class="row" th:if="${listA!=null}">
+                    <table th:replace="views/listAgencia :: tablaAgencia"></table>
+                </div>
+                <div class="row" th:if="${listS!=null}">
+                    <table th:replace="views/listSucursal :: tablaSucursal"></table>
+                </div>
+                <div class="row" th:if="${listU!=null}">
+                    <table th:replace="views/listUnidadOpe :: tablaUnidadOpe"></table>
                 </div>
                 <div class="row" th:if="${r!=null}">
                     <div th:replace="registro :: registro"></div>
