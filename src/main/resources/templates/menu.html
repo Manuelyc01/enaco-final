@@ -117,7 +117,11 @@
                     <div class="col-md-5">
                         <div class="header-rightside">
                             <ul class="list-inline header-top pull-right">
-                                <li class="hidden-xs">
+                                <li>
+                                    <a class="add-project" style="background-color: #7bb44d;color: black;"
+                                       th:href="@{/auth/comprar}">REALIZAR COMPRA</a>
+                                </li>
+                                <li>
                                     <a class="add-project" style="background-color: #7bb44d;color: black;"
                                        th:if="${session.usuario.getId_rol().getId_rol()==1}"
                                        th:href="@{/auth/registrar}">Crear Usuario</a>
@@ -127,7 +131,6 @@
                                         <button type="submit" class="add-project" data-toggle="modal"  style="background-color: #7bb44d">Cerrar sesión</button>
                                     </form>
                                 </li>
-
                             </ul>
                         </div>
                     </div>
@@ -135,6 +138,7 @@
             </div>
             <div class="user-dashboard" th:if="${session.usuario!=null}">
                 <h1>Bienvenido, <span th:text="${session.usuario.nombre}" ></span></h1>
+
                     <!--LISTAS-->
                 <div class="row" th:if="${list!=null}">
                     <table th:replace="views/listUsuario :: tablaUsuarios"></table>
@@ -154,11 +158,15 @@
                 <div class="row" th:if="${listU!=null}">
                     <table th:replace="views/listUnidadOpe :: tablaUnidadOpe"></table>
                 </div>
+                <!-- FORMS -->
                 <div class="row" th:if="${r!=null}">
                     <div th:replace="registro :: registro"></div>
                 </div>
                 <div class="row" th:if="${e!=null}">
                     <div th:replace="registro :: registro"></div>
+                </div>
+                <div class="row" th:if="${c!=null}">
+                    <div th:replace="compra :: compra"></div>
                 </div>
             </div>
         </div>

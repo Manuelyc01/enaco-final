@@ -155,5 +155,11 @@ public class privateController {
         return "redirect:/auth/listaUsuarios";
     }
 
+    //COMPRA
+    @GetMapping("/auth/comprar")
+    public String comprar(Model model){
+        model.addAttribute("c","yes");
+        return "menu";
+    }
 
 }

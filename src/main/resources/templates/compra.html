@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="compra">
+    <div class="header">
+        <h1>REGISTRAR COMPRA</h1>
+    </div>
+    <form method="post">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    <label > Numero de Liquidacion </label>
+                    <input class="form-control" type="text" placeholder="12345" disabled>
+                </div>
+                <div class="col-md-2">
+                    <label > Fecha</label>
+                    <input class="form-control" type="text" placeholder="25/01/2021" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    <label > CEDULA DE PRODUCTOR</label>
+                    <input class="form-control" type="text" placeholder="Ingresar DNI" >
+                </div>
+                <div class="col-md-4">
+                    <label > Nombre de productor</label>
+                    <input class="form-control" type="text" placeholder="URIOL GALVEZ JUAN" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    <label > DNI DE REPRESENTANTE</label>
+                    <input class="form-control" type="text" placeholder="Ingresar DNI" >
+                </div>
+                <div class="col-md-4">
+                    <label > Nombre de representante</label>
+                    <input class="form-control" type="text" placeholder="TOLENTINO VILLAREAL AYLWIN ESMIDIO" disabled>
+                </div>
+                <div class="col-md-4">
+                    <label > Direccion de representante</label>
+                    <input class="form-control" type="text" placeholder="KITENI-MASOQUIATO, ECHARATE, LA CONVENCIEN" disabled>
+                </div>
+                <div class="col-md-2">
+                    <label > Ubigeo reniec de representante</label>
+                    <input class="form-control" type="text" placeholder="486259321" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-4">
+                    <label > OFICINA(Unidad Operativa): </label>
+                    <select class="form-control">
+                        <option value="1">001000--LIMA</option>
+                        <option value="2">011000--QUILLABAMBA</option>
+                        <option value="3">011010--QUEBRADA</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Direccion de oficina:</label>
+                    <input type="search" class="form-control" placeholder="Jiròn Cuzco 748, QUILLABAMBA" disabled/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-4">
+                    <label > TIPO DE HOJA DE COCA: </label>
+                    <select class="form-control">
+                        <option value="1">H01D--HOJA DE COCA INDUSTRIAL</option>
+                        <option value="2">H02D--COCA INDUSTRIAL</option>
+                        <option value="3">H03I--HOJA DE COCA TINGO MARIA</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Precio unitario de HC (S/.)</label>
+                    <input type="search" class="form-control" placeholder="S/0.00" disabled/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" style="border-style:groove">
+            <div class="row">
+                <div class="col-md-6">
+                    <label > Peso Bruto (Kg)</label>
+                    <input class="form-control" type="text" placeholder="Ingresar kilogramos" >
+                    <label > Tara (Kg)</label>
+                    <input class="form-control" type="text" placeholder="Ingresar tara" >
+                    <label > Humedad (Kg)</label>
+                    <input class="form-control" type="text" placeholder="Ingresar humedad" >
+                </div>
+                <div class="col-md-6">
+                    <label > Peso Neto (kg)</label>
+                    <input class="form-control" type="text" placeholder="0.0Kg" disabled>
+                    <label > Valor de la compra (S/.)</label>
+                    <input class="form-control" type="text" placeholder="S/0.00" disabled>
+                    <label > IGV (S/.)</label>
+                    <input class="form-control" type="text" placeholder="S/1.80" disabled>
+                    <label > Total de la Compra (S/.)</label>
+                    <input class="form-control" type="text" placeholder="S/1.80" disabled>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">COMPRAR</button>
+        <button type="submit" class="btn btn-primary">IMPRIMIR</button>
+    </form>
+
+</div>
+</body>
+</html>
