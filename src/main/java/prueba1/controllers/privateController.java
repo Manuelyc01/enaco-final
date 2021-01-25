@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import prueba1.Service.EstadoService;
+import prueba1.Service.ProductorService;
 import prueba1.Service.UnidadOpeService;
 import prueba1.Service.UsuarioService;
+import prueba1.models.Productor;
 import prueba1.models.UnidadOperativa;
 import prueba1.models.Usuario;
 
@@ -25,12 +27,15 @@ public class privateController {
     private final UsuarioService usuarioService;
     @Autowired
     private final UnidadOpeService unidadOpeService;
+    @Autowired
+    private final ProductorService productorService;
 
     @Autowired
     private final EstadoService estadoService;
-    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, EstadoService estadoService) {
+    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, EstadoService estadoService) {
         this.usuarioService = usuarioService;
         this.unidadOpeService = unidadOpeService;
+        this.productorService = productorService;
         this.estadoService = estadoService;
     }
 
@@ -81,17 +86,16 @@ public class privateController {
     public String listarUsuario(Model model){
 
         List<Usuario> usuarios = usuarioService.listar();
-
         model.addAttribute("list","yes");
         model.addAttribute("usuarios",usuarios);
-
-
         return "menu";
     }
     //LISTAR PRODUCTOR
     @GetMapping("/auth/listProductor")
     public String listarProductor(Model model){
+        List<Productor> list = productorService.list();
         model.addAttribute("listP","yes");
+        model.addAttribute("productores",list);
         return "menu";
     }
     //LISTAR COSTO HOJA COCA

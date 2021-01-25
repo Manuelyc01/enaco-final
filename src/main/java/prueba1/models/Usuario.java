@@ -33,8 +33,8 @@ public class Usuario {
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
     private Rol id_rol;
     @OneToOne
-    @JoinColumn(name = "id_Uniope", referencedColumnName = "id_Uniope")
-    private UnidadOperativa id_UniOpe;
+    @JoinColumn(name = "cod_uniope", referencedColumnName = "cod_uniope")
+    private UnidadOperativa cod_uniOpe;
 
     @Column(name = "passw")
     private String  passw;

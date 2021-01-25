@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             let nombre = unidadOpe.nom_uniOpe.toLowerCase();
             if(nombre.indexOf(texto) !== -1){
                 selectUnidadOpe.innerHTML += `
-                            <option value="${unidadOpe.id_UniOpe}">
+                            <option value="${unidadOpe.cod_uniOpe}">
                                         <span>${unidadOpe.cod_uniOpe}</span>---<span>${unidadOpe .nom_uniOpe}</span>
                              </option>
                         `

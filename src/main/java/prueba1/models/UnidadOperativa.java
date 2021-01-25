@@ -14,10 +14,6 @@ import java.util.List;
 @Table(name = "unidadoperativa")
 public class UnidadOperativa {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_Uniope")
-    private Integer id_UniOpe;
-
     @Column(name = "cod_uniope")
     private String cod_uniOpe;
 
@@ -27,10 +23,13 @@ public class UnidadOperativa {
     @Column(name = "direccion")
     private String direccion;
 
-    @Column(name = "ubigeouniope")
-    private String ubigeoUniOpe;
+    @Column(name = "ubigeo")
+    private String ubigeo;
 
-    @Column(name = "localidad")
-    private String localidad;
+    @Column(name = "cod_agencia")
+    private String cod_agencia;
+
+    @Column(name = "unimedcompra")
+    private String uniMedCompra;
 
 }

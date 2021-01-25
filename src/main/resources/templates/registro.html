@@ -43,8 +43,8 @@
                             <label > Unidad Operativa: </label>
                             <div class="row">
                                 <div class="col-md-4">
-                                <select class="form-control" th:field="*{id_UniOpe}" id="selectUnidadOpe">
-                                    <option th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.id_UniOpe}">
+                                <select class="form-control" th:field="*{cod_uniOpe}" id="selectUnidadOpe">
+                                    <option th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
                                         <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
                                     </option>
                                 </select>
@@ -103,8 +103,8 @@
                         <div class="form-group">
                             <label > Unidad Operativa: </label>
                             <div class="row"><div class="col-md-4">
-                                <select class="form-control" th:field="*{id_UniOpe}"  id="selectUnidadOpe">
-                                    <option th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.id_UniOpe}">
+                                <select class="form-control" th:field="*{cod_uniOpe}" id="selectUnidadOpe">
+                                    <option th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
                                         <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
                                     </option>
                                 </select>

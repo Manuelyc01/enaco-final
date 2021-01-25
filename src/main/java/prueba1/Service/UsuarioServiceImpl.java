@@ -54,7 +54,7 @@ public class UsuarioServiceImpl implements UsuarioService{
         u1.setTelefono(usuario.getTelefono());
         u1.setCorreo(usuario.getCorreo());
         u1.setId_rol(usuario.getId_rol());
-        u1.setId_UniOpe(usuario.getId_UniOpe());
+        u1.setCod_uniOpe(usuario.getCod_uniOpe());
         u1.setUsua(usuario.getUsua());
         if (usuario.getPassw()!= s){
             u1.setPassw(bCryptPasswordEncoder.encode(usuario.getPassw()));

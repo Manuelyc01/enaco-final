@@ -12,6 +12,7 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" th:href="@{/css/menuStyles.css}">
+    <link  th:if="${listP!=null}" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
 
     <title>MENU</title>
         <!--MODEL LISTS-->
@@ -26,7 +27,7 @@
         const listUnidadOpe = /*[[${unidadesOpe}]]*/ "unidadesOpe";
     </script>
     <script th:if="${listP!=null}" th:inline="javascript" >
-        console.log("Lista Productores")
+        const listProductores= /*[[${productores}]]*/ "productores";
     </script>
     <script th:if="${listC!=null}" th:inline="javascript" >
         console.log("Lista Hoja COCA")
@@ -88,6 +89,7 @@
                         <div class="search hidden-xs hidden-sm" th:if="${listP!=null}" >
                             <input type="search" class="form-control rounded" id="formProductor" placeholder="Buscar Productor" aria-label="Search"
                                    aria-describedby="search-addon" />
+                            <button id="btnBuscarP">Buscar</button>
                         </div>
                         <div class="search hidden-xs hidden-sm" th:if="${listC!=null}" >
                             <input type="search" class="form-control rounded" id="formCosto" aria-label="Search" placeholder="Buscar Hoja de Coca"
@@ -120,7 +122,7 @@
                     <table th:replace="views/listUsuario :: tablaUsuarios"></table>
                 </div>
                 <div class="row" th:if="${listP!=null}">
-                    <table th:replace="views/listProdructor :: tablaProductor"></table>
+                    <table th:replace="views/listProdructor :: tablaProductor" ></table>
                 </div>
                 <div class="row" th:if="${listC!=null}">
                     <table th:replace="views/listCostoHC :: tablaCostoHC"></table>
@@ -135,9 +137,11 @@
         </div>
     </div>
 
-</div>
-<script th:if="${list!=null}"th:src="@{/js/listsUsuarios.js}"></script>
-<script th:if="${r!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
-<script th:if="${e!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+    </div>
+    <script th:if="${list!=null}"th:src="@{/js/listsUsuarios.js}"></script>
+    <script th:if="${r!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+    <script th:if="${e!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+    <script th:if="${listP!=null}" th:src="@{/js/listsProductores.js}"></script>
+
 </body>
 </html>
