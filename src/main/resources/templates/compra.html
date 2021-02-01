@@ -9,16 +9,17 @@
     <div class="header">
         <h1>REGISTRAR COMPRA</h1>
     </div>
-    <form method="post">
+    <form method="post" th:object="${compra}">
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
                     <label > Numero de Liquidacion </label>
-                    <input class="form-control" type="text" placeholder="12345" disabled>
+                    <input th:placeholder="*{num_compra}" class="form-control" type="text" disabled>
                 </div>
                 <div class="col-md-2">
                     <label > Fecha</label>
-                    <input class="form-control" type="text" placeholder="25/01/2021" disabled>
+                    <input th:placeholder="*{#dates.format(fecha,'dd/MM/yyyy')}" class="form-control" type="text"  disabled>
+
                 </div>
             </div>
         </div>
@@ -26,11 +27,18 @@
             <div class="row">
                 <div class="col-md-2">
                     <label > CEDULA DE PRODUCTOR</label>
-                    <input class="form-control" type="text" placeholder="Ingresar DNI" >
+                    <div class="input-group mb-3">
+                        <input id="formCedula" th:field="*{cedula}" type="text" class="form-control" placeholder="Ingresar cedula"aria-describedby="basic-addon1"autocomplete="off" >
+                        <div class="input-group-prepend">
+                            <a id="buscCedula" class="btn btn-outline-secondary" type="button">Buscar</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <label > Nombre de productor</label>
-                    <input class="form-control" type="text" placeholder="URIOL GALVEZ JUAN" disabled>
+                    <div id="resultP">
+                        <input type="text" class="form-control" disabled>
+                    </div>
                 </div>
             </div>
         </div>
@@ -38,40 +46,61 @@
             <div class="row">
                 <div class="col-md-2">
                     <label > DNI DE REPRESENTANTE</label>
-                    <input class="form-control" type="text" placeholder="Ingresar DNI" >
+                    <div class="input-group mb-3">
+                    <input id="formDni" th:field="*{dni}"  class="form-control" type="text" placeholder="Ingresar DNI" autocomplete="off" >
+                        <div class="input-group-prepend">
+                            <a id="buscDni" class="btn btn-outline-secondary" type="button">Buscar</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <label > Nombre de representante</label>
-                    <input class="form-control" type="text" placeholder="TOLENTINO VILLAREAL AYLWIN ESMIDIO" disabled>
+                    <div id="resultR1">
+                    <input class="form-control" type="text" disabled>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <label > Direccion de representante</label>
-                    <input class="form-control" type="text" placeholder="KITENI-MASOQUIATO, ECHARATE, LA CONVENCIEN" disabled>
+                    <div id="resultR2">
+                    <input  class="form-control" type="text"disabled>
+                    </div>
                 </div>
                 <div class="col-md-2">
-                    <label > Ubigeo reniec de representante</label>
-                    <input class="form-control" type="text" placeholder="486259321" disabled>
+                    <label > Ubigeo representante</label>
+                    <div id="resultR3">
+                    <input  class="form-control" type="text" disabled>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
+                <div class="col-md-2">
+                    <label > NOMBRE DE UNIDAD</label>
+                    <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
+                </div>
                 <div class="col-md-4">
                     <label > OFICINA(Unidad Operativa): </label>
-                    <select class="form-control">
-                        <option value="1">001000--LIMA</option>
-                        <option value="2">011000--QUILLABAMBA</option>
-                        <option value="3">011010--QUEBRADA</option>
+                    <select class="form-control" th:field="*{cod_uniOpe}" id="selectUnidadOpe">
+                        <option  th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
+                            <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
+                        </option>
                     </select>
                 </div>
                 <div class="col-md-3">
                     <label>Direccion de oficina:</label>
-                    <input type="search" class="form-control" placeholder="Jiròn Cuzco 748, QUILLABAMBA" disabled/>
+                    <div id="direccionUni">
+                    <input  type="search" class="form-control" placeholder="" disabled/>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
+                <div class="col-md-2">
+                    <label > NOMBRE</label>
+                    <input id="formTipoHc" class="form-control" type="text" placeholder="Buscar Tipo Hoja Coca" autocomplete="off" >
+                </div>
                 <div class="col-md-4">
                     <label > TIPO DE HOJA DE COCA: </label>
                     <select class="form-control">

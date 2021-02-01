@@ -20,4 +20,9 @@ public class ProductorServiceImpl implements ProductorService{
     public List<Productor> list(){
         return repository.findAll();
     }
+
+    @Override
+    public Productor findByCedula(String cedula){
+        return repository.getOne(cedula);
+    }
 }

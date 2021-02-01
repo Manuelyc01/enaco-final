@@ -5,9 +5,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     //RESULTADOS
     const selectUnidadOpe =document.querySelector('#selectUnidadOpe');
-
-    //MODEL LIST
-    const listUnidad=listUnidadOpe;
+    const direccionUni=document.querySelector('#direccionUni');
+    //LIST UNI CONTROLLER
+    let listUnidad=$.ajax({
+        type: 'GET',
+        url:'/unidadesOpe/',
+        success:[function (result) {
+            listUnidad=result;
+        }]
+    });
 
     //FILTRAR USUARIOS
     const filtrar = () =>{
@@ -29,6 +35,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         `
         }
     }
+    //DIRECCION UNIDAD
+    function d() {
+        let value = selectUnidadOpe.value;
+        for (let unidadOpe of listUnidad){
+            let cod = unidadOpe.cod_uniOpe.toLowerCase();
+            if(value==cod){
+                if(direccionUni!=null){
+                    direccionUni.innerHTML=`
+                         <input  type="search" placeholder="${unidadOpe.direccion}" class="form-control"disabled/>
+                    `
+                }
+            }
+        }
+    }
     formUnidadOpe.addEventListener('keyup',filtrar)
+    //INPUT BUSQUEDA
+    formUnidadOpe.addEventListener('keyup',d)
+    selectUnidadOpe.addEventListener('change',d)
+
 });
 

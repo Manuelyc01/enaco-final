@@ -1,17 +1,18 @@
 package prueba1.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.MimeTypeUtils;
+import org.springframework.web.bind.annotation.*;
 import prueba1.Service.*;
 import prueba1.models.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -30,16 +31,19 @@ public class privateController {
     private final SucursalService sucursalService;
     @Autowired
     private final AgenciaService agenciaService;
+    @Autowired
+    private final CompraService compraService;
 
     @Autowired
     private final EstadoService estadoService;
-    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, CostoHcService costoHcService, SucursalService sucursalService, AgenciaService agenciaService, EstadoService estadoService) {
+    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, CostoHcService costoHcService, SucursalService sucursalService, AgenciaService agenciaService, CompraService compraService, EstadoService estadoService) {
         this.usuarioService = usuarioService;
         this.unidadOpeService = unidadOpeService;
         this.productorService = productorService;
         this.costoHcService = costoHcService;
         this.sucursalService = sucursalService;
         this.agenciaService = agenciaService;
+        this.compraService = compraService;
         this.estadoService = estadoService;
     }
 
@@ -75,7 +79,9 @@ public class privateController {
         String user= usuario.getUsua();
         if(usuarioService.findByUsua(user)!=null){
             //SI EL USUARIO EXISTE
+            List<UnidadOperativa> listar = unidadOpeService.listar();
             model.addAttribute("user",usuario);
+            model.addAttribute("unidadesOpe", listar);
             model.addAttribute("userExist", "usuario existe");
             model.addAttribute("r", 1);
             return "menu";
@@ -137,6 +143,7 @@ public class privateController {
         usuarioService.eliminar(id);
         return "redirect:/auth/listaUsuarios";
     }
+
     //EDITAR USUARIO
     @GetMapping("/auth/editUsuario/{id}")
     public String editarUsuario(@PathVariable Integer id,Model model){
@@ -154,12 +161,58 @@ public class privateController {
         usuarioService.update(id,usuario);
         return "redirect:/auth/listaUsuarios";
     }
-
-    //COMPRA
-    @GetMapping("/auth/comprar")
-    public String comprar(Model model){
+    @GetMapping("/auth/compraUsuario/{id}")
+    public String compraUsuario(@PathVariable Integer id,Model model){
+        List<UnidadOperativa> listar = unidadOpeService.listar();
         model.addAttribute("c","yes");
+        model.addAttribute("id",id);
+        model.addAttribute("unidadesOpe",listar);
+        model.addAttribute("compra",nuevaCompra(id));
         return "menu";
     }
+
+    //DATOS COMPRA
+    public Compra nuevaCompra(Integer id){
+        //OBTENER NUM COMPRAS DE USUARIO
+        Usuario u = usuarioService.findById(id);
+        Integer num;
+        if (u.getNum_compras()!=null){
+            num=u.getNum_compras()+1;
+        }else {
+            num=1;
+        }
+
+        //GENERAR NUEVO OBJETO COMPRA
+        Compra compra=new Compra();
+        int n=num.toString().length();//TAMAÑO DEL NUMERO
+        switch (n)//CANTIDAD DE DIGITOS (6)
+        {
+            case 1:
+                compra.setNum_compra(u.getSerie_compra()+"-"+"00000"+num.toString());
+                break;
+            case 2:
+                compra.setNum_compra(u.getSerie_compra()+"-"+"0000"+num.toString());
+                break;
+            case 3:
+                compra.setNum_compra(u.getSerie_compra()+"-"+"000"+num.toString());
+                break;
+            case 4:
+                compra.setNum_compra(u.getSerie_compra()+"-"+"00"+num.toString());
+                break;
+            case 5:
+                compra.setNum_compra(u.getSerie_compra()+"-"+"0"+num.toString());
+                break;
+            case 6:
+                compra.setNum_compra(u.getSerie_compra()+"-"+num.toString());
+
+        }
+        //ENVIO FECHA HOY
+        Date date=new Date();
+        compra.setFecha(date);
+
+
+        return compra;
+    }
+
 
 }

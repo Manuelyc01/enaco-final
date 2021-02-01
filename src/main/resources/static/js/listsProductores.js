@@ -5,15 +5,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     var pageNumber= 1;
     var pageSize=13;
-
-    const productores = listProductores;
-    var productoresHtml="";
+    let productores = $.ajax({
+        type: 'GET',
+        url:'/productores/',
+        success:[function (result) {
+            productores=result
+        }]
+    });
+    let productoresHtml="";
 
     function paginate(array,page_size,page_number) {
         return array.slice((page_number - 1) * page_size, page_number * page_size);
     }
     function showProductores() {
-        paginar(productores)
+        $.ajax({
+            type: 'GET',
+            url:'/productores/',
+            success:[function (result) {
+                paginar(result)
+            }]
+        });
     }
     showProductores();
     const filtar= ()=>{
@@ -30,7 +41,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     btnBuscarP.addEventListener('click',filtar)
     function paginar(lista){
         var pageCont = Math.ceil(lista.length/pageSize);
-
         var pagination=paginate(lista,pageSize,pageNumber)
         productoresHtml="";
         pagination.forEach(productores =>{
@@ -66,4 +76,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
             });
         }
     }
+
+
 });

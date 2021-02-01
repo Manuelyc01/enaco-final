@@ -49,4 +49,7 @@ public class Usuario {
 
     @Column(name = "serie_compra")
     private String serie_compra;
+
+    @Column(name = "num_compras")
+    private Integer num_compras;
 }

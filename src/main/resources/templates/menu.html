@@ -8,31 +8,12 @@
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" th:href="@{/css/menuStyles.css}">
     <link  th:if="${listP!=null}" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
 
     <title>MENU</title>
-        <!--MODEL LISTS-->
-    <script th:if="${list!=null}" th:inline="javascript" >
-        const listUsu = /*[[${usuarios}]]*/ "listaUsuarios";
-    </script>
-    <script th:if="${r!=null}" th:inline="javascript" >
-        const listUnidadOpe = /*[[${unidadesOpe}]]*/ "unidadesOpe";
-    </script>
-
-    <script th:if="${e!=null}" th:inline="javascript" >
-        const listUnidadOpe = /*[[${unidadesOpe}]]*/ "unidadesOpe";
-    </script>
-    <script th:if="${listP!=null}" th:inline="javascript" >
-        const listProductores= /*[[${productores}]]*/ "productores";
-    </script>
-    <script th:if="${listC!=null}" th:inline="javascript" >
-        console.log("Lista Hoja COCA")
-    </script>
-    <!--MODEL LISTS END-->
 </head>
 <body class="home">
 <div class="container-fluid display-table">
@@ -174,9 +155,14 @@
 
     </div>
     <script th:if="${list!=null}"th:src="@{/js/listsUsuarios.js}"></script>
+
     <script th:if="${r!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
     <script th:if="${e!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+
     <script th:if="${listP!=null}" th:src="@{/js/listsProductores.js}"></script>
+
+    <script th:if="${c!=null}" th:src="@{/js/BusquedaCompra.js}"></script>
+    <script th:if="${c!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
 
 </body>
 </html>

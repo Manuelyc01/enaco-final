@@ -3,12 +3,10 @@ package prueba1.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import prueba1.models.Estado;
-import prueba1.models.Rol;
 import prueba1.models.Usuario;
+import prueba1.repository.CompraRepository;
 import prueba1.repository.UsuarioRepository;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Service
@@ -18,6 +16,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Autowired
     private final UsuarioRepository usuarioRepository;
+
 
     public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
@@ -65,4 +64,15 @@ public class UsuarioServiceImpl implements UsuarioService{
         usuarioRepository.save(u1);
 
     }
+    @Override
+    public void compra(Integer id){
+        Usuario u= usuarioRepository.getOne(id);
+        if (u.getNum_compras()!=null){
+            u.setNum_compras(u.getNum_compras()+1);
+        }else {
+            u.setNum_compras(+1);
+        }
+        usuarioRepository.save(u);
+    }
+
 }

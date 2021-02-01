@@ -6,8 +6,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //RESULTADOS
     const resultado =document.querySelector('#listUsuarios')
 
-
-    const listUsuarios = listUsu;
+    let listUsuarios = $.ajax({
+        type: 'GET',
+        url:'/usuarios/',
+        success:[function (result) {
+            listUsuarios=result;
+        }]
+    });
 
     //FILTRAR USUARIOS
     const filtrar = () =>{
