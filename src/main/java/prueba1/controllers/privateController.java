@@ -1,12 +1,9 @@
 package prueba1.controllers;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 import prueba1.Service.*;
 import prueba1.models.*;
@@ -33,10 +30,12 @@ public class privateController {
     private final AgenciaService agenciaService;
     @Autowired
     private final CompraService compraService;
+    @Autowired
+    private final TipoHcService tipoHcService;
 
     @Autowired
     private final EstadoService estadoService;
-    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, CostoHcService costoHcService, SucursalService sucursalService, AgenciaService agenciaService, CompraService compraService, EstadoService estadoService) {
+    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, CostoHcService costoHcService, SucursalService sucursalService, AgenciaService agenciaService, CompraService compraService, TipoHcService tipoHcService, EstadoService estadoService) {
         this.usuarioService = usuarioService;
         this.unidadOpeService = unidadOpeService;
         this.productorService = productorService;
@@ -44,6 +43,7 @@ public class privateController {
         this.sucursalService = sucursalService;
         this.agenciaService = agenciaService;
         this.compraService = compraService;
+        this.tipoHcService = tipoHcService;
         this.estadoService = estadoService;
     }
 
@@ -163,10 +163,15 @@ public class privateController {
     }
     @GetMapping("/auth/compraUsuario/{id}")
     public String compraUsuario(@PathVariable Integer id,Model model){
-        List<UnidadOperativa> listar = unidadOpeService.listar();
+        Usuario u = usuarioService.findById(id);
+        List<CostoHojaCoca> costoHojaCocas = costoHcService.filterCostoHc(u.getCod_uniOpe());
+        List<UnidadOperativa> listarU = unidadOpeService.listar();
+
         model.addAttribute("c","yes");
-        model.addAttribute("id",id);
-        model.addAttribute("unidadesOpe",listar);
+
+        model.addAttribute("unidadesOpe", listarU);
+        model.addAttribute("tiposHc",costoHojaCocas);
+
         model.addAttribute("compra",nuevaCompra(id));
         return "menu";
     }
@@ -188,22 +193,22 @@ public class privateController {
         switch (n)//CANTIDAD DE DIGITOS (6)
         {
             case 1:
-                compra.setNum_compra(u.getSerie_compra()+"-"+"00000"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra()+"-"+"00000"+num.toString());
                 break;
             case 2:
-                compra.setNum_compra(u.getSerie_compra()+"-"+"0000"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra()+"-"+"0000"+num.toString());
                 break;
             case 3:
-                compra.setNum_compra(u.getSerie_compra()+"-"+"000"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra()+"-"+"000"+num.toString());
                 break;
             case 4:
-                compra.setNum_compra(u.getSerie_compra()+"-"+"00"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra()+"-"+"00"+num.toString());
                 break;
             case 5:
-                compra.setNum_compra(u.getSerie_compra()+"-"+"0"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra()+"-"+"0"+num.toString());
                 break;
             case 6:
-                compra.setNum_compra(u.getSerie_compra()+"-"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra()+"-"+num.toString());
 
         }
         //ENVIO FECHA HOY

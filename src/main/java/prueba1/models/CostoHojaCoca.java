@@ -39,6 +39,9 @@ public class CostoHojaCoca {
     @Column(name = "precioconigv")
     private Double precioConIgv;
 
+    @Column(name = "estado")
+    private Integer estado;
+
 
 
 

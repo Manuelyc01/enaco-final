@@ -3,6 +3,7 @@ package prueba1.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import prueba1.models.CostoHojaCoca;
+import prueba1.models.UnidadOperativa;
 import prueba1.repository.CostoHcRepository;
 
 import java.util.List;
@@ -20,5 +21,10 @@ public class CostoHcServiceImpl implements CostoHcService{
     @Override
     public List<CostoHojaCoca> list(){
         return repository.findAll();
+    }
+
+    @Override
+    public List<CostoHojaCoca> filterCostoHc(UnidadOperativa cod_uniOpe){
+        return repository.filterTipoHc(cod_uniOpe);
     }
 }

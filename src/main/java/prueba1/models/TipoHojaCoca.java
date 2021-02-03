@@ -18,7 +18,7 @@ public class TipoHojaCoca {
 
     @Id
     @Column(name = "cod_tipohoja")
-    private String cod_tipohoja;
+    private String cod_tipoHoja;
 
     @Column(name = "nombre")
     private String nombre;

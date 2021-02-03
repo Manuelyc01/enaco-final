@@ -19,4 +19,5 @@ public interface UsuarioService {
     void update(Integer id, Usuario usuario);
 
     void compra(Integer id);
+
 }
