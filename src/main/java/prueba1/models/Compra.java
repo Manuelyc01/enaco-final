@@ -50,7 +50,7 @@ public class Compra {
     private Double humedad;
 
     @Column(name = "pesoneto")
-    private Double pesoneto;
+    private Double pesoNeto;
 
     @Column(name = "valorcompra")
     private Double valorCompra;
@@ -61,6 +61,8 @@ public class Compra {
     @Column(name = "totalcompra")
     private Double totalCompra;
 
+    @Column(name = "son")
+    private String son;
 
 
 }

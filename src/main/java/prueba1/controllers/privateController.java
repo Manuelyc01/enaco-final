@@ -171,6 +171,7 @@ public class privateController {
 
         model.addAttribute("unidadesOpe", listarU);
         model.addAttribute("tiposHc",costoHojaCocas);
+        model.addAttribute("usuario",u);//US
 
         model.addAttribute("compra",nuevaCompra(id));
         return "menu";
@@ -214,10 +215,16 @@ public class privateController {
         //ENVIO FECHA HOY
         Date date=new Date();
         compra.setFecha(date);
-
+        //TARA y HUMEDAD
+        compra.setTara(0.);
+        compra.setHumedad(0.);
 
         return compra;
     }
 
-
+    @PostMapping("/auth/comprar/{id}")
+    public String comprar(@PathVariable Integer id,Compra compra){
+        compraService.save(id,compra);
+        return "menu";
+    }
 }
