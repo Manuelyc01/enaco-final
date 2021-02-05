@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -52,4 +53,7 @@ public class Usuario {
 
     @Column(name = "num_compras")
     private Integer num_compras;
+
+    @Column (name = "fecha")
+    private Date fecha;
 }

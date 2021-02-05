@@ -24,13 +24,16 @@ public class AjaxRestController {
     private final UsuarioService usuarioService;
     @Autowired
     private final CostoHcService costoHcService;
+    @Autowired
+    private final TipoHcService tipoHcService;
 
-    public AjaxRestController(ProductorService productorService, RepresentanteService representanteService, UnidadOpeService unidadOpeService, UsuarioService usuarioService, CostoHcService costoHcService) {
+    public AjaxRestController(ProductorService productorService, RepresentanteService representanteService, UnidadOpeService unidadOpeService, UsuarioService usuarioService, CostoHcService costoHcService, TipoHcService tipoHcService) {
         this.productorService = productorService;
         this.representanteService = representanteService;
         this.unidadOpeService = unidadOpeService;
         this.usuarioService = usuarioService;
         this.costoHcService = costoHcService;
+        this.tipoHcService = tipoHcService;
     }
 
     //LISTS
@@ -44,6 +47,18 @@ public class AjaxRestController {
             return ResponseEntity.accepted().body(list);
         } catch (Exception e) {
             return new ResponseEntity<List<CostoHojaCoca>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "listTipoHc",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<TipoHojaCoca>> listTipoHc() {
+        List<TipoHojaCoca> list = tipoHcService.list();
+        try {
+            return ResponseEntity.accepted().body(list);
+        } catch (Exception e) {
+            return new ResponseEntity<List<TipoHojaCoca>>(HttpStatus.BAD_REQUEST);
         }
     }
     @RequestMapping(

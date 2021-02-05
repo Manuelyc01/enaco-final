@@ -93,7 +93,8 @@ public class privateController {
 
     //LISTAR USUARIO
     @GetMapping("/auth/listaUsuarios")
-    public String listarUsuario(Model model){
+    public String listarUsuario(Model model,Authentication auth){
+
 
         List<Usuario> usuarios = usuarioService.listar();
         model.addAttribute("list","yes");
@@ -111,8 +112,7 @@ public class privateController {
     //LISTAR COSTO HOJA COCA
     @GetMapping("/auth/listCostoHC")
     public String listarCostoHC(Model model){
-        List<CostoHojaCoca> list = costoHcService.list();
-        model.addAttribute("listC",list);
+        model.addAttribute("listC","list");
         return "menu";
     }
     //LISTAR SUCURSAL
@@ -132,8 +132,12 @@ public class privateController {
     //LISTAR UNIDAD
     @GetMapping("/auth/listUnidadOpe")
     public String listarUnidadOpe(Model model){
-        List<UnidadOperativa> listar = unidadOpeService.listar();
-        model.addAttribute("listU",listar);
+       model.addAttribute("listU","listar");
+        return "menu";
+    }
+    @GetMapping("/auth/listTipoHc")
+    public String listarTipoHc(Model model){
+        model.addAttribute("listT","yes");
         return "menu";
     }
 

@@ -17,15 +17,7 @@
             <th scope="col">Precio con IGV</th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="costoHc:${listC}">
-            <th scope="row" th:text="*{costoHc.cod_uniOpe.nom_uniOpe}"></th>
-            <td th:text="*{costoHc.cod_tipoHoja.nombre}"></td>
-            <td></td>
-            <td th:text="*{costoHc.precioSinIgv}"></td>
-            <td th:text="*{costoHc.igv}"></td>
-            <td th:text="*{costoHc.precioConIgv}"></td>
-        </tr>
+        <tbody id="listCostoHc">
         </tbody>
     </table>
 </div>

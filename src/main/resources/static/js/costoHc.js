@@ -1,4 +1,78 @@
 document.addEventListener("DOMContentLoaded", function(event) {
+    //VISTA COSTO
+    const formCosto=document.querySelector("#formCosto")
+    var pageNumber= 1;
+    var pageSize=13;
+    let listCostoHc=$.ajax({//listTIPOHC
+        type: 'GET',
+        url:'/listCostoHc/',
+        success:[function (result) {
+            listCostoHc=result;
+        }]
+    });
+    let costoHtml="";//save list html
+    function paginate(array,page_size,page_number) {
+        return array.slice((page_number - 1) * page_size, page_number * page_size);
+    }
+    function paginar(lista){
+        var pageCont = Math.ceil(lista.length/pageSize);
+        var pagination=paginate(lista,pageSize,pageNumber)
+        costoHtml="";
+        pagination.forEach(costoHc =>{
+            costoHtml += `
+            <tr>
+            <th scope="row">${costoHc.cod_uniOpe.nom_uniOpe}</th>
+            <td>${costoHc.cod_tipoHoja.nombre}</td>
+            <td>${costoHc.fecha_vigencia}</td>
+            <td>${costoHc.precioSinIgv}</td>
+            <td>${costoHc.igv}</td>
+            <td>${costoHc.precioConIgv}</td>
+        </tr>
+                `
+        });
+        costoHtml += "";
+        costoHtml += pageNumber >1 ? "<button id='anterior'>Anterior</button>":"";
+        costoHtml += pageNumber < pageCont ? ("<button id='siguiente'>Siguiente</button>"):"";
+        document.querySelector("#listCostoHc").innerHTML="";
+        document.querySelector("#listCostoHc").innerHTML=costoHtml;
+
+        if(pageNumber < pageCont){
+            var a=document.querySelector("#siguiente");
+            a.addEventListener("click",function next() {
+                pageNumber++;
+                paginar(lista);
+            });
+        }
+        if(pageNumber>1){
+            var a=document.querySelector("#anterior");
+            a.addEventListener("click",function previous() {
+                pageNumber--;
+                paginar(lista);
+            });
+        }
+    }
+    function showCostos() {
+        $.ajax({
+            type: 'GET',
+            url:'/listCostoHc/',
+            success:[function (result) {
+                paginar(result)
+            }]
+        });
+    }
+    const filtrar= ()=>{
+        const list=new Array();
+        const text= formCosto.value.toLowerCase();
+        for (let costo of listCostoHc){
+            let nombre = costo.cod_tipoHoja.nombre.toLowerCase();
+            if(nombre.indexOf(text)!==-1){
+                list.push(costo)
+            }
+        }
+        paginar(list);
+    }
+    showCostos();
+    formCosto.addEventListener('keyup',filtrar)
     //SELECT TIPO
     const selectTipoHc =document.querySelector('#selectTipoHc');
     const precioUnitario=document.querySelector('#precioUnitario');
@@ -41,14 +115,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     tara.addEventListener('keyup',calcular);
     humedad.addEventListener('keyup',calcular)
 
-    //listTIPOHC
-    let listCostoHc=$.ajax({
-        type: 'GET',
-        url:'/listCostoHc/',
-        success:[function (result) {
-            listCostoHc=result;
-        }]
-    });
     //selecion tipoHC --precio
     function d() {
         let value = selectTipoHc.value;

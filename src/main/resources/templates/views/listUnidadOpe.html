@@ -17,15 +17,7 @@
             <th scope="col">Unidad de Medida compra</th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="unidadOpe:${listU}">
-            <th scope="row" th:text="*{unidadOpe.cod_uniOpe}"></th>
-            <td th:text="*{unidadOpe.nom_uniOpe}"></td>
-            <td th:text="*{unidadOpe.direccion}"></td>
-            <td></td>
-            <td th:text="*{unidadOpe.cod_agencia.nombre}"></td>
-            <td th:text="*{unidadOpe.uniMedCompra}"></td>
-        </tr>
+        <tbody id="listUnidadOpe">
         </tbody>
     </table>
 </div>

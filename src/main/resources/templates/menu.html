@@ -28,39 +28,59 @@
                 <ul>
                     <li class="active"><a th:href="@{/private/index}"><i class="fa fa-home" aria-hidden="true"></i><span class="hidden-xs hidden-sm">INICIO</span></a></li>
                     <li>
-                        <a th:href="@{/auth/listaUsuarios}">
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                                th:href="@{/auth/listaUsuarios}">
                             <i class="fa fa-user" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Usuarios</span>
                         </a>
                     </li>
                     <li>
-                        <a th:href="@{/auth/listProductor}">
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                                th:href="@{/auth/listProductor}">
                             <i class="fa fa-user" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Productores</span>
                         </a>
                     </li>
                     <li>
-                        <a th:href="@{/auth/listCostoHC}">
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                                th:href="@{/auth/listCostoHC}">
                             <i class="fa fa-bar-chart" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Costo Hoja de Coca</span>
                         </a>
                     </li>
                     <li>
-                        <a th:href="@{/auth/listSucursal}">
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                                th:href="@{/auth/listSucursal}">
                             <i class="fa fa-tasks" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Sucursal</span>
                         </a>
                     </li>
                     <li>
-                        <a th:href="@{/auth/listAgencia}">
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                                th:href="@{/auth/listAgencia}">
                             <i class="fa fa-tasks" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Agencia</span>
                         </a>
                     </li>
                     <li>
-                        <a th:href="@{/auth/listUnidadOpe}">
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                                th:href="@{/auth/listUnidadOpe}">
                             <i class="fa fa-tasks" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Unidad Operativa</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                                th:href="@{/auth/listTipoHc}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Tipo Hoja de Coca</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
+                           th:href="@{/auth/compraUsuario/{id}(id=${session.usuario.getId_usuario()})}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Realizar Compra</span>
                         </a>
                     </li>
                 </ul>
@@ -88,25 +108,23 @@
                         <div class="search hidden-xs hidden-sm" th:if="${listP!=null}" >
                             <input type="search" class="form-control rounded" id="formProductor" placeholder="Buscar Productor" aria-label="Search"
                                    aria-describedby="search-addon" />
-                            <button id="btnBuscarP">Buscar</button>
                         </div>
                         <div class="search hidden-xs hidden-sm" th:if="${listC!=null}" >
                             <input type="search" class="form-control rounded" id="formCosto" aria-label="Search" placeholder="Buscar Hoja de Coca"
+                                   aria-describedby="search-addon" />
+                        </div>
+                        <div class="search hidden-xs hidden-sm" th:if="${listU!=null}" >
+                        <input type="search" class="form-control rounded" id="formUnidadOpe" aria-label="Search" placeholder="Buscar Hoja de Coca"
+                               aria-describedby="search-addon" />
+                        </div>
+                        <div class="search hidden-xs hidden-sm" th:if="${listT!=null}" >
+                            <input type="search" class="form-control rounded" id="formTipoHc" aria-label="Search" placeholder="Buscar Hoja de Coca"
                                    aria-describedby="search-addon" />
                         </div>
                     </div>
                     <div class="col-md-5">
                         <div class="header-rightside">
                             <ul class="list-inline header-top pull-right">
-                                <li>
-                                    <a class="add-project" style="background-color: #7bb44d;color: black;"
-                                       th:href="@{/auth/comprar}">REALIZAR COMPRA</a>
-                                </li>
-                                <li>
-                                    <a class="add-project" style="background-color: #7bb44d;color: black;"
-                                       th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                                       th:href="@{/auth/registrar}">Crear Usuario</a>
-                                </li>
                                 <li>
                                     <form th:action="@{/logout}" method="post">
                                         <button type="submit" class="add-project" data-toggle="modal"  style="background-color: #7bb44d">Cerrar sesión</button>
@@ -122,7 +140,14 @@
 
                     <!--LISTAS-->
                 <div class="row" th:if="${list!=null}">
+                    <div class="row" style="padding-bottom: 5px">
+                            <a class="btn btn-success"
+                               th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                               th:href="@{/auth/registrar}">Agregar Usuario</a>
+                    </div>
+                    <div class="row">
                     <table th:replace="views/listUsuario :: tablaUsuarios"></table>
+                    </div>
                 </div>
                 <div class="row" th:if="${listP!=null}">
                     <table th:replace="views/listProdructor :: tablaProductor" ></table>
@@ -139,6 +164,9 @@
                 <div class="row" th:if="${listU!=null}">
                     <table th:replace="views/listUnidadOpe :: tablaUnidadOpe"></table>
                 </div>
+                <div class="row" th:if="${listT!=null}">
+                    <table th:replace="views/listTipoHc :: tablaTipoHc"></table>
+                </div>
                 <!-- FORMS -->
                 <div class="row" th:if="${r!=null}">
                     <div th:replace="registro :: registro"></div>
@@ -154,12 +182,15 @@
     </div>
 
     </div>
-    <script th:if="${list!=null}"th:src="@{/js/listsUsuarios.js}"></script>
 
     <script th:if="${r!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
     <script th:if="${e!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
 
+    <script th:if="${list!=null}"th:src="@{/js/listsUsuarios.js}"></script>
     <script th:if="${listP!=null}" th:src="@{/js/listsProductores.js}"></script>
+    <script th:if="${listC!=null}" th:src="@{/js/costoHc.js}"></script>
+    <script th:if="${listU!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+    <script th:if="${listT!=null}" th:src="@{/js/listTipoHc.js}"></script>
 
     <script th:if="${c!=null}" th:src="@{/js/BusquedaCompra.js}"></script>
     <script th:if="${c!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>

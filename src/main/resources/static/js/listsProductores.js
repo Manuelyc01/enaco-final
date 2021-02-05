@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
     const formProductor=document.querySelector('#formProductor');
-    const btnBuscarP=document.querySelector('#btnBuscarP');
 
     var pageNumber= 1;
     var pageSize=13;
@@ -27,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         });
     }
     showProductores();
-    const filtar= ()=>{
+    const filtrar= ()=>{
         const list=new Array();
         const text= formProductor.value.toLowerCase();
         for (let productor of productores){
@@ -38,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
         paginar(list);
     }
-    btnBuscarP.addEventListener('click',filtar)
+    formProductor.addEventListener('keyup',filtrar)
     function paginar(lista){
         var pageCont = Math.ceil(lista.length/pageSize);
         var pagination=paginate(lista,pageSize,pageNumber)
