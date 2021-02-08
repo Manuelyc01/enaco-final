@@ -78,9 +78,16 @@
                     </li>
                     <li>
                         <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
-                           th:href="@{/auth/compraUsuario/{id}(id=${session.usuario.getId_usuario()})}">
+                           th:href="@{/auth/compraUsuario}">
                             <i class="fa fa-tasks" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Realizar Compra</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                           th:href="@{/auth/cajaBoveda}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Caja Bóveda</span>
                         </a>
                     </li>
                 </ul>
@@ -136,7 +143,7 @@
                 </header>
             </div>
             <div class="user-dashboard" th:if="${session.usuario!=null}">
-                <h1>Bienvenido, <span th:text="${session.usuario.nombre}" ></span></h1>
+                <h1 th:if="${inicio!=null}">Bienvenido, <span th:text="${session.usuario.nombre}" ></span></h1>
 
                     <!--LISTAS-->
                 <div class="row" th:if="${list!=null}">
@@ -177,6 +184,9 @@
                 <div class="row" th:if="${c!=null}">
                     <div th:replace="compra :: compra"></div>
                 </div>
+                <div class="row" th:if="${cB!=null}">
+                    <div th:replace="views/cajaBoveda :: cajaBoveda"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -195,6 +205,9 @@
     <script th:if="${c!=null}" th:src="@{/js/BusquedaCompra.js}"></script>
     <script th:if="${c!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
     <script th:if="${c!=null}" th:src="@{/js/costoHc.js}"></script>
+    <script th:if="${cB!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+    <script th:if="${cB!=null}" th:src="@{/js/cajaBoveda.js}"></script>
+    <script th:if="${c!=null}" th:src="@{/js/cajaBoveda.js}"></script>
 
 </body>
 </html>

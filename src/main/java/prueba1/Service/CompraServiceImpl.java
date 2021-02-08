@@ -16,25 +16,22 @@ public class CompraServiceImpl implements CompraService{
     private final CompraRepository compraRepository;
     @Autowired
     private final UsuarioService usuarioService;
+    @Autowired
+    private final UnidadOpeService unidadOpeService;
 
-    public CompraServiceImpl(CompraRepository compraRepository, UsuarioRepository usuarioRepository, UsuarioService usuarioService) {
+    public CompraServiceImpl(CompraRepository compraRepository, UsuarioRepository usuarioRepository, UsuarioService usuarioService, UnidadOpeService unidadOpeService) {
         this.compraRepository = compraRepository;
         this.usuarioService = usuarioService;
+        this.unidadOpeService = unidadOpeService;
     }
 
     @Override
     public void save(Integer id, Compra compra){
         //OBTENER NUM COMPRAS DE USUARIO
         Usuario u = usuarioService.findById(id);
-        Integer num;
-        if (u.getNum_compras()!=null){
-            num=u.getNum_compras()+1;
-            u.setNum_compras(num);
-            usuarioService.registrar(u);
-        }else {
-            num=1;
-            u.setNum_compras(num);
-            usuarioService.registrar(u);
+        Integer num=u.getNum_compras();
+        if (num==null){
+            num=+1;
         }
         int n=num.toString().length();//TAMAÑO DEL NUMERO
         switch (n)//CANTIDAD DE DIGITOS (6)
@@ -61,6 +58,8 @@ public class CompraServiceImpl implements CompraService{
         //ENVIO FECHA HOY
         Date date=new Date();
         compra.setFecha(date);
+        usuarioService.compra(id);
+        unidadOpeService.saveCajaBoveda(compra.getCod_uniOpe().getCod_uniOpe(),compra.getTotalCompra(),2);
         compraRepository.save(compra);
     }
 

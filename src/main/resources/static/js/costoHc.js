@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(event) {
     //VISTA COSTO
     const formCosto=document.querySelector("#formCosto")
+    const listCostoHcHTML=document.querySelector("#listCostoHc")
     var pageNumber= 1;
     var pageSize=13;
     let listCostoHc=$.ajax({//listTIPOHC
@@ -15,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         return array.slice((page_number - 1) * page_size, page_number * page_size);
     }
     function paginar(lista){
+        if(listCostoHcHTML !=null){
         var pageCont = Math.ceil(lista.length/pageSize);
         var pagination=paginate(lista,pageSize,pageNumber)
         costoHtml="";
@@ -33,8 +35,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         costoHtml += "";
         costoHtml += pageNumber >1 ? "<button id='anterior'>Anterior</button>":"";
         costoHtml += pageNumber < pageCont ? ("<button id='siguiente'>Siguiente</button>"):"";
-        document.querySelector("#listCostoHc").innerHTML="";
-        document.querySelector("#listCostoHc").innerHTML=costoHtml;
+
+            listCostoHcHTML.innerHTML="";
+            listCostoHcHTML.innerHTML=costoHtml;
 
         if(pageNumber < pageCont){
             var a=document.querySelector("#siguiente");
@@ -49,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 pageNumber--;
                 paginar(lista);
             });
+        }
         }
     }
     function showCostos() {
@@ -72,7 +76,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         paginar(list);
     }
     showCostos();
-    formCosto.addEventListener('keyup',filtrar)
+    if (formCosto!=null){
+        formCosto.addEventListener('keyup',filtrar)
+    }
     //SELECT TIPO
     const selectTipoHc =document.querySelector('#selectTipoHc');
     const precioUnitario=document.querySelector('#precioUnitario');
@@ -111,10 +117,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
 
     };
-    pesoBruto.addEventListener('keyup',calcular);
-    tara.addEventListener('keyup',calcular);
-    humedad.addEventListener('keyup',calcular)
-
+    if(pesoBruto!=null){
+        pesoBruto.addEventListener('keyup',calcular);
+        tara.addEventListener('keyup',calcular);
+        humedad.addEventListener('keyup',calcular)
+    }
     //selecion tipoHC --precio
     function d() {
         let value = selectTipoHc.value;
@@ -138,9 +145,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         }
     }
-    selectTipoHc.addEventListener('change',d);
-    selectTipoHc.addEventListener('change',calcular);
-
+    if(selectTipoHc!=null){
+        selectTipoHc.addEventListener('change',d);
+        selectTipoHc.addEventListener('change',calcular);
+    }
     //FUNCTIONS SON
     function Unidades(num){
 

@@ -32,10 +32,15 @@ public class privateController {
     private final CompraService compraService;
     @Autowired
     private final TipoHcService tipoHcService;
+    @Autowired
+    private final TipoTransacService tipoTransacService;
+    @Autowired
+    private final CajaBovedaService cajaBovedaService;
+
 
     @Autowired
     private final EstadoService estadoService;
-    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, CostoHcService costoHcService, SucursalService sucursalService, AgenciaService agenciaService, CompraService compraService, TipoHcService tipoHcService, EstadoService estadoService) {
+    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, CostoHcService costoHcService, SucursalService sucursalService, AgenciaService agenciaService, CompraService compraService, TipoHcService tipoHcService, TipoTransacService tipoTransacService, CajaBovedaService cajaBovedaService, EstadoService estadoService) {
         this.usuarioService = usuarioService;
         this.unidadOpeService = unidadOpeService;
         this.productorService = productorService;
@@ -44,6 +49,8 @@ public class privateController {
         this.agenciaService = agenciaService;
         this.compraService = compraService;
         this.tipoHcService = tipoHcService;
+        this.tipoTransacService = tipoTransacService;
+        this.cajaBovedaService = cajaBovedaService;
         this.estadoService = estadoService;
     }
 
@@ -55,6 +62,7 @@ public class privateController {
             Usuario usuario = usuarioService.findByUsua(username);
             session.setAttribute("usuario",usuario);
         }
+        model.addAttribute("inicio","yes");
         return "menu";
     }
     //REGISTRO
@@ -75,18 +83,24 @@ public class privateController {
         }
     }
     @PostMapping("/auth/registro")
-    public String registro(Usuario usuario,Model model){
-        String user= usuario.getUsua();
-        if(usuarioService.findByUsua(user)!=null){
-            //SI EL USUARIO EXISTE
-            List<UnidadOperativa> listar = unidadOpeService.listar();
-            model.addAttribute("user",usuario);
-            model.addAttribute("unidadesOpe", listar);
-            model.addAttribute("userExist", "usuario existe");
-            model.addAttribute("r", 1);
-            return "menu";
-        }else {
-            usuarioService.registrar(usuario);
+    public String registro(Usuario usuario,Model model,Authentication auth){
+        String username=auth.getName();
+        Usuario u = usuarioService.findByUsua(username);
+        if(u.getId_rol().getId_rol()==1){
+            String user= usuario.getUsua();
+            if(usuarioService.findByUsua(user)!=null){
+                //SI EL USUARIO EXISTE
+                List<UnidadOperativa> listar = unidadOpeService.listar();
+                model.addAttribute("user",usuario);
+                model.addAttribute("unidadesOpe", listar);
+                model.addAttribute("userExist", "usuario existe");
+                model.addAttribute("r", 1);
+                return "menu";
+            }else {
+                usuarioService.registrar(usuario);
+                return "redirect:/private/index";
+            }
+        }else{
             return "redirect:/private/index";
         }
     }
@@ -94,63 +108,112 @@ public class privateController {
     //LISTAR USUARIO
     @GetMapping("/auth/listaUsuarios")
     public String listarUsuario(Model model,Authentication auth){
-
-
-        List<Usuario> usuarios = usuarioService.listar();
-        model.addAttribute("list","yes");
-        model.addAttribute("usuarios",usuarios);
-        return "menu";
+        String name = auth.getName();
+        Usuario byUsua = usuarioService.findByUsua(name);
+        if(byUsua.getId_rol().getId_rol()==1){
+            List<Usuario> usuarios = usuarioService.listar();
+            model.addAttribute("list","yes");
+            model.addAttribute("usuarios",usuarios);
+            return "menu";
+        }else{
+            return "redirect:/private/index";
+        }
     }
     //LISTAR PRODUCTOR
     @GetMapping("/auth/listProductor")
-    public String listarProductor(Model model){
+    public String listarProductor(Model model, Authentication auth){
+        String name = auth.getName();
+        Usuario byUsua = usuarioService.findByUsua(name);
+        if(byUsua.getId_rol().getId_rol()==1){
         List<Productor> list = productorService.list();
         model.addAttribute("listP","yes");
         model.addAttribute("productores",list);
         return "menu";
+        }else{
+            return "redirect:/private/index";
+        }
     }
     //LISTAR COSTO HOJA COCA
     @GetMapping("/auth/listCostoHC")
-    public String listarCostoHC(Model model){
+    public String listarCostoHC(Model model, Authentication auth){
+        String name = auth.getName();
+        Usuario byUsua = usuarioService.findByUsua(name);
+        if(byUsua.getId_rol().getId_rol()==1){
         model.addAttribute("listC","list");
         return "menu";
+        }else{
+            return "redirect:/private/index";
+        }
     }
     //LISTAR SUCURSAL
     @GetMapping("/auth/listSucursal")
-    public String listarSucursal(Model model){
+    public String listarSucursal(Model model,Authentication auth){
+        String name = auth.getName();
+        Usuario byUsua = usuarioService.findByUsua(name);
+        if(byUsua.getId_rol().getId_rol()==1){
         List<Sucursal> list = sucursalService.list();
         model.addAttribute("listS",list);
         return "menu";
+        }else{
+            return "redirect:/private/index";
+        }
     }
     //LISTAR AGENCIA
     @GetMapping("/auth/listAgencia")
-    public String listarAgencia(Model model){
+    public String listarAgencia(Model model,Authentication auth){
+        String name = auth.getName();
+        Usuario byUsua = usuarioService.findByUsua(name);
+        if(byUsua.getId_rol().getId_rol()==1){
         List<Agencia> list = agenciaService.list();
         model.addAttribute("listA",list);
         return "menu";
+        }else{
+            return "redirect:/private/index";
+        }
     }
     //LISTAR UNIDAD
     @GetMapping("/auth/listUnidadOpe")
-    public String listarUnidadOpe(Model model){
+    public String listarUnidadOpe(Model model, Authentication auth){
+        String name = auth.getName();
+        Usuario byUsua = usuarioService.findByUsua(name);
+        if(byUsua.getId_rol().getId_rol()==1){
        model.addAttribute("listU","listar");
         return "menu";
+        }else{
+            return "redirect:/private/index";
+        }
     }
     @GetMapping("/auth/listTipoHc")
-    public String listarTipoHc(Model model){
+    public String listarTipoHc(Model model, Authentication auth){
+        String name = auth.getName();
+        Usuario byUsua = usuarioService.findByUsua(name);
+        if(byUsua.getId_rol().getId_rol()==1){
         model.addAttribute("listT","yes");
         return "menu";
+        }else{
+            return "redirect:/private/index";
+        }
     }
 
     //ELIMINAR USUARIO
     @GetMapping("/auth/eliminarUsuario/{id}")
-    public String eliminarUsuario(@PathVariable Integer id){
+    public String eliminarUsuario(@PathVariable Integer id,Authentication auth){
+        String name = auth.getName();
+        Usuario byUsua = usuarioService.findByUsua(name);
+        if(byUsua.getId_rol().getId_rol()==1){
         usuarioService.eliminar(id);
         return "redirect:/auth/listaUsuarios";
+    }else{
+        return "redirect:/private/index";
+    }
     }
 
     //EDITAR USUARIO
     @GetMapping("/auth/editUsuario/{id}")
-    public String editarUsuario(@PathVariable Integer id,Model model){
+    public String editarUsuario(@PathVariable Integer id,Model model,Authentication auth){
+        String name = auth.getName();
+        Usuario byUsua = usuarioService.findByUsua(name);
+        if(byUsua.getId_rol().getId_rol()==1){
         Usuario u = usuarioService.findById(id);
 
         List<UnidadOperativa> listar = unidadOpeService.listar();
@@ -159,26 +222,36 @@ public class privateController {
 
         model.addAttribute("unidadesOpe", listar);
         return "menu";
+        }else{
+            return "redirect:/private/index";
+        }
     }
     @PostMapping("/auth/update/{id}")
-    public String actualizarUsuario(@PathVariable Integer id,Usuario usuario){
+    public String actualizarUsuario(@PathVariable Integer id,Usuario usuario, Authentication auth){
+        String name = auth.getName();
+        Usuario byUsua = usuarioService.findByUsua(name);
+        if(byUsua.getId_rol().getId_rol()==1){
         usuarioService.update(id,usuario);
         return "redirect:/auth/listaUsuarios";
+            }else{
+                return "redirect:/private/index";
+            }
     }
-    @GetMapping("/auth/compraUsuario/{id}")
-    public String compraUsuario(@PathVariable Integer id,Model model){
-        Usuario u = usuarioService.findById(id);
-        List<CostoHojaCoca> costoHojaCocas = costoHcService.filterCostoHc(u.getCod_uniOpe());
-        List<UnidadOperativa> listarU = unidadOpeService.listar();
+    //COMPRA
+    @GetMapping("/auth/compraUsuario")
+    public String compraUsuario(Model model,Authentication auth){
+        String name = auth.getName();
+        Usuario byUsua = usuarioService.findByUsua(name);
+            List<CostoHojaCoca> costoHojaCocas = costoHcService.filterCostoHc(byUsua.getCod_uniOpe());
+            List<UnidadOperativa> listarU = unidadOpeService.listar();
 
-        model.addAttribute("c","yes");
+            model.addAttribute("c","yes");
 
-        model.addAttribute("unidadesOpe", listarU);
-        model.addAttribute("tiposHc",costoHojaCocas);
-        model.addAttribute("usuario",u);//US
+            model.addAttribute("unidadesOpe", listarU);
+            model.addAttribute("tiposHc",costoHojaCocas);
 
-        model.addAttribute("compra",nuevaCompra(id));
-        return "menu";
+            model.addAttribute("compra",nuevaCompra(byUsua.getId_usuario()));
+            return "menu";
     }
 
     //DATOS COMPRA
@@ -226,9 +299,37 @@ public class privateController {
         return compra;
     }
 
-    @PostMapping("/auth/comprar/{id}")
-    public String comprar(@PathVariable Integer id,Compra compra){
-        compraService.save(id,compra);
+    @PostMapping("/auth/comprar")
+    public String comprar(Compra compra,Authentication auth){
+        String name = auth.getName();
+        Usuario u = usuarioService.findByUsua(name);
+        compraService.save(u.getId_usuario(),compra);
         return "menu";
     }
+
+    //CAJA BOVEDA
+    @GetMapping("/auth/cajaBoveda")
+    public String cajaBoveda(Model model){
+        List<UnidadOperativa> listarU = unidadOpeService.listar();
+        List<TipoTransaccion> listTransac = tipoTransacService.list();
+
+
+        model.addAttribute("cajaBoveda",new CajaBoveda());
+        model.addAttribute("unidadesOpe", listarU);
+        model.addAttribute("listTransac", listTransac);
+        model.addAttribute("fc", new Date());
+
+        model.addAttribute("cB","yes");
+
+        return "menu";
+    }
+    @PostMapping("/auth/saveCaja")
+    public String saveCaja(CajaBoveda cajaBoveda,Authentication auth){
+        String name = auth.getName();
+        Usuario u = usuarioService.findByUsua(name);
+        cajaBoveda.setId_usuario(u);
+        cajaBovedaService.save(cajaBoveda);
+        return "menu";
+    }
+
 }

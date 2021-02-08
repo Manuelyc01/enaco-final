@@ -33,4 +33,7 @@ public class UnidadOperativa {
     @Column(name = "unimedcompra")
     private String uniMedCompra;
 
+    @Column(name = "cajaboveda")
+    private Double cajaBoveda;
+
 }

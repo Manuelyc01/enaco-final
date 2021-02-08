@@ -2,6 +2,7 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
     const formUsuario=document.querySelector("#formUsuario")
+    const listUsuarios = document.querySelector("#listUsuarios");
 
     var pageNumber= 1;
     var pageSize=10;
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         return array.slice((page_number - 1) * page_size, page_number * page_size);
     }
     function paginar(lista){
+        if(listUsuarios!=null){
         var pageCont = Math.ceil(lista.length/pageSize);
         var pagination=paginate(lista,pageSize,pageNumber)
         usuariosHtml="";
@@ -42,8 +44,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         usuariosHtml += "";
         usuariosHtml += pageNumber >1 ? "<button id='anterior'>Anterior</button>":"";
         usuariosHtml += pageNumber < pageCont ? ("<button id='siguiente'>Siguiente</button>"):"";
-        document.querySelector("#listUsuarios").innerHTML="";
-        document.querySelector("#listUsuarios").innerHTML=usuariosHtml;
+        listUsuarios.innerHTML="";
+        listUsuarios.innerHTML=usuariosHtml;
 
         if(pageNumber < pageCont){
             var a=document.querySelector("#siguiente");
@@ -58,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 pageNumber--;
                 paginar(lista);
             });
+        }
         }
     }
     function showUsuarios() {
@@ -82,6 +85,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     //ACCIONES
     showUsuarios();
-    formUsuario.addEventListener('keyup',filtrar)
+    if (formUsuario!=null){
+        formUsuario.addEventListener('keyup',filtrar)
+    }
 
 });
