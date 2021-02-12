@@ -1,5 +1,6 @@
 package prueba1.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -63,6 +64,10 @@ public class Compra {
 
     @Column(name = "son")
     private String son;
+
+    @OneToOne
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private Usuario id_usuario;
 
 
 }

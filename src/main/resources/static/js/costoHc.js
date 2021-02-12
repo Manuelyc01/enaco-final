@@ -2,6 +2,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //VISTA COSTO
     const formCosto=document.querySelector("#formCosto")
     const listCostoHcHTML=document.querySelector("#listCostoHc")
+
+    const formUnidadOpe = document.querySelector('#formUnidadOpe');
+    const selectUnidadOpe =document.querySelector('#selectUnidadOpe');
+
     var pageNumber= 1;
     var pageSize=13;
     let listCostoHc=$.ajax({//listTIPOHC
@@ -167,7 +171,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         return "";
     }
-
     function Decenas(num){
 
         decena = Math.floor(num/10);
@@ -202,14 +205,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
             case 0: return Unidades(unidad);
         }
     }//Unidades()
-
     function DecenasY(strSin, numUnidades){
         if (numUnidades > 0)
             return strSin + " Y " + Unidades(numUnidades)
 
         return strSin;
     }//DecenasY()
-
     function Centenas(num){
 
         centenas = Math.floor(num / 100);
@@ -233,7 +234,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         return Decenas(decenas);
     }//Centenas()
-
     function Seccion(num, divisor, strSingular, strPlural){
         cientos = Math.floor(num / divisor)
         resto = num - (cientos * divisor)
@@ -251,7 +251,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         return letras;
     }//Seccion()
-
     function Miles(num){
         divisor = 1000;
         cientos = Math.floor(num / divisor)
@@ -267,7 +266,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         //return Seccion(num, divisor, "UN MIL", "MIL") + " " + Centenas(resto);
     }//Miles()
-
     function Millones(num){
         divisor = 1000000;
         cientos = Math.floor(num / divisor)
@@ -283,7 +281,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         //return Seccion(num, divisor, "UN MILLON", "MILLONES") + " " + Miles(resto);
     }//Millones()
-
     function NumeroALetras(num,centavos){
         var data = {
             numero: num,
@@ -313,4 +310,42 @@ document.addEventListener("DOMContentLoaded", function(event) {
             return son;
         }
         }//NumeroALetras()
+
+
+        //ACTUALIZAR LIST COSTOS
+    function CostosF(){
+        let value = selectUnidadOpe.value;
+        console.log(value)
+        $.ajax({
+            type: 'GET',
+            url:'/listCostoHcF/'+value,
+            success:[function (result) {
+                selectTipoHc.innerHTML=``
+                if(result!=null){
+                    selectTipoHc.innerHTML+=`
+                    <option value="0">
+                            Seleccionar...</option>`
+                    for(let costo of result){
+                        selectTipoHc.innerHTML += `
+                            <option value="${costo.cod_tipoHoja.cod_tipoHoja}">
+                            <span>${costo.cod_tipoHoja.cod_tipoHoja}</span>---<span>${costo.cod_tipoHoja.nombre}</span>
+                        </option>
+                        `
+                    }
+                }else {
+                    selectTipoHc.innerHTML += `
+                            <option value="0">
+                            <span>SIN REGISTROS</span>
+                        </option>
+                        `
+                }
+            }]
+        });
+    }
+        if (formUnidadOpe!=null){
+            formUnidadOpe.addEventListener('keyup',CostosF)
+        }
+        if (selectUnidadOpe!=null){
+            selectUnidadOpe.addEventListener('change',CostosF)
+        }
 });

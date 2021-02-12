@@ -8,9 +8,10 @@
 <div th:fragment="compra">
     <div class="header">
         <h1>REGISTRAR COMPRA</h1>
+        <span th:if="${msg!=null}" th:text="${msg}" style="color: red"></span>
     </div>
     <form method="post" th:action="@{/auth/comprar}" th:object="${compra}">
-        <div class="form-group">
+        <div class="form-group" th:if="${msg==null}">
             <div class="row">
                 <div class="col-md-2">
                     <label > Numero de Liquidacion </label>
@@ -72,6 +73,9 @@
                 <div class="col-md-4">
                     <label > OFICINA(Unidad Operativa): </label>
                     <select class="form-control" th:field="*{cod_uniOpe}" id="selectUnidadOpe" >
+                        <option value="0">
+                            <span> Seleccionar...</span>
+                        </option>
                         <option  th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
                             <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
                         </option>

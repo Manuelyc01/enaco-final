@@ -13,6 +13,9 @@
     <link type="text/css" rel="stylesheet" th:href="@{/css/menuStyles.css}">
     <link  th:if="${listP!=null}" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
 
+    <script th:if="${listCompras!=null}" th:inline="javascript">
+        const id_usuario = /*[[${id}]]*/ "id";
+    </script>
     <title>MENU</title>
 </head>
 <body class="home">
@@ -88,6 +91,13 @@
                            th:href="@{/auth/cajaBoveda}">
                             <i class="fa fa-tasks" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Caja Bóveda</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                           th:href="@{/auth/listCompras}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Compras</span>
                         </a>
                     </li>
                 </ul>
@@ -174,6 +184,9 @@
                 <div class="row" th:if="${listT!=null}">
                     <table th:replace="views/listTipoHc :: tablaTipoHc"></table>
                 </div>
+                <div class="row" th:if="${listCompras!=null}">
+                    <table th:replace="views/listCompras :: tablaCompras"></table>
+                </div>
                 <!-- FORMS -->
                 <div class="row" th:if="${r!=null}">
                     <div th:replace="registro :: registro"></div>
@@ -201,6 +214,7 @@
     <script th:if="${listC!=null}" th:src="@{/js/costoHc.js}"></script>
     <script th:if="${listU!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
     <script th:if="${listT!=null}" th:src="@{/js/listTipoHc.js}"></script>
+    <script th:if="${listCompras!=null}" th:src="@{/js/listCompras.js}"></script>
 
     <script th:if="${c!=null}" th:src="@{/js/BusquedaCompra.js}"></script>
     <script th:if="${c!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>

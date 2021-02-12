@@ -1,5 +1,6 @@
 package prueba1.controllers;
 
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import prueba1.Service.*;
 import prueba1.models.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -36,11 +39,12 @@ public class privateController {
     private final TipoTransacService tipoTransacService;
     @Autowired
     private final CajaBovedaService cajaBovedaService;
-
+    @Autowired
+    private final RepresentanteService representanteService;
 
     @Autowired
     private final EstadoService estadoService;
-    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, CostoHcService costoHcService, SucursalService sucursalService, AgenciaService agenciaService, CompraService compraService, TipoHcService tipoHcService, TipoTransacService tipoTransacService, CajaBovedaService cajaBovedaService, EstadoService estadoService) {
+    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, CostoHcService costoHcService, SucursalService sucursalService, AgenciaService agenciaService, CompraService compraService, TipoHcService tipoHcService, TipoTransacService tipoTransacService, CajaBovedaService cajaBovedaService, RepresentanteService representanteService, EstadoService estadoService) {
         this.usuarioService = usuarioService;
         this.unidadOpeService = unidadOpeService;
         this.productorService = productorService;
@@ -51,6 +55,7 @@ public class privateController {
         this.tipoHcService = tipoHcService;
         this.tipoTransacService = tipoTransacService;
         this.cajaBovedaService = cajaBovedaService;
+        this.representanteService = representanteService;
         this.estadoService = estadoService;
     }
 
@@ -111,9 +116,7 @@ public class privateController {
         String name = auth.getName();
         Usuario byUsua = usuarioService.findByUsua(name);
         if(byUsua.getId_rol().getId_rol()==1){
-            List<Usuario> usuarios = usuarioService.listar();
             model.addAttribute("list","yes");
-            model.addAttribute("usuarios",usuarios);
             return "menu";
         }else{
             return "redirect:/private/index";
@@ -125,9 +128,7 @@ public class privateController {
         String name = auth.getName();
         Usuario byUsua = usuarioService.findByUsua(name);
         if(byUsua.getId_rol().getId_rol()==1){
-        List<Productor> list = productorService.list();
         model.addAttribute("listP","yes");
-        model.addAttribute("productores",list);
         return "menu";
         }else{
             return "redirect:/private/index";
@@ -183,6 +184,7 @@ public class privateController {
             return "redirect:/private/index";
         }
     }
+    //LISTAR TIPO HC
     @GetMapping("/auth/listTipoHc")
     public String listarTipoHc(Model model, Authentication auth){
         String name = auth.getName();
@@ -194,7 +196,14 @@ public class privateController {
             return "redirect:/private/index";
         }
     }
-
+    //LISTAR COMPRAS
+    @GetMapping("/auth/listCompras")
+    public String listarCompras(Model model, Authentication auth){
+        Usuario usuario = usuarioService.findByUsua(auth.getName());
+        model.addAttribute("listCompras","yes");
+        model.addAttribute("id",usuario.getId_usuario());
+        return "menu";
+    }
     //ELIMINAR USUARIO
     @GetMapping("/auth/eliminarUsuario/{id}")
     public String eliminarUsuario(@PathVariable Integer id,Authentication auth){
@@ -242,7 +251,7 @@ public class privateController {
     public String compraUsuario(Model model,Authentication auth){
         String name = auth.getName();
         Usuario byUsua = usuarioService.findByUsua(name);
-            List<CostoHojaCoca> costoHojaCocas = costoHcService.filterCostoHc(byUsua.getCod_uniOpe());
+            List<CostoHojaCoca> costoHojaCocas = costoHcService.list();
             List<UnidadOperativa> listarU = unidadOpeService.listar();
 
             model.addAttribute("c","yes");
@@ -298,13 +307,45 @@ public class privateController {
 
         return compra;
     }
-
     @PostMapping("/auth/comprar")
-    public String comprar(Compra compra,Authentication auth){
-        String name = auth.getName();
-        Usuario u = usuarioService.findByUsua(name);
-        compraService.save(u.getId_usuario(),compra);
-        return "menu";
+    public String comprar(Compra compra,Authentication auth,Model model){
+        Productor cedula_productor = compra.getCedula_productor();
+        String dni_repre = compra.getDni_repre();
+        Representante d = representanteService.findByDni(dni_repre);
+        if(cedula_productor==null && d==null){//ERROR DIGITACION CEDULA Y DNI
+            compra.setPesoBruto(0.0);
+            model.addAttribute("msg","Digitar cedula y dni correctamente");
+            model.addAttribute("c","yes");
+            model.addAttribute("unidadesOpe", unidadOpeService.listar());
+            List<CostoHojaCoca> costoHojaCocas = costoHcService.filterCostoHc(compra.getCod_uniOpe().getCod_uniOpe());
+            model.addAttribute("tiposHc",costoHojaCocas);
+            model.addAttribute("compra",compra);
+            return "menu";
+        }else if(cedula_productor!=null && d==null){//ERROR DIGITACION  DNI
+            compra.setPesoBruto(0.0);
+            List<CostoHojaCoca> costoHojaCocas = costoHcService.filterCostoHc(compra.getCod_uniOpe().getCod_uniOpe());
+            model.addAttribute("tiposHc",costoHojaCocas);
+            model.addAttribute("msg","Digitar dni correctamente");
+            model.addAttribute("c","yes");
+            model.addAttribute("unidadesOpe", unidadOpeService.listar());
+            model.addAttribute("compra",compra);
+            return "menu";
+        }else if (cedula_productor==null && d!=null){//ERROR DIGITACION  DNI
+            compra.setPesoBruto(0.0);
+            model.addAttribute("msg","Digitar cedula correctamente");
+            model.addAttribute("unidadesOpe", unidadOpeService.listar());
+            model.addAttribute("c","yes");
+            List<CostoHojaCoca> costoHojaCocas = costoHcService.filterCostoHc(compra.getCod_uniOpe().getCod_uniOpe());
+            model.addAttribute("tiposHc",costoHojaCocas);
+            model.addAttribute("compra",compra);
+            return "menu";
+        }else {
+            String name = auth.getName();
+            Usuario u = usuarioService.findByUsua(name);
+            compra.setId_usuario(u);
+            compraService.save(u.getId_usuario(),compra);
+            return "redirect:/auth/listCompras";
+        }
     }
 
     //CAJA BOVEDA
@@ -330,6 +371,12 @@ public class privateController {
         cajaBoveda.setId_usuario(u);
         cajaBovedaService.save(cajaBoveda);
         return "menu";
+    }
+    //REPORT PDF
+    @GetMapping("/auth/report/{id}")
+    public void generar(@PathVariable Integer id, HttpServletResponse response) throws IOException, JRException {
+        Compra c = compraService.getById(id);
+          compraService.exportReport(c,response);
     }
 
 }

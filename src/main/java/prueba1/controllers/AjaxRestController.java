@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import prueba1.Service.*;
 import prueba1.models.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,14 +27,17 @@ public class AjaxRestController {
     private final CostoHcService costoHcService;
     @Autowired
     private final TipoHcService tipoHcService;
+    @Autowired
+    private final CompraService compraService;
 
-    public AjaxRestController(ProductorService productorService, RepresentanteService representanteService, UnidadOpeService unidadOpeService, UsuarioService usuarioService, CostoHcService costoHcService, TipoHcService tipoHcService) {
+    public AjaxRestController(ProductorService productorService, RepresentanteService representanteService, UnidadOpeService unidadOpeService, UsuarioService usuarioService, CostoHcService costoHcService, TipoHcService tipoHcService, CompraService compraService) {
         this.productorService = productorService;
         this.representanteService = representanteService;
         this.unidadOpeService = unidadOpeService;
         this.usuarioService = usuarioService;
         this.costoHcService = costoHcService;
         this.tipoHcService = tipoHcService;
+        this.compraService = compraService;
     }
 
     //LISTS
@@ -47,6 +51,36 @@ public class AjaxRestController {
             return ResponseEntity.accepted().body(list);
         } catch (Exception e) {
             return new ResponseEntity<List<CostoHojaCoca>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "listCostoHcF/{cod}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<CostoHojaCoca>> listCostoHcF(@PathVariable("cod") String cod) {
+        List<CostoHojaCoca> list = costoHcService.filterCostoHc(cod);
+        try {
+            return ResponseEntity.accepted().body(list);
+        } catch (Exception e) {
+            return new ResponseEntity<List<CostoHojaCoca>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "listCompras/{id}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Compra>> listCompras(@PathVariable("id") Integer id) {
+        Usuario u = usuarioService.findById(id);
+        List<Compra> list;
+        if(u.getId_rol().getId_rol()==1){
+            list = compraService.list();
+        }else{
+            list = compraService.listByIdUsuario(u.getId_usuario());
+        }
+        try {
+            return ResponseEntity.accepted().body(list);
+        } catch (Exception e) {
+            return new ResponseEntity<List<Compra>>(HttpStatus.BAD_REQUEST);
         }
     }
     @RequestMapping(
@@ -115,7 +149,6 @@ public class AjaxRestController {
             return new ResponseEntity<String>("Productor no registrado", HttpStatus.OK);
         }
     }
-
     //BUSCAR REPRESENTANTE
     @RequestMapping(
             value = "buscarR/{dni}",
