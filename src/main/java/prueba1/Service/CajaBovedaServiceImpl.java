@@ -23,7 +23,7 @@ public class CajaBovedaServiceImpl implements CajaBovedaService{
 
     @Override
     public List<CajaBoveda> list(){
-        return repository.findAll();
+        return repository.list();
     }
 
     @Override

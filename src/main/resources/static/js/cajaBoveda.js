@@ -86,7 +86,63 @@ document.addEventListener("DOMContentLoaded", function(event) {
         tara.addEventListener('keyup',x);
         humedad.addEventListener('keyup',x)
     }
-    
 
+    //REGISTROS
+    const listCajaBoveda = document.querySelector("#listCajaBoveda");
+    var pageNumber= 1;
+    var pageSize=8;
+    $.ajax({
+        type: 'GET',
+        url:'/cajabovedas/',
+        success:[function (result) {
+            paginar(result)
+        }]
+    });
+    let cajaBhtml="";
+    function paginate(array,page_size,page_number) {
+        return array.slice((page_number - 1) * page_size, page_number * page_size);
+    }
+    function paginar(lista){
+        if(listCajaBoveda!=null){
+            var pageCont = Math.ceil(lista.length/pageSize);
+            var pagination=paginate(lista,pageSize,pageNumber)
+            cajaBhtml="";
+            pagination.forEach(cajaB =>{
+                cajaBhtml+=`
+                    <tr>
+                    <th scope="row">${cajaB.id_usuario.nombre}</th>
+                    <th scope="row">${cajaB.cod_uniOpe.nom_uniOpe}</th>
+                    <th scope="row">${cajaB.id_tipoTransac.nombre}</th>
+                    <th scope="row">${cajaB.fecha}</th>
+                    <th scope="row">${cajaB.monto}</th>
+                    </tr>
+                `
+            });
+            cajaBhtml += "";
+            cajaBhtml += pageNumber >1 ? "<button id='anterior'>Anterior</button>":"";
+            cajaBhtml += pageNumber < pageCont ? ("<button id='siguiente'>Siguiente</button>"):"";
+
+            listCajaBoveda.innerHTML=""
+            listCajaBoveda.innerHTML=cajaBhtml;
+            if(pageNumber < pageCont){
+                var a=document.querySelector("#siguiente");
+
+                a.addEventListener("click",function next() {
+                    pageNumber++;
+                    paginar(lista);
+                });
+
+            }
+            if(pageNumber>1){
+                var a=document.querySelector("#anterior");
+
+                a.addEventListener("click",function previous() {
+                    pageNumber--;
+                    paginar(lista);
+                });
+
+            }
+        }
+    }
 
 });

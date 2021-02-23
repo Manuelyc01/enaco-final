@@ -141,7 +141,7 @@ public class CompraServiceImpl implements CompraService{
     }
     @Override
     public List<Compra> list(){
-        return compraRepository.findAll();
+        return compraRepository.list();
     }
     @Override
     public List<Compra> listByIdUsuario(Integer id){

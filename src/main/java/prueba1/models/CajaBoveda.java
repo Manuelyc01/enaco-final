@@ -30,6 +30,7 @@ public class CajaBoveda {
     @JoinColumn(name = "id_tipotransac",referencedColumnName = "id_tipotransac")
     private TipoTransaccion id_tipoTransac;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "fecha")
     private Date fecha;
 

@@ -40,7 +40,7 @@ public class UnidadOpeServiceImpl   implements UnidadOpeService {
             }
         }else if (tipo==2){
             if(u.getCajaBoveda()>0){
-                u.setCajaBoveda(u.getCajaBoveda()-m);
+                u.setCajaBoveda(Math.round((u.getCajaBoveda()-m) * 100.0) / 100.0);
             }
         }
         repository.save(u);

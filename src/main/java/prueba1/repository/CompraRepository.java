@@ -12,6 +12,11 @@ import java.util.List;
 @Repository
 public interface CompraRepository extends JpaRepository<Compra,Integer> {
 
-    @Query("SELECT u FROM Compra u where u.id_usuario.id_usuario=?1")
+    @Query("SELECT u FROM Compra u where u.id_usuario.id_usuario=?1 order by u.fecha desc ")
     public List<Compra> listCompraByIdUsuario(Integer id);
+
+    @Query("SELECT u from Compra u order by u.fecha desc ")
+    public List<Compra> list();
+
+
 }

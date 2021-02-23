@@ -457,6 +457,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="Serif" isUnderline="false"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{igv}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="453" y="80" width="94" height="20" uuid="6fe34464-1fe3-46a1-8d0a-9bc5eb60f6e4"/>

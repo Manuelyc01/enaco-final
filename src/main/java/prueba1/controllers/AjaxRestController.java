@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import prueba1.Service.*;
 import prueba1.models.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,8 +28,10 @@ public class AjaxRestController {
     private final TipoHcService tipoHcService;
     @Autowired
     private final CompraService compraService;
+    @Autowired
+    private final CajaBovedaService cajaBovedaService;
 
-    public AjaxRestController(ProductorService productorService, RepresentanteService representanteService, UnidadOpeService unidadOpeService, UsuarioService usuarioService, CostoHcService costoHcService, TipoHcService tipoHcService, CompraService compraService) {
+    public AjaxRestController(ProductorService productorService, RepresentanteService representanteService, UnidadOpeService unidadOpeService, UsuarioService usuarioService, CostoHcService costoHcService, TipoHcService tipoHcService, CompraService compraService, CajaBovedaService cajaBovedaService) {
         this.productorService = productorService;
         this.representanteService = representanteService;
         this.unidadOpeService = unidadOpeService;
@@ -38,6 +39,7 @@ public class AjaxRestController {
         this.costoHcService = costoHcService;
         this.tipoHcService = tipoHcService;
         this.compraService = compraService;
+        this.cajaBovedaService = cajaBovedaService;
     }
 
     //LISTS
@@ -105,6 +107,18 @@ public class AjaxRestController {
             return ResponseEntity.accepted().body(unidadOperativas);
         } catch (Exception e) {
             return new ResponseEntity<List<UnidadOperativa>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "cajabovedas",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<CajaBoveda>> listCajaBoveda() {
+        List<CajaBoveda> cajaBovedas = cajaBovedaService.list() ;
+        try {
+            return ResponseEntity.accepted().body(cajaBovedas);
+        } catch (Exception e) {
+            return new ResponseEntity<List<CajaBoveda>>(HttpStatus.BAD_REQUEST);
         }
     }
 

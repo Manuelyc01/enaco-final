@@ -23,16 +23,45 @@ document.addEventListener("DOMContentLoaded", function(event) {
         var pagination=paginate(lista,pageSize,pageNumber)
         unidadHtml="";
         pagination.forEach(unidadOpe =>{
-            unidadHtml += `
-            <tr>
-            <th scope="row">${unidadOpe.cod_uniOpe}</th>
-            <td>${unidadOpe.nom_uniOpe}</td>
-            <td>${unidadOpe.direccion}</td>
-            <td></td>
-            <td>${unidadOpe.cod_agencia.nombre}</td>
-            <td>${unidadOpe.uniMedCompra}</td>
-        </tr>
+            if (unidadOpe.cod_agencia == null && unidadOpe.cod_sucursal !=null){
+                unidadHtml += `
+                        <tr>
+                        <th scope="row">${unidadOpe.cod_uniOpe}</th>
+                        <td>${unidadOpe.nom_uniOpe}</td>
+                        <td>${unidadOpe.direccion}</td>
+                        <td></td>
+                        <td>--</td>
+                        <td>${unidadOpe.cod_sucursal.nombre}</td>
+                        <td>${unidadOpe.uniMedCompra}</td>
+                        </tr>
                 `
+            }
+            if (unidadOpe.cod_agencia != null && unidadOpe.cod_sucursal ==null){
+                unidadHtml += `
+                        <tr>
+                        <th scope="row">${unidadOpe.cod_uniOpe}</th>
+                        <td>${unidadOpe.nom_uniOpe}</td>
+                        <td>${unidadOpe.direccion}</td>
+                        <td></td>
+                        <td>${unidadOpe.cod_agencia.nombre}</td>
+                        <td>--</td>
+                        <td>${unidadOpe.uniMedCompra}</td>
+                        </tr>
+                `
+            }
+            if (unidadOpe.cod_agencia != null && unidadOpe.cod_sucursal !=null){
+                unidadHtml += `
+                        <tr>
+                        <th scope="row">${unidadOpe.cod_uniOpe}</th>
+                        <td>${unidadOpe.nom_uniOpe}</td>
+                        <td>${unidadOpe.direccion}</td>
+                        <td></td>
+                        <td>${unidadOpe.cod_agencia.nombre}</td>
+                        <td>${unidadOpe.cod_sucursal.nombre}</td>
+                        <td>${unidadOpe.uniMedCompra}</td>
+                        </tr>
+                `
+            }
         });
         unidadHtml += "";
         unidadHtml += pageNumber >1 ? "<button id='anterior'>Anterior</button>":"";
@@ -109,14 +138,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     //DIRECCION UNIDAD
     function d() {
-        let value = selectUnidadOpe.value;
-        for (let unidadOpe of listUnidad){
-            let cod = unidadOpe.cod_uniOpe.toLowerCase();
-            if(value==cod){
-                if(direccionUni!=null){
-                    direccionUni.innerHTML=`
+        if (selectUnidadOpe != null){
+            let value = selectUnidadOpe.value;
+            for (let unidadOpe of listUnidad){
+                let cod = unidadOpe.cod_uniOpe.toLowerCase();
+                if(value==cod){
+                    if(direccionUni!=null){
+                        direccionUni.innerHTML=`
                          <input  type="search" value="${unidadOpe.direccion}" class="form-control"disabled/>
                     `
+                    }
                 }
             }
         }
