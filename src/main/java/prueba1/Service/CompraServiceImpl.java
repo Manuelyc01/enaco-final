@@ -10,10 +10,7 @@ import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
-import prueba1.models.Boleta;
-import prueba1.models.Compra;
-import prueba1.models.Usuario;
+import prueba1.models.*;
 import prueba1.repository.CompraRepository;
 import prueba1.repository.UsuarioRepository;
 
@@ -36,51 +33,99 @@ public class CompraServiceImpl implements CompraService{
     private final UnidadOpeService unidadOpeService;
     @Autowired
     private final RepresentanteService representanteService;
+    @Autowired
+    private final TipoTransacService tipoTransacService;
+    @Autowired
+    private final CajaBovedaService cajaBovedaService;
+    @Autowired
+    private final MovimientoService movimientoService;
+    @Autowired
+    private final InventarioService inventarioService;
 
-    public CompraServiceImpl(CompraRepository compraRepository, UsuarioRepository usuarioRepository, ApplicationContext applicationContext, UsuarioService usuarioService, UnidadOpeService unidadOpeService, RepresentanteService representanteService) {
+    public CompraServiceImpl(CompraRepository compraRepository, UsuarioRepository usuarioRepository, ApplicationContext applicationContext, UsuarioService usuarioService, UnidadOpeService unidadOpeService, RepresentanteService representanteService, TipoTransacService tipoTransacService, CajaBovedaService cajaBovedaService, MovimientoService movimientoService, InventarioService inventarioService) {
         this.compraRepository = compraRepository;
         this.applicationContext = applicationContext;
         this.usuarioService = usuarioService;
         this.unidadOpeService = unidadOpeService;
         this.representanteService = representanteService;
+        this.tipoTransacService = tipoTransacService;
+        this.cajaBovedaService = cajaBovedaService;
+        this.movimientoService = movimientoService;
+        this.inventarioService = inventarioService;
     }
 
     @Override
-    public void save(Integer id, Compra compra){
+    public void save(Integer id, Compra compra) {
         //OBTENER NUM COMPRAS DE USUARIO
         Usuario u = usuarioService.findById(id);
-        Integer num=u.getNum_compras();
-        if (num==null){
-            num=+1;
+        Integer num;
+        if (u.getNum_compras()!=null){
+            num=u.getNum_compras()+1;
+        }else {
+            num=1;
         }
-        int n=num.toString().length();//TAMAÑO DEL NUMERO
+        int n = num.toString().length();//TAMAÑO DEL NUMERO
         switch (n)//CANTIDAD DE DIGITOS (6)
         {
             case 1:
-                compra.setNum_liquidacion(u.getSerie_compra()+"-"+"00000"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra() + "-" + "00000" + num.toString());
                 break;
             case 2:
-                compra.setNum_liquidacion(u.getSerie_compra()+"-"+"0000"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra() + "-" + "0000" + num.toString());
                 break;
             case 3:
-                compra.setNum_liquidacion(u.getSerie_compra()+"-"+"000"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra() + "-" + "000" + num.toString());
                 break;
             case 4:
-                compra.setNum_liquidacion(u.getSerie_compra()+"-"+"00"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra() + "-" + "00" + num.toString());
                 break;
             case 5:
-                compra.setNum_liquidacion(u.getSerie_compra()+"-"+"0"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra() + "-" + "0" + num.toString());
                 break;
             case 6:
-                compra.setNum_liquidacion(u.getSerie_compra()+"-"+num.toString());
+                compra.setNum_liquidacion(u.getSerie_compra() + "-" + num.toString());
 
         }
         //ENVIO FECHA HOY
-        Date date=new Date();
+        Date date = new Date();
         compra.setFecha(date);
         usuarioService.compra(id);
-        unidadOpeService.saveCajaBoveda(compra.getCod_uniOpe().getCod_uniOpe(),compra.getTotalCompra(),2);
+        unidadOpeService.saveCajaBoveda(compra.getCod_uniOpe().getCod_uniOpe(), compra.getTotalCompra(), 2);
+
+
+        //REGISTRO CAJA BOVEDA
+        CajaBoveda cajaBoveda=new CajaBoveda();
+        cajaBoveda.setId_usuario(compra.getId_usuario());
+        cajaBoveda.setCod_uniOpe(compra.getCod_uniOpe());
+        TipoTransaccion tipoT = tipoTransacService.getById(3);
+        cajaBoveda.setId_tipoTransac(tipoT);
+        cajaBoveda.setFecha(compra.getFecha());
+        cajaBoveda.setMonto(compra.getTotalCompra());
+
+
+        //REGISTRO INVENTARIO
+        Inventario inventario=new Inventario();
+        inventario.setId_usuario(compra.getId_usuario());
+        inventario.setCod_almacen(compra.getCod_uniOpe());
+        Movimiento mv = movimientoService.findById(1);
+        inventario.setId_movimiento(mv);
+        inventario.setDocumento(compra.getNum_liquidacion());
+        inventario.setCod_tipoHoja(compra.getCod_tipoHoja());
+        inventario.setPesoNeto(compra.getPesoNeto());
+        //STOCK INICIAL--STOCK FINAL
+        List<Inventario> inventarios = inventarioService.listByProductAlmacen(compra.getCod_tipoHoja().getCod_tipoHoja(), compra.getCod_uniOpe().getCod_uniOpe());
+        if (inventarios.size()==0){
+            inventario.setStockInicial(0.00);
+            inventario.setStockFinal(+compra.getPesoNeto());
+        }else {
+            List<Inventario> inv1 = inventarioService.listByProductAlmacenOne(compra.getCod_tipoHoja(), compra.getCod_uniOpe());
+            Inventario inventario1 = inv1.get(0);
+            inventario.setStockInicial(inventario1.getStockFinal());
+            inventario.setStockFinal(inventario1.getStockFinal()+compra.getPesoNeto());
+        }
         compraRepository.save(compra);
+        inventarioService.save(inventario);
+        cajaBovedaService.save(cajaBoveda);
     }
     @Override
     public void exportReport(Compra compra, HttpServletResponse response) throws IOException, JRException {
@@ -146,5 +191,9 @@ public class CompraServiceImpl implements CompraService{
     @Override
     public List<Compra> listByIdUsuario(Integer id){
         return compraRepository.listCompraByIdUsuario(id);
+    }
+    @Override
+    public Compra findById(Integer id){
+        return  compraRepository.getOne(id);
     }
 }

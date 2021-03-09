@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         totalCompra.setAttribute('value',totalC);
         if(totalC >= 0){
             NumeroALetras(totalC);
-            txtSon.setAttribute('value',son)
+            txtSon.setAttribute('value',son)//
         }else {
             txtSon.setAttribute('value',"?")
         }
@@ -315,29 +315,30 @@ document.addEventListener("DOMContentLoaded", function(event) {
         //ACTUALIZAR LIST COSTOS
     function CostosF(){
         let value = selectUnidadOpe.value;
-        console.log(value)
         $.ajax({
             type: 'GET',
             url:'/listCostoHcF/'+value,
             success:[function (result) {
-                selectTipoHc.innerHTML=``
-                if(result!=null){
-                    selectTipoHc.innerHTML+=`
+                if(selectTipoHc!=null){
+                    selectTipoHc.innerHTML=``
+                    if(result.length!=0){
+                        selectTipoHc.innerHTML+=`
                     <option value="0">
                             Seleccionar...</option>`
-                    for(let costo of result){
-                        selectTipoHc.innerHTML += `
+                        for(let costo of result){
+                            selectTipoHc.innerHTML += `
                             <option value="${costo.cod_tipoHoja.cod_tipoHoja}">
                             <span>${costo.cod_tipoHoja.cod_tipoHoja}</span>---<span>${costo.cod_tipoHoja.nombre}</span>
                         </option>
                         `
-                    }
-                }else {
-                    selectTipoHc.innerHTML += `
+                        }
+                    }else {
+                        selectTipoHc.innerHTML += `
                             <option value="0">
                             <span>SIN REGISTROS</span>
                         </option>
                         `
+                }
                 }
             }]
         });

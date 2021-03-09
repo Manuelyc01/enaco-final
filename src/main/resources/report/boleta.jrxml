@@ -97,7 +97,7 @@
 			</staticText>
 			<image>
 				<reportElement x="10" y="0" width="251" height="80" uuid="7563409c-cca7-4e25-a926-4ff3beaed79f"/>
-				<imageExpression><![CDATA["C:/Users/Manuel/Downloads/F1.png"]]></imageExpression>
+				<imageExpression><![CDATA["src/main/resources/static/img/F1.png"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="410" y="80" width="91" height="24" uuid="f522099d-50bb-4f01-89fb-c832c17d7818"/>

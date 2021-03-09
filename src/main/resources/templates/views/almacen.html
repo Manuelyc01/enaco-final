@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="almacen">
+    <div class="row">
+        <h1 style="padding-left: 25px">INVENTARIO ALMACEN</h1>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <h3 style="padding-left: 25px">Buscar unidad operativa</h3><br>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label > NOMBRE DE UNIDAD</label>
+                <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
+            </div>
+            <div class="col-md-3">
+                <label > OFICINA(Unidad Operativa): </label>
+                <select class="form-control" id="selectUnidadOpe">
+                    <option value="0">
+                        <span> Seleccionar...</span>
+                    </option>
+                    <option  th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
+                        <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label >FILTRAR TIPO HOJA DE COCA: </label>
+                <select class="form-control" id="TipoHc" >
+                    <option value="0">
+                        Seleccionar...
+                    </option>
+                    <option  th:each="tiposHc : ${tiposHc}" th:value="${tiposHc.cod_tipoHoja}">
+                        <span th:text="${tiposHc.cod_tipoHoja}"></span>---<span th:text="${tiposHc.nombre}"></span>
+                    </option>
+                </select>
+            </div>
+            <a class="btn btn-success" id="btnBuscarAlmacen">Buscar</a>
+        </div>
+    </div>
+    <div class="row">
+            <h3 style="padding-left: 25px">Registro Hojas de coca</h3><br>
+    </div>
+    <div class="row">
+        <table class="table table-bordered" th:fragment="tablaAlmacen" id="tablaAlmacen">
+            <thead class="thead-dark" style="background-color: #cde49f">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Almacen</th>
+                <th scope="col">Movimiento</th>
+                <th scope="col">Documento</th>
+                <th scope="col">Tipo Hoja</th>
+                <th scope="col">Peso Neto</th>
+                <th scope="col">Stock Inicial</th>
+                <th scope="col">Stock Final</th>
+            </tr>
+            </thead>
+            <tbody id="listTipoHcAlmacen">
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

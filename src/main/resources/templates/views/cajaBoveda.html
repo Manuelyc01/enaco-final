@@ -55,9 +55,12 @@
             <div class="row">
                 <div class="col-md-3">
                     <label > TIPO DE TRANSACCIÓN: </label>
-                    <select class="form-control" th:field="*{id_tipoTransac}" id="selectTipoTransac" >
-                        <option  th:each="transaccion : ${listTransac}" th:value="${transaccion.id_tipoTransac}">
-                            <span th:text="${transaccion.id_tipoTransac}"></span>. <span th:text="${transaccion.nombre}"></span>
+                    <select class="form-control" th:field="*{id_tipoTransac}" id="selectTipoTransac" name="id_tipoTransac">
+                        <option value="1">
+                            1. Ingreso
+                        </option>
+                        <option value="2">
+                            2. Reembolso
                         </option>
                     </select>
                 </div>

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import prueba1.Service.*;
 import prueba1.models.*;
 
@@ -41,10 +42,21 @@ public class privateController {
     private final CajaBovedaService cajaBovedaService;
     @Autowired
     private final RepresentanteService representanteService;
-
+    @Autowired
+    private final DecomisoService decomisoService;
+    @Autowired
+    private final MermaService mermaService;
+    @Autowired
+    private final TransferenciaService transferenciaService;
+    @Autowired
+    private final MovimientoService movimientoService;
+    @Autowired
+    private final InventarioService inventarioService;
+    @Autowired
+    private final DemasiaService demasiaService;
     @Autowired
     private final EstadoService estadoService;
-    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, CostoHcService costoHcService, SucursalService sucursalService, AgenciaService agenciaService, CompraService compraService, TipoHcService tipoHcService, TipoTransacService tipoTransacService, CajaBovedaService cajaBovedaService, RepresentanteService representanteService, EstadoService estadoService) {
+    public privateController(UsuarioService usuarioService, UnidadOpeService unidadOpeService, ProductorService productorService, CostoHcService costoHcService, SucursalService sucursalService, AgenciaService agenciaService, CompraService compraService, TipoHcService tipoHcService, TipoTransacService tipoTransacService, CajaBovedaService cajaBovedaService, RepresentanteService representanteService, DecomisoService decomisoService, MermaService mermaService, TransferenciaService transferenciaService, MovimientoService movimientoService, InventarioService inventarioService, DemasiaService demasiaService, EstadoService estadoService) {
         this.usuarioService = usuarioService;
         this.unidadOpeService = unidadOpeService;
         this.productorService = productorService;
@@ -56,6 +68,12 @@ public class privateController {
         this.tipoTransacService = tipoTransacService;
         this.cajaBovedaService = cajaBovedaService;
         this.representanteService = representanteService;
+        this.decomisoService = decomisoService;
+        this.mermaService = mermaService;
+        this.transferenciaService = transferenciaService;
+        this.movimientoService = movimientoService;
+        this.inventarioService = inventarioService;
+        this.demasiaService = demasiaService;
         this.estadoService = estadoService;
     }
 
@@ -251,13 +269,13 @@ public class privateController {
     public String compraUsuario(Model model,Authentication auth){
         String name = auth.getName();
         Usuario byUsua = usuarioService.findByUsua(name);
-            List<CostoHojaCoca> costoHojaCocas = costoHcService.list();
             List<UnidadOperativa> listarU = unidadOpeService.listar();
 
-            model.addAttribute("c","yes");
+            model.addAttribute("c","yes");//
 
             model.addAttribute("unidadesOpe", listarU);
-            model.addAttribute("tiposHc",costoHojaCocas);
+
+            model.addAttribute("realizarCompra", "yes");//
 
             model.addAttribute("compra",nuevaCompra(byUsua.getId_usuario()));
             return "menu";
@@ -308,7 +326,7 @@ public class privateController {
         return compra;
     }
     @PostMapping("/auth/comprar")
-    public String comprar(Compra compra,Authentication auth,Model model){
+    public String comprar(Compra compra, Authentication auth, Model model, RedirectAttributes attributes){
         Productor cedula_productor = compra.getCedula_productor();
         String dni_repre = compra.getDni_repre();
         Representante d = representanteService.findByDni(dni_repre);
@@ -340,24 +358,52 @@ public class privateController {
             model.addAttribute("compra",compra);
             return "menu";
         }else {
-            String name = auth.getName();
-            Usuario u = usuarioService.findByUsua(name);
-            compra.setId_usuario(u);
-            compraService.save(u.getId_usuario(),compra);
-            return "redirect:/auth/listCompras";
+            UnidadOperativa uni = unidadOpeService.findByCod(compra.getCod_uniOpe().getCod_uniOpe());
+            Double cb = uni.getCajaBoveda();
+            Double vc = compra.getValorCompra();
+            //VALOR DE COMPRA MENOR O IGUAL A CAJA BOVEDA
+            if (vc<=cb){
+                String name = auth.getName();
+                Usuario u = usuarioService.findByUsua(name);
+                compra.setId_usuario(u);
+                compraService.save(u.getId_usuario(),compra);
+
+                return "redirect:/compraRealizada/"+compra.getId_compra();
+            }else {
+                model.addAttribute("msg","Digitar cedula correctamente");
+                model.addAttribute("unidadesOpe", unidadOpeService.listar());
+                model.addAttribute("c","yes");
+                List<CostoHojaCoca> costoHojaCocas = costoHcService.filterCostoHc(compra.getCod_uniOpe().getCod_uniOpe());
+                model.addAttribute("tiposHc",costoHojaCocas);
+                model.addAttribute("compra",compra);
+                return "menu";
+            }
         }
+    }
+    @GetMapping("/compraRealizada/{id}")
+    public String compraRealizada(@PathVariable Integer id, Model model){
+        Compra compra = compraService.findById(id);
+        model.addAttribute("compraRealizada","yes");//
+
+        model.addAttribute("cedula",compra.getCedula_productor().getCedula());
+        model.addAttribute("nombP",compra.getCedula_productor().getNombre());
+        model.addAttribute("dni",compra.getDni_repre());
+        model.addAttribute("nombR",representanteService.findByDni(compra.getDni_repre()).getNombre());
+        model.addAttribute("uni",compra.getCod_uniOpe().getNom_uniOpe());
+        model.addAttribute("hc",compra.getCod_tipoHoja().getNombre());
+        model.addAttribute("total",compra.getTotalCompra());
+        model.addAttribute("id",compra.getId_compra());
+        return "menu";
     }
 
     //CAJA BOVEDA
     @GetMapping("/auth/cajaBoveda")
     public String cajaBoveda(Model model){
         List<UnidadOperativa> listarU = unidadOpeService.listar();
-        List<TipoTransaccion> listTransac = tipoTransacService.list();
 
 
         model.addAttribute("cajaBoveda",new CajaBoveda());
         model.addAttribute("unidadesOpe", listarU);
-        model.addAttribute("listTransac", listTransac);
         model.addAttribute("fc", new Date());
 
         model.addAttribute("cB","yes");
@@ -378,5 +424,165 @@ public class privateController {
         Compra c = compraService.getById(id);
           compraService.exportReport(c,response);
     }
+    //AlMACEN
+    @GetMapping("/auth/almacen")
+    public String almacen(Model model){
+        List<UnidadOperativa> listar = unidadOpeService.listar();
+        List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
+        model.addAttribute("almacen","almacen");
+        model.addAttribute("unidadesOpe",listar);
+        model.addAttribute("tiposHc",tipoHojaCocas);
+        return "menu";
+    }
 
+    //INGRESO POR DECOMISO
+    @GetMapping("/auth/decomiso")
+    public String decomiso(Model model){
+        List<Decomiso> decomiso = decomisoService.numMoviento();
+        List<UnidadOperativa> listarU = unidadOpeService.listar();
+        List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
+
+        Integer num;
+        if(decomiso.size()==0){
+            num=1;
+        }else {
+            Decomiso d = decomiso.get(0);
+            num=d.getId_decomiso()+1;
+        }
+        model.addAttribute("decom","decomiso");
+        model.addAttribute("decomiso",new Decomiso());
+        model.addAttribute("fc", new Date());
+        model.addAttribute("unidadesOpe", listarU);
+        model.addAttribute("tiposHc",tipoHojaCocas);
+        model.addAttribute("num_Movimiento",num);
+        return "menu";
+    }
+    @PostMapping("/auth/saveDecomiso")
+    public String saveDecomiso(Decomiso decomiso,Authentication auth){
+        Usuario u = usuarioService.findByUsua(auth.getName());
+        decomiso.setId_usuario(u);
+        decomisoService.save(decomiso);
+        return "menu";
+    }
+    @GetMapping("/auth/merma")
+    public String merma(Model model){
+        List<Merma> merma = mermaService.numMovimiento();
+        List<UnidadOperativa> listarU = unidadOpeService.listar();
+        List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
+
+        Integer num;
+        if(merma.size()==0){
+            num=1;
+        }else {
+            Merma m = merma.get(0);
+            num=m.getId_merma()+1;
+        }
+        model.addAttribute("merm","merma");
+        model.addAttribute("merma",new Merma());
+        model.addAttribute("fc", new Date());
+        model.addAttribute("unidadesOpe", listarU);
+        model.addAttribute("tiposHc",tipoHojaCocas);
+        model.addAttribute("num_Movimiento",num);
+        return "menu";
+    }
+    @PostMapping("/auth/saveMerma")
+    public String saveMerma(Merma merma,Authentication auth,Model model){
+        UnidadOperativa cod_uniOpe = merma.getCod_uniOpe();
+        TipoHojaCoca cod_tipoHoja = merma.getCod_tipoHoja();
+        List<Inventario> inv = inventarioService.listByProductAlmacenOne(cod_tipoHoja, cod_uniOpe);
+        Inventario inventario = inv.get(0);
+        //STOCK MAYOR A cantidad de MERMA
+        if (inventario.getStockFinal()<merma.getCantidadNeta()){
+            List<Merma> merm = mermaService.numMovimiento();
+            List<UnidadOperativa> listarU = unidadOpeService.listar();
+            List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
+
+            Integer num;
+            if(merm.size()==0){
+                num=1;
+            }else {
+                Merma m = merm.get(0);
+                num=m.getId_merma()+1;
+            }
+            model.addAttribute("merm","merma");
+            model.addAttribute("msg","CANTIDAD DE STOCK MENOR A CANTIDAD DE MERMA");
+            model.addAttribute("merma",new Merma());
+            model.addAttribute("fc", new Date());
+            model.addAttribute("unidadesOpe", listarU);
+            model.addAttribute("tiposHc",tipoHojaCocas);
+            model.addAttribute("num_Movimiento",num);
+        }else {
+            Usuario u = usuarioService.findByUsua(auth.getName());
+            merma.setId_usuario(u);
+            mermaService.save(merma);
+        }
+        return "menu";
+    }
+    //TRANSFERENCIA HOJA DE COCA
+    @GetMapping("/auth/transferencia")
+    public String transferencia(Model model){
+        List<UnidadOperativa> listarU = unidadOpeService.listar();
+        List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
+
+
+        model.addAttribute("transf","transferencia");
+        model.addAttribute("transferencia",new Transferencia());
+        model.addAttribute("fc", new Date());
+        model.addAttribute("unidadesOpe", listarU);
+        model.addAttribute("tiposHc",tipoHojaCocas);
+        return "menu";
+    }
+    @PostMapping("/auth/saveTransferencia")
+    public String saveTransferencia(Transferencia transferencia,Authentication auth,Model model){
+            UnidadOperativa cod_uniOpe = transferencia.getOrigen();
+            TipoHojaCoca cod_tipoHoja = transferencia.getCod_tipoHoja();
+            List<Inventario> inv = inventarioService.listByProductAlmacenOne(cod_tipoHoja, cod_uniOpe);
+            Inventario inventario = inv.get(0);
+            if(inventario.getStockFinal()<transferencia.getCantidad()){
+                List<UnidadOperativa> listarU = unidadOpeService.listar();
+                List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
+
+                model.addAttribute("msg","Cantidad superior al Stock de Origen");
+                model.addAttribute("transf","transferencia");
+                model.addAttribute("transferencia",new Transferencia());
+                model.addAttribute("fc", new Date());
+                model.addAttribute("unidadesOpe", listarU);
+                model.addAttribute("tiposHc",tipoHojaCocas);
+            }else {
+                Usuario u = usuarioService.findByUsua(auth.getName());
+                transferencia.setId_usuario(u);
+                transferenciaService.save(transferencia);
+            }
+        return "menu";
+
+    }
+    //INGRESO POR DEMASIA
+    @GetMapping("/auth/demasia")
+    public String demasia(Model model){
+        List<Demasia> demasia = demasiaService.numMovimiento();
+        List<UnidadOperativa> listarU = unidadOpeService.listar();
+        List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
+
+        Integer num;
+        if(demasia.size()==0){
+            num=1;
+        }else {
+            Demasia d = demasia.get(0);
+            num=d.getId_demasia()+1;
+        }
+        model.addAttribute("demas","demasia");
+        model.addAttribute("demasia",new Demasia());
+        model.addAttribute("fc", new Date());
+        model.addAttribute("unidadesOpe", listarU);
+        model.addAttribute("tiposHc",tipoHojaCocas);
+        model.addAttribute("num_Movimiento",num);
+        return "menu";
+    }
+    @PostMapping("/auth/saveDemasia")
+    public String saveDemasia(Demasia demasia,Authentication auth){
+        Usuario u = usuarioService.findByUsua(auth.getName());
+        demasia.setId_usuario(u);
+        demasiaService.save(demasia);
+        return "menu";
+    }
 }

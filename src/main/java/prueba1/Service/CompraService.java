@@ -21,4 +21,6 @@ public interface CompraService {
     List<Compra> list();
 
     List<Compra> listByIdUsuario(Integer id);
+
+    Compra findById(Integer id);
 }
