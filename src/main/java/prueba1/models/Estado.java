@@ -21,6 +21,4 @@ public class Estado {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany(mappedBy = "id_estado")
-    private List<Usuario> usuario;
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -29,21 +30,30 @@ public class Usuario {
     @Column(name = "correo")
     private String correo;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
     private Rol id_rol;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_Uniope", referencedColumnName = "id_Uniope")
-    private UnidadOperativa id_UniOpe;
+    @OneToOne
+    @JoinColumn(name = "cod_uniope", referencedColumnName = "cod_uniope")
+    private UnidadOperativa cod_uniOpe;
 
     @Column(name = "passw")
     private String  passw;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "id_estado",referencedColumnName = "id_estado")
     private Estado id_estado;
 
     @Column(name = "usua")
     private String usua;
+
+    @Column(name = "serie_compra")
+    private String serie_compra;
+
+    @Column(name = "num_compras")
+    private Integer num_compras;
+
+    @Column (name = "fecha")
+    private Date fecha;
 }

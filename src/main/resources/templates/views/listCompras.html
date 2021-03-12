@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="views/head :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table class="table table-bordered" th:fragment="tablaCompras" id="tablaCompras">
+    <thead class="thead-dark" style="background-color: #cde49f">
+    <tr>
+        <th scope="col">Num. Liquidación</th>
+        <th scope="col">Cliente</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Usuario</th>
+    </tr>
+    </thead>
+    <tbody id="listCompras">
+    </tbody>
+</table>
+</body>
+</html>

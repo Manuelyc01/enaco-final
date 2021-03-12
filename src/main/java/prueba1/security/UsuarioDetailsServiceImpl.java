@@ -1,6 +1,7 @@
 package prueba1.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +23,7 @@ public class UsuarioDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String usua) throws UsernameNotFoundException {
         Usuario user= usuarioRepository.findByUsua(usua);
-        User.UserBuilder builder=null;
+        UserBuilder builder = null;
 
         if(user != null){
             builder = User.withUsername(usua);

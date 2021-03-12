@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="views/head :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <table class="table table-bordered" th:fragment="tablaCostoHC" id="tablaCostoHC">
+        <thead class="thead-dark" style="background-color: #cde49f">
+        <tr>
+            <th scope="col">Unidad Operativa</th>
+            <th scope="col">Tipo de Hoja</th>
+            <th scope="col">Fecha de Vigencia</th>
+            <th scope="col">Precio sin IGV</th>
+            <th scope="col">IGV</th>
+            <th scope="col">Precio con IGV</th>
+        </tr>
+        </thead>
+        <tbody id="listCostoHc">
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

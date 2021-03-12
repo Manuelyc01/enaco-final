@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="views/head :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <table class="table table-bordered" th:fragment="tablaSucursal" id="tablaSucursal">
+        <thead class="thead-dark" style="background-color: #cde49f">
+        <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Direccion</th>
+            <th scope="col">Ubigeo</th>
+            <th scope="col">Unidad de Medida compra</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sucursal:${listS}">
+            <th scope="row" th:text="*{sucursal.cod_sucursal}"></th>
+            <td th:text="*{sucursal.nombre}"></td>
+            <td th:text="*{sucursal.direccion}"></td>
+            <td></td>
+            <td th:text="*{sucursal.uniMedCompra}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

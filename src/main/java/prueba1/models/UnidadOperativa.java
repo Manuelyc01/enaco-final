@@ -14,10 +14,6 @@ import java.util.List;
 @Table(name = "unidadoperativa")
 public class UnidadOperativa {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_Uniope")
-    private Integer id_UniOpe;
-
     @Column(name = "cod_uniope")
     private String cod_uniOpe;
 
@@ -27,12 +23,21 @@ public class UnidadOperativa {
     @Column(name = "direccion")
     private String direccion;
 
-    @Column(name = "ubigeouniope")
-    private String ubigeoUniOpe;
+    @Column(name = "ubigeo")
+    private String ubigeo;
 
-    @Column(name = "localidad")
-    private String localidad;
+    @OneToOne
+    @JoinColumn(name = "cod_agencia",referencedColumnName = "cod_agencia")
+    private Agencia cod_agencia;
 
-    @OneToMany(mappedBy = "id_UniOpe")
-    private List<Usuario> usuario;
+    @OneToOne
+    @JoinColumn(name = "cod_sucursal",referencedColumnName = "cod_sucursal")
+    private Sucursal cod_sucursal;
+
+    @Column(name = "unimedcompra")
+    private String uniMedCompra;
+
+    @Column(name = "cajaboveda")
+    private Double cajaBoveda;
+
 }

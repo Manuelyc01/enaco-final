@@ -20,6 +20,4 @@ public class Rol {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany (mappedBy = "id_rol")
-    private List<Usuario> usuarios;
 }

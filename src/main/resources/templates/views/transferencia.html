@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="transferencia">
+    <div class="header">
+        <h1>Transferencia Hoja de Coca</h1>
+        <span th:if="${msg!=null}" th:text="${msg}" style="color: red"></span>
+    </div>
+    <form method="post" th:action="@{/auth/saveTransferencia}" th:object="${transferencia}">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    <label > FECHA</label>
+                    <input th:value="${#dates.format(fc,'dd/MM/yyyy')}" class="form-control" type="text"  readonly>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    <label > UNIDAD ORIGEN</label>
+                    <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
+                </div>
+                <div class="col-md-4">
+                    <label > OFICINA(ORIGEN): </label>
+                    <select class="form-control" th:field="*{origen}" id="selectUnidadOpe" >
+                        <option value="0">
+                            <span> Seleccionar...</span>
+                        </option>
+                        <option  th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
+                            <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label >FILTRAR TIPO HOJA DE COCA: </label>
+                    <select class="form-control" id="TipoHc" th:field="*{cod_tipoHoja}">
+                        <option value="0">
+                            Seleccionar...
+                        </option>
+                        <option  th:each="tiposHc : ${tiposHc}" th:value="${tiposHc.cod_tipoHoja}">
+                            <span th:text="${tiposHc.cod_tipoHoja}"></span>---<span th:text="${tiposHc.nombre}"></span>
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <div class="col-md-3">
+                        <a type="button" class="btn btn-info" id="btnStock">Stock</a>
+                    </div>
+                    <div class="col-md-9">
+                        <label >Cantidad: </label>
+                        <input id="txtStock" class="form-control" type="text" placeholder="0.0" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-4">
+                    <label > OFICINA(DESTINO): </label>
+                    <select class="form-control" th:field="*{destino}"  >
+                        <option value="0">
+                            <span> Seleccionar...</span>
+                        </option>
+                        <option  th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
+                            <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-5">
+                    <div>
+                        <label > Transportista</label>
+                        <input class="form-control" type="text" autocomplete="off"th:field="*{transportista}">
+                    </div>
+                    <div>
+                        <label > Placa de Vehículo</label>
+                        <input class="form-control" type="text" autocomplete="off"th:field="*{placaVehiculo}">
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <label> Comentario</label>
+                    <textarea  class="form-control" rows="3" th:field="*{comentario}">
+                    </textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-5">
+                    <label > Cantidad (Kg)</label>
+                    <input id="cantidadN" th:field="*{cantidad}" class="form-control" type="text" placeholder="Ingresar kilogramos" autocomplete="off" required>
+                </div>
+                <div id="divCantidad"></div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" >REGISTRAR</button>
+    </form>
+</div>
+</body>
+</html>

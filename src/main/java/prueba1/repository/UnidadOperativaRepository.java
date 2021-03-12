@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import prueba1.models.UnidadOperativa;
 
 @Repository
-public interface UnidadOperativaRepository extends JpaRepository<UnidadOperativa,Integer> {
+public interface UnidadOperativaRepository extends JpaRepository<UnidadOperativa,String> {
 }
