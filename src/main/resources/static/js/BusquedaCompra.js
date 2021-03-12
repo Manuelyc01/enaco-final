@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //CEDULA PRODUCTOR
     const formCedula= document.querySelector('#formCedula');
     const resultP=document.querySelector('#resultP');
+    const msg=document.querySelector('#msg');
     //DNI REPRESENTANTE
     const formDni=document.querySelector('#formDni');
     const resultR1=document.querySelector('#resultR1');

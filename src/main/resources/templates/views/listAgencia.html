@@ -24,7 +24,8 @@
             <td th:text="*{agencia.direccion}"></td>
             <td></td>
             <td th:text="*{agencia.uniMedCompra}"></td>
-            <td th:text="*{agencia.cod_sucursal.nombre}"></td>
+            <td th:if="${agencia.cod_sucursal}!=null" th:text="*{agencia.cod_sucursal.nombre}"></td>
+            <td th:if="${agencia.cod_sucursal}==null">No pertenece a Sucursal</td>
         </tr>
         </tbody>
     </table>

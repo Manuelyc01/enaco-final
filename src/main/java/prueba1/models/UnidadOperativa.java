@@ -30,7 +30,14 @@ public class UnidadOperativa {
     @JoinColumn(name = "cod_agencia",referencedColumnName = "cod_agencia")
     private Agencia cod_agencia;
 
+    @OneToOne
+    @JoinColumn(name = "cod_sucursal",referencedColumnName = "cod_sucursal")
+    private Sucursal cod_sucursal;
+
     @Column(name = "unimedcompra")
     private String uniMedCompra;
+
+    @Column(name = "cajaboveda")
+    private Double cajaBoveda;
 
 }

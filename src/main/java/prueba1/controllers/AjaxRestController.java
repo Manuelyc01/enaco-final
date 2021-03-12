@@ -26,14 +26,23 @@ public class AjaxRestController {
     private final CostoHcService costoHcService;
     @Autowired
     private final TipoHcService tipoHcService;
+    @Autowired
+    private final CompraService compraService;
+    @Autowired
+    private final CajaBovedaService cajaBovedaService;
+    @Autowired
+    private final InventarioService inventarioService;
 
-    public AjaxRestController(ProductorService productorService, RepresentanteService representanteService, UnidadOpeService unidadOpeService, UsuarioService usuarioService, CostoHcService costoHcService, TipoHcService tipoHcService) {
+    public AjaxRestController(ProductorService productorService, RepresentanteService representanteService, UnidadOpeService unidadOpeService, UsuarioService usuarioService, CostoHcService costoHcService, TipoHcService tipoHcService, CompraService compraService, CajaBovedaService cajaBovedaService, InventarioService inventarioService) {
         this.productorService = productorService;
         this.representanteService = representanteService;
         this.unidadOpeService = unidadOpeService;
         this.usuarioService = usuarioService;
         this.costoHcService = costoHcService;
         this.tipoHcService = tipoHcService;
+        this.compraService = compraService;
+        this.cajaBovedaService = cajaBovedaService;
+        this.inventarioService = inventarioService;
     }
 
     //LISTS
@@ -47,6 +56,48 @@ public class AjaxRestController {
             return ResponseEntity.accepted().body(list);
         } catch (Exception e) {
             return new ResponseEntity<List<CostoHojaCoca>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "listCostoHcF/{cod}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<CostoHojaCoca>> listCostoHcF(@PathVariable("cod") String cod) {
+        List<CostoHojaCoca> list = costoHcService.filterCostoHc(cod);
+        try {
+            return ResponseEntity.accepted().body(list);
+        } catch (Exception e) {
+            return new ResponseEntity<List<CostoHojaCoca>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "listRegistrosUni/{cod}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Inventario>> listRegistrosUni(@PathVariable("cod") String cod) {
+        List<Inventario> list = inventarioService.listByUni(cod);
+        try {
+            return ResponseEntity.accepted().body(list);
+        } catch (Exception e) {
+            return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "listCompras/{id}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Compra>> listCompras(@PathVariable("id") Integer id) {
+        Usuario u = usuarioService.findById(id);
+        List<Compra> list;
+        if(u.getId_rol().getId_rol()==1){
+            list = compraService.list();
+        }else{
+            list = compraService.listByIdUsuario(u.getId_usuario());
+        }
+        try {
+            return ResponseEntity.accepted().body(list);
+        } catch (Exception e) {
+            return new ResponseEntity<List<Compra>>(HttpStatus.BAD_REQUEST);
         }
     }
     @RequestMapping(
@@ -71,6 +122,18 @@ public class AjaxRestController {
             return ResponseEntity.accepted().body(unidadOperativas);
         } catch (Exception e) {
             return new ResponseEntity<List<UnidadOperativa>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "cajabovedas",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<CajaBoveda>> listCajaBoveda() {
+        List<CajaBoveda> cajaBovedas = cajaBovedaService.list() ;
+        try {
+            return ResponseEntity.accepted().body(cajaBovedas);
+        } catch (Exception e) {
+            return new ResponseEntity<List<CajaBoveda>>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -115,7 +178,6 @@ public class AjaxRestController {
             return new ResponseEntity<String>("Productor no registrado", HttpStatus.OK);
         }
     }
-
     //BUSCAR REPRESENTANTE
     @RequestMapping(
             value = "buscarR/{dni}",
@@ -128,6 +190,38 @@ public class AjaxRestController {
         } catch (Exception e) {
 
             return new ResponseEntity<Representante>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "viewRegisters/{uni}/{hoj}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Inventario>> registrosAlmacen(@PathVariable("uni") String uni,@PathVariable("hoj") String hoj) {
+        List<Inventario> inventarios = inventarioService.listByProductAlmacen(hoj, uni);
+        try {
+            return ResponseEntity.accepted().body(inventarios);
+        } catch (Exception e) {
+
+            return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "viewStock/{uni}/{hoj}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> stockHcAlmacen(@PathVariable("uni") String uni,@PathVariable("hoj") String hoj) {
+        List<Inventario> inventario = inventarioService.stockHcAlmacen(hoj, uni);
+
+        try {
+            Double stockFinal=0.0;
+            if(inventario.size()==1){
+                Inventario i = inventario.get(0);
+                 stockFinal= i.getStockFinal();
+            }
+            return ResponseEntity.accepted().body(stockFinal+"");
+        } catch (Exception e) {
+
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -13,6 +13,9 @@
     <link type="text/css" rel="stylesheet" th:href="@{/css/menuStyles.css}">
     <link  th:if="${listP!=null}" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
 
+    <script th:if="${listCompras!=null}" th:inline="javascript">
+        const id_usuario = /*[[${id}]]*/ "id";
+    </script>
     <title>MENU</title>
 </head>
 <body class="home">
@@ -78,9 +81,65 @@
                     </li>
                     <li>
                         <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
-                           th:href="@{/auth/compraUsuario/{id}(id=${session.usuario.getId_usuario()})}">
+                           th:href="@{/auth/compraUsuario}">
                             <i class="fa fa-tasks" aria-hidden="true"></i>
                             <span class="hidden-xs hidden-sm">Realizar Compra</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                           th:href="@{/auth/cajaBoveda}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Caja Bóveda</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==2}"
+                           th:href="@{/auth/cajaBoveda}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Caja Bóveda</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
+                           th:href="@{/auth/almacen}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Almacen</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
+                           th:href="@{/auth/decomiso}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Ingreso por Decomiso</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
+                           th:href="@{/auth/demasia}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Ingreso por Demasia</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
+                           th:href="@{/auth/merma}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Merma</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
+                           th:href="@{/auth/transferencia}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Transferencia</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                           th:href="@{/auth/listCompras}">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span class="hidden-xs hidden-sm">Compras</span>
                         </a>
                     </li>
                 </ul>
@@ -136,7 +195,7 @@
                 </header>
             </div>
             <div class="user-dashboard" th:if="${session.usuario!=null}">
-                <h1>Bienvenido, <span th:text="${session.usuario.nombre}" ></span></h1>
+                <h1 th:if="${inicio!=null}">Bienvenido, <span th:text="${session.usuario.nombre}" ></span></h1>
 
                     <!--LISTAS-->
                 <div class="row" th:if="${list!=null}">
@@ -167,6 +226,9 @@
                 <div class="row" th:if="${listT!=null}">
                     <table th:replace="views/listTipoHc :: tablaTipoHc"></table>
                 </div>
+                <div class="row" th:if="${listCompras!=null}">
+                    <table th:replace="views/listCompras :: tablaCompras"></table>
+                </div>
                 <!-- FORMS -->
                 <div class="row" th:if="${r!=null}">
                     <div th:replace="registro :: registro"></div>
@@ -176,6 +238,27 @@
                 </div>
                 <div class="row" th:if="${c!=null}">
                     <div th:replace="compra :: compra"></div>
+                </div>
+                <div class="row" th:if="${cB!=null}">
+                    <div th:replace="views/cajaBoveda :: cajaBoveda"></div>
+                </div>
+                <div class="row" th:if="${almacen!=null}">
+                    <div th:replace="views/almacen :: almacen"></div>
+                </div>
+                <div class="row" th:if="${decom!=null}">
+                    <div th:replace="views/decomiso :: decomiso"></div>
+                </div>
+                <div class="row" th:if="${demas!=null}">
+                    <div th:replace="views/demasia :: demasia"></div>
+                </div>
+                <div class="row" th:if="${merm!=null}">
+                    <div th:replace="views/Merma :: merma"></div>
+                </div>
+                <div class="row" th:if="${transf!=null}">
+                    <div th:replace="views/transferencia :: transferencia"></div>
+                </div>
+                <div class="row" th:if="${compraRealizada!=null}">
+                    <div th:replace="views/compraRealizada :: compraRealizada"></div>
                 </div>
             </div>
         </div>
@@ -191,10 +274,24 @@
     <script th:if="${listC!=null}" th:src="@{/js/costoHc.js}"></script>
     <script th:if="${listU!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
     <script th:if="${listT!=null}" th:src="@{/js/listTipoHc.js}"></script>
+    <script th:if="${listCompras!=null}" th:src="@{/js/listCompras.js}"></script>
 
     <script th:if="${c!=null}" th:src="@{/js/BusquedaCompra.js}"></script>
     <script th:if="${c!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
     <script th:if="${c!=null}" th:src="@{/js/costoHc.js}"></script>
+    <script th:if="${cB!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+
+    <script th:if="${almacen!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+    <script th:if="${almacen!=null}" th:src="@{/js/almacen.js}"></script>
+    <script th:if="${decom!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+    <script th:if="${demas!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+    <script th:if="${transf!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+    <script th:if="${transf!=null}" th:src="@{/js/transferencia.js}"></script>
+    <script th:if="${merm!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+    <script th:if="${merm!=null}" th:src="@{/js/merma.js}"></script>
+
+    <script th:if="${cB!=null}" th:src="@{/js/cajaBoveda.js}"></script>
+    <script th:if="${c!=null}" th:src="@{/js/cajaBoveda.js}"></script>
 
 </body>
 </html>

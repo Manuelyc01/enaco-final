@@ -20,4 +20,29 @@ public class UnidadOpeServiceImpl   implements UnidadOpeService {
     public List<UnidadOperativa> listar(){
         return repository.findAll();
     }
+    @Override
+    public UnidadOperativa findByCod(String cod){
+        return repository.getOne(cod);
+    }
+    @Override
+    public void save(UnidadOperativa unidadOperativa){
+        repository.save(unidadOperativa);
+    }
+    @Override
+    public void saveCajaBoveda(String cod,double monto,Integer tipo){
+        UnidadOperativa u = repository.getOne(cod);
+        Double m=Math.round(monto * 100.0) / 100.0;
+        if(tipo ==1){
+            if(u.getCajaBoveda()==null){
+                u.setCajaBoveda(+m);
+            } else if (u.getCajaBoveda() >= 0){
+                u.setCajaBoveda(u.getCajaBoveda()+m);
+            }
+        }else if (tipo==2){
+            if(u.getCajaBoveda()>0){
+                u.setCajaBoveda(Math.round((u.getCajaBoveda()-m) * 100.0) / 100.0);
+            }
+        }
+        repository.save(u);
+    }
 }

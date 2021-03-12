@@ -6,141 +6,152 @@
 </head>
 <body>
 <div th:fragment="compra">
-    <div class="header">
-        <h1>REGISTRAR COMPRA</h1>
-    </div>
-    <form method="post" th:action="@{/auth/comprar/{id}(id=${usuario.id_usuario})}" th:object="${compra}">
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-2">
-                    <label > Numero de Liquidacion </label>
-                    <input th:value="*{num_liquidacion}" class="form-control" type="text" readonly>
-                </div>
-                <div class="col-md-2">
-                    <label > Fecha</label>
-                    <input th:value="*{#dates.format(fecha,'dd/MM/yyyy')}" class="form-control" type="text"  readonly>
+    <div th:if="${realizarCompra!=null}">
+        <div class="header">
+            <h1>REGISTRAR COMPRA</h1>
+            <span th:if="${msg!=null}" th:text="${msg}" style="color: red"></span>
+        </div>
+        <form method="post" th:action="@{/auth/comprar}" th:object="${compra}">
+            <div class="form-group" th:if="${msg==null}">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label > Numero de Liquidacion </label>
+                        <input th:value="*{num_liquidacion}"    class="form-control" type="text" readonly>
+                    </div>
+                    <div class="col-md-2">
+                        <label > Fecha</label>
+                        <input th:value="*{#dates.format(fecha,'dd/MM/yyyy')}" class="form-control" type="text"  readonly>
 
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-2">
-                    <label > CEDULA DE PRODUCTOR</label>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label > CEDULA DE PRODUCTOR</label>
                         <input id="formCedula" th:field="*{cedula_productor}" type="text" class="form-control" placeholder="Ingresar cedula"aria-describedby="basic-addon1"autocomplete="off" required>
-                </div>
-                <div class="col-md-4">
-                    <label > Nombre de productor</label>
-                    <div id="resultP">
-                        <input type="text" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label > Nombre de productor</label>
+                        <div id="resultP">
+                            <input type="text" class="form-control" readonly>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-2">
-                    <label > DNI DE REPRESENTANTE</label>
-                    <input id="formDni" th:field="*{dni_repre}"  class="form-control" type="text" placeholder="Ingresar DNI" autocomplete="off" required>
-                </div>
-                <div class="col-md-4">
-                    <label > Nombre de representante</label>
-                    <div id="resultR1">
-                    <input class="form-control" type="text" readonly>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label > DNI DE REPRESENTANTE</label>
+                        <input id="formDni" th:field="*{dni_repre}"  class="form-control" type="text" placeholder="Ingresar DNI" autocomplete="off" required>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <label > Direccion de representante</label>
-                    <div id="resultR2">
-                    <input  class="form-control" type="text"readonly>
+                    <div class="col-md-4">
+                        <label > Nombre de representante</label>
+                        <div id="resultR1">
+                            <input class="form-control" type="text" readonly>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <label > Ubigeo representante</label>
-                    <div id="resultR3">
-                    <input  class="form-control" type="text" readonly>
+                    <div class="col-md-4">
+                        <label > Direccion de representante</label>
+                        <div id="resultR2">
+                            <input  class="form-control" type="text"readonly>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-2">
-                    <label > NOMBRE DE UNIDAD</label>
-                    <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
-                </div>
-                <div class="col-md-4">
-                    <label > OFICINA(Unidad Operativa): </label>
-                    <select class="form-control" th:field="*{cod_uniOpe}" id="selectUnidadOpe" >
-                        <option  th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
-                            <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label>Direccion de oficina:</label>
-                    <div id="direccionUni">
-                    <input  type="search" class="form-control" placeholder="" readonly/>
+                    <div class="col-md-2">
+                        <label > Ubigeo representante</label>
+                        <div id="resultR3">
+                            <input  class="form-control" type="text" readonly>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-4">
-                    <label > TIPO HOJA DE COCA: </label>
-                    <select class="form-control" th:field="*{cod_tipoHoja}" id="selectTipoHc" >
-                        <option value="0">
-                            Seleccionar
-                        </option>
-                        <option  th:each="tiposHc : ${tiposHc}" th:value="${tiposHc.cod_tipoHoja.cod_tipoHoja}">
-                            <span th:text="${tiposHc.cod_tipoHoja.cod_tipoHoja}"></span>---<span th:text="${tiposHc.cod_tipoHoja.nombre}"></span>
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label>Precio unitario de HC (S/.)</label>
-                    <div id="precioUnitario">
-                    <input id="precioU" type="search" class="form-control" placeholder="0.00" readonly/>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label > NOMBRE DE UNIDAD</label>
+                        <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
+                    </div>
+                    <div class="col-md-4">
+                        <label > OFICINA(Unidad Operativa): </label>
+                        <select class="form-control" th:field="*{cod_uniOpe}" id="selectUnidadOpe" >
+                            <option value="0">
+                                <span> Seleccionar...</span>
+                            </option>
+                            <option  th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
+                                <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Direccion de oficina:</label>
+                        <div id="direccionUni">
+                            <input  type="search" class="form-control" placeholder="" readonly/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Caja Boveda de Oficina:</label>
+                        <div id="cajaBovedaUni">
+                            <input  type="search" class="form-control" placeholder="" readonly/>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group" style="border-style:groove">
-            <div class="row">
-                <div class="col-md-6">
-                    <label > Peso Bruto (Kg)</label>
-                    <input th:field="*{pesoBruto}" class="form-control" type="text" placeholder="Ingresar kilogramos" id="pesoBruto" autocomplete="off" required>
-                    <label > Tara (Kg)</label>
-                    <input th:field="*{tara}"  class="form-control" type="text" placeholder="Ingresar tara"  id="tara" autocomplete="off">
-                    <label > Humedad (Kg)</label>
-                    <input th:field="*{humedad}" class="form-control" type="text" placeholder="Ingresar humedad" id="humedad" autocomplete="off">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label > TIPO HOJA DE COCA: </label>
+                        <select class="form-control" th:field="*{cod_tipoHoja}" id="selectTipoHc" >
+                            <option value="0">
+                                Seleccionar Unidad
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Precio unitario de HC (S/.)</label>
+                        <div id="precioUnitario">
+                            <input id="precioU" type="search" class="form-control" placeholder="0.00" readonly/>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label > Peso Neto (kg)</label>
-                    <input id="pesoNeto" th:field="*{pesoNeto}" class="form-control" type="text" placeholder="0.0" readonly>
+            </div>
+            <div class="form-group" style="border-style:groove">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label > Peso Bruto (Kg)</label>
+                        <input th:field="*{pesoBruto}" class="form-control" type="text" placeholder="Ingresar kilogramos" id="pesoBruto" autocomplete="off" required>
+                        <label > Tara (Kg)</label>
+                        <input th:field="*{tara}"  class="form-control" type="text" placeholder="Ingresar tara"  id="tara" autocomplete="off">
+                        <label > Humedad (Kg)</label>
+                        <input th:field="*{humedad}" class="form-control" type="text" placeholder="Ingresar humedad" id="humedad" autocomplete="off">
+                    </div>
+                    <div class="col-md-6">
+                        <label > Peso Neto (kg)</label>
+                        <input id="pesoNeto" th:field="*{pesoNeto}" class="form-control" type="text" placeholder="0.0" readonly>
 
-                    <label > Valor de la compra (S/.)</label>
-                    <input id="valorCompra" th:field="*{valorCompra}" class="form-control" type="text" placeholder="0.00" readonly>
+                        <label > Valor de la compra (S/.)</label>
+                        <input id="valorCompra" th:field="*{valorCompra}" class="form-control" type="text" placeholder="0.00" readonly>
 
-                    <label > IGV (S/.)</label>
-                    <input id="igv" th:field="*{igv}" class="form-control" type="text" placeholder="0.00" readonly>
+                        <label > IGV (S/.)</label>
+                        <input id="igv" th:field="*{igv}" class="form-control" type="text" placeholder="0.00" readonly>
 
-                    <div class="col-md-3" style="padding-left: 0">
-                        <label > Total de la Compra (S/.)</label>
+                        <div class="col-md-3" style="padding-left: 0">
+                            <label > Total de Compra(S/.)</label>
                             <input id="totalCompra"  th:field="*{totalCompra}"class="form-control" type="text" placeholder="S/0.00" readonly>
-                    </div>
-                    <div class="col-md-9" style="padding-left: 0">
-                        <label > SON: </label>
+                        </div>
+                        <div class="col-md-9" style="padding-left: 0">
+                            <label > SON: </label>
                             <input id="txtSon" th:field="*{son}"  placeholder="" class="form-control"readonly/>
+                        </div>
+                        <div id="alert"></div>
                     </div>
                 </div>
             </div>
-        </div>
-        <button type="submit" class="btn btn-primary">COMPRAR</button>
-        <button type="submit" class="btn btn-primary">IMPRIMIR</button>
-    </form>
+            <div id="btn">
+                <button type="submit" class="btn btn-primary" disabled>COMPRAR</button>
+            </div>
 
+        </form>
+    </div>
 </div>
 </body>
 </html>

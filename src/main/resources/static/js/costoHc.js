@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", function(event) {
     //VISTA COSTO
     const formCosto=document.querySelector("#formCosto")
+    const listCostoHcHTML=document.querySelector("#listCostoHc")
+
+    const formUnidadOpe = document.querySelector('#formUnidadOpe');
+    const selectUnidadOpe =document.querySelector('#selectUnidadOpe');
+
     var pageNumber= 1;
     var pageSize=13;
     let listCostoHc=$.ajax({//listTIPOHC
@@ -15,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         return array.slice((page_number - 1) * page_size, page_number * page_size);
     }
     function paginar(lista){
+        if(listCostoHcHTML !=null){
         var pageCont = Math.ceil(lista.length/pageSize);
         var pagination=paginate(lista,pageSize,pageNumber)
         costoHtml="";
@@ -33,8 +39,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         costoHtml += "";
         costoHtml += pageNumber >1 ? "<button id='anterior'>Anterior</button>":"";
         costoHtml += pageNumber < pageCont ? ("<button id='siguiente'>Siguiente</button>"):"";
-        document.querySelector("#listCostoHc").innerHTML="";
-        document.querySelector("#listCostoHc").innerHTML=costoHtml;
+
+            listCostoHcHTML.innerHTML="";
+            listCostoHcHTML.innerHTML=costoHtml;
 
         if(pageNumber < pageCont){
             var a=document.querySelector("#siguiente");
@@ -49,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 pageNumber--;
                 paginar(lista);
             });
+        }
         }
     }
     function showCostos() {
@@ -72,7 +80,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         paginar(list);
     }
     showCostos();
-    formCosto.addEventListener('keyup',filtrar)
+    if (formCosto!=null){
+        formCosto.addEventListener('keyup',filtrar)
+    }
     //SELECT TIPO
     const selectTipoHc =document.querySelector('#selectTipoHc');
     const precioUnitario=document.querySelector('#precioUnitario');
@@ -105,16 +115,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
         totalCompra.setAttribute('value',totalC);
         if(totalC >= 0){
             NumeroALetras(totalC);
-            txtSon.setAttribute('value',son)
+            txtSon.setAttribute('value',son)//
         }else {
             txtSon.setAttribute('value',"?")
         }
 
     };
-    pesoBruto.addEventListener('keyup',calcular);
-    tara.addEventListener('keyup',calcular);
-    humedad.addEventListener('keyup',calcular)
-
+    if(pesoBruto!=null){
+        pesoBruto.addEventListener('keyup',calcular);
+        tara.addEventListener('keyup',calcular);
+        humedad.addEventListener('keyup',calcular)
+    }
     //selecion tipoHC --precio
     function d() {
         let value = selectTipoHc.value;
@@ -138,9 +149,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         }
     }
-    selectTipoHc.addEventListener('change',d);
-    selectTipoHc.addEventListener('change',calcular);
-
+    if(selectTipoHc!=null){
+        selectTipoHc.addEventListener('change',d);
+        selectTipoHc.addEventListener('change',calcular);
+    }
     //FUNCTIONS SON
     function Unidades(num){
 
@@ -159,7 +171,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         return "";
     }
-
     function Decenas(num){
 
         decena = Math.floor(num/10);
@@ -194,14 +205,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
             case 0: return Unidades(unidad);
         }
     }//Unidades()
-
     function DecenasY(strSin, numUnidades){
         if (numUnidades > 0)
             return strSin + " Y " + Unidades(numUnidades)
 
         return strSin;
     }//DecenasY()
-
     function Centenas(num){
 
         centenas = Math.floor(num / 100);
@@ -225,7 +234,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         return Decenas(decenas);
     }//Centenas()
-
     function Seccion(num, divisor, strSingular, strPlural){
         cientos = Math.floor(num / divisor)
         resto = num - (cientos * divisor)
@@ -243,7 +251,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         return letras;
     }//Seccion()
-
     function Miles(num){
         divisor = 1000;
         cientos = Math.floor(num / divisor)
@@ -259,7 +266,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         //return Seccion(num, divisor, "UN MIL", "MIL") + " " + Centenas(resto);
     }//Miles()
-
     function Millones(num){
         divisor = 1000000;
         cientos = Math.floor(num / divisor)
@@ -275,7 +281,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         //return Seccion(num, divisor, "UN MILLON", "MILLONES") + " " + Miles(resto);
     }//Millones()
-
     function NumeroALetras(num,centavos){
         var data = {
             numero: num,
@@ -305,4 +310,43 @@ document.addEventListener("DOMContentLoaded", function(event) {
             return son;
         }
         }//NumeroALetras()
+
+
+        //ACTUALIZAR LIST COSTOS
+    function CostosF(){
+        let value = selectUnidadOpe.value;
+        $.ajax({
+            type: 'GET',
+            url:'/listCostoHcF/'+value,
+            success:[function (result) {
+                if(selectTipoHc!=null){
+                    selectTipoHc.innerHTML=``
+                    if(result.length!=0){
+                        selectTipoHc.innerHTML+=`
+                    <option value="0">
+                            Seleccionar...</option>`
+                        for(let costo of result){
+                            selectTipoHc.innerHTML += `
+                            <option value="${costo.cod_tipoHoja.cod_tipoHoja}">
+                            <span>${costo.cod_tipoHoja.cod_tipoHoja}</span>---<span>${costo.cod_tipoHoja.nombre}</span>
+                        </option>
+                        `
+                        }
+                    }else {
+                        selectTipoHc.innerHTML += `
+                            <option value="0">
+                            <span>SIN REGISTROS</span>
+                        </option>
+                        `
+                }
+                }
+            }]
+        });
+    }
+        if (formUnidadOpe!=null){
+            formUnidadOpe.addEventListener('keyup',CostosF)
+        }
+        if (selectUnidadOpe!=null){
+            selectUnidadOpe.addEventListener('change',CostosF)
+        }
 });

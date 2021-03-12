@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="cajaBoveda">
+    <div class="header">
+        <h1>CAJA BOVEDA</h1>
+    </div>
+    <form method="post" th:action="@{/auth/saveCaja}" th:object="${cajaBoveda}">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    <label > USUARIO </label>
+                    <input th:value="${session.usuario.getNombre}" class="form-control" type="text" readonly>
+                </div>
+                <div class="col-md-2">
+                    <label > FECHA</label>
+                    <input th:value="${#dates.format(fc,'dd/MM/yyyy')}" class="form-control" type="text"  readonly>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    <label > NOMBRE DE UNIDAD</label>
+                    <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
+                </div>
+                <div class="col-md-4">
+                    <label > OFICINA(Unidad Operativa): </label>
+                    <select class="form-control" th:field="*{cod_uniOpe}" id="selectUnidadOpe" >
+                        <option value="0">Seleccionar...</option>
+                        <option  th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
+                            <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Direccion de oficina:</label>
+                    <div id="direccionUni">
+                        <input  type="search" class="form-control" placeholder="" readonly/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Caja Boveda de Oficina:</label>
+                    <div id="cajaBovedaUni">
+                        <input  type="search" class="form-control" placeholder="" readonly/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-3">
+                    <label > TIPO DE TRANSACCIÓN: </label>
+                    <select class="form-control" th:field="*{id_tipoTransac}" id="selectTipoTransac" name="id_tipoTransac">
+                        <option value="1">
+                            1. Ingreso
+                        </option>
+                        <option value="2">
+                            2. Reembolso
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Ingresar Monto(S/.)</label>
+                    <div>
+                        <input required id="montoIn" th:field="*{monto}" type="search" class="form-control" placeholder="0.00" autocomplete="off"/>
+                    </div>
+                    <div id="alert"></div>
+                </div>
+            </div>
+        </div>
+        <div id="btn">
+        <button type="submit" class="btn btn-primary">REGISTRAR</button>
+        </div>
+    </form>
+    <div class="row">
+        <h2>Registros</h2>
+        <table class="table table-bordered" th:fragment="tablaCajaBoveda" id="tablaCajaBoveda">
+            <thead class="thead-dark" style="background-color: #cde49f">
+            <tr>
+                <th scope="col">Usuario</th>
+                <th scope="col">Unidad Operativa</th>
+                <th scope="col">Transacción</th>
+                <th scope="col">fecha</th>
+                <th scope="col">Monto</th>
+            </tr>
+            </thead>
+            <tbody id="listCajaBoveda">
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -9,5 +9,6 @@ public interface CostoHcService {
     List<CostoHojaCoca> list();
 
 
-    List<CostoHojaCoca> filterCostoHc(UnidadOperativa cod_uniOpe);
+
+    List<CostoHojaCoca> filterCostoHc(String cod_uniOpe);
 }

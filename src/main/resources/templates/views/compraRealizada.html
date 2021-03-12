@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="compraRealizada">
+    <div class="header">
+        <h1>COMPRA REALIZADA</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label> CEDULA DE PRODUCTOR</label>
+            <input th:value="*{cedula}" type="text" class="form-control" aria-describedby="basic-addon1" readonly>
+        </div>
+        <div class="col-md-4">
+            <label > Nombre de productor</label>
+            <input th:value="*{nombP}" type="text" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label> DNI REPRESENTANTE</label>
+            <input th:value="*{dni}" type="text" class="form-control" aria-describedby="basic-addon1" readonly>
+        </div>
+        <div class="col-md-4">
+            <label > Nombre de representante</label>
+            <input th:value="*{nombR}" type="text" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <label > UNIDAD OPERATIVA</label>
+            <input th:value="*{uni}" type="text" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label> Hoja de coca</label>
+            <input th:value="*{hc}" type="text" class="form-control" aria-describedby="basic-addon1" readonly>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label> TOTAL DE COMPRA</label>
+            <input th:value="*{total}" type="text" class="form-control" aria-describedby="basic-addon1" readonly>
+        </div>
+    </div>
+    <a class="btn btn-info" th:href="@{/auth/report/{id}(id=${id})}">Imprimir Boleta</a>
+</div>
+</body>
+</html>

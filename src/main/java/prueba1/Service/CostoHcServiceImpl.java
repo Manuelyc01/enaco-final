@@ -20,11 +20,12 @@ public class CostoHcServiceImpl implements CostoHcService{
 
     @Override
     public List<CostoHojaCoca> list(){
-        return repository.findAll();
+        return repository.costos();
     }
 
     @Override
-    public List<CostoHojaCoca> filterCostoHc(UnidadOperativa cod_uniOpe){
+    public List<CostoHojaCoca> filterCostoHc(String cod_uniOpe){
+
         return repository.filterTipoHc(cod_uniOpe);
     }
 }
