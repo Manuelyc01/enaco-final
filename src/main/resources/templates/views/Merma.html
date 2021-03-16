@@ -7,7 +7,7 @@
 <body>
 <div th:fragment="merma">
     <div class="header">
-        <h1>Merma Hoja de Coca</h1>
+        <h2>Merma Hoja de Coca</h2>
         <span th:if="${msg!=null}" th:text="${msg}" style="color: red"></span>
     </div>
     <form method="post" th:action="@{/auth/saveMerma}" th:object="${merma}">
@@ -29,7 +29,7 @@
                     <label > NOMBRE DE UNIDAD</label>
                     <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label > OFICINA(Unidad Operativa): </label>
                     <select class="form-control" th:field="*{cod_uniOpe}" id="selectUnidadOpe" >
                         <option value="0">
@@ -51,15 +51,13 @@
                         </option>
                     </select>
                 </div>
+                <div class="col-md-1">
+                    <a type="button" class="btn btn-info" id="btnStock">Stock</a>
+                </div>
                 <div class="col-md-3">
-                    <div class="col-md-3">
-                        <a type="button" class="btn btn-info" id="btnStock">Stock</a>
-                    </div>
-                    <div class="col-md-9">
-                        <label >Cantidad: </label>
-                        <input id="txtStock" class="form-control" type="text" placeholder="0.0" readonly>
-                    </div>
-                    </div>
+                    <label >Cantidad: </label>
+                    <input id="txtStock" class="form-control" type="text" placeholder="0.0" readonly>
+                </div>
             </div>
         </div>
         <div class="form-group">

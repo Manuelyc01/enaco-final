@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const listUsuarios = document.querySelector("#listUsuarios");
 
     var pageNumber= 1;
-    var pageSize=10;
+    var pageSize=6;
 
     let usuarios = $.ajax({
         type: 'GET',
@@ -34,9 +34,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
                      <td>${usuario.cod_uniOpe.nom_uniOpe}</td>
                      <td>${usuario.usua}</td>
                      <td>${usuario.id_estado.descripcion}</td>
+                     <td>${usuario.serie_compra}</td>
                      <td>
-                     <a class="btn btn-info" href="/auth/editUsuario/${usuario.id_usuario}">Editar</a>
-                     <a class="btn btn-danger" href="/auth/eliminarUsuario/${usuario.id_usuario}">Eliminar</a>
+                     <a class="fas fa-fw fa-edit" href="/auth/editUsuario/${usuario.id_usuario}"></a>
+                     <a class="fas fa-fw fa-trash-alt" href="/auth/eliminarUsuario/${usuario.id_usuario}"></a>
                      </td>
                 </tr>
                 `

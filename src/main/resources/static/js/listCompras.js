@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const id=id_usuario;
 
     var pageNumber= 1;
-    var pageSize=13;
+    var pageSize=7;
     let compras = $.ajax({
         type: 'GET',
         url:'/listCompras/'+id,
@@ -32,12 +32,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
         pagination.forEach(compras =>{
             comprasHtml += `
                     <tr>
-                    <th scope="row">${compras.num_liquidacion}</th>
+                    <th scope="row">
+                    <a class="fas fa-fw fa-eye" href="/compraRealizada/${compras.id_compra}"></a>${compras.num_liquidacion}</th>
                     <td>${compras.dni_repre}</td>
                     <td>${compras.fecha}</td>
                     <td>${compras.id_usuario.nombre}</td>
                     <td>
-                     <a class="btn btn-info" href="/auth/report/${compras.id_compra}">Boleta</a>
+                    <a class="btn btn-info" href="/auth/report/${compras.id_compra}">Boleta</a>
                      </td>
                     </tr>
                 `

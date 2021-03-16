@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const formProductor=document.querySelector('#formProductor');
 
     var pageNumber= 1;
-    var pageSize=13;
+    var pageSize=10;
     let productores = $.ajax({
         type: 'GET',
         url:'/productores/',

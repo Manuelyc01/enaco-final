@@ -8,7 +8,7 @@
 <div th:fragment="compra">
     <div th:if="${realizarCompra!=null}">
         <div class="header">
-            <h1>REGISTRAR COMPRA</h1>
+            <h2>REGISTRAR COMPRA</h2>
             <span th:if="${msg!=null}" th:text="${msg}" style="color: red"></span>
         </div>
         <form method="post" th:action="@{/auth/comprar}" th:object="${compra}">
@@ -134,14 +134,11 @@
                         <label > IGV (S/.)</label>
                         <input id="igv" th:field="*{igv}" class="form-control" type="text" placeholder="0.00" readonly>
 
-                        <div class="col-md-3" style="padding-left: 0">
-                            <label > Total de Compra(S/.)</label>
+                        <label > Total de Compra(S/.)</label>
                             <input id="totalCompra"  th:field="*{totalCompra}"class="form-control" type="text" placeholder="S/0.00" readonly>
-                        </div>
-                        <div class="col-md-9" style="padding-left: 0">
-                            <label > SON: </label>
+
+                        <label > SON: </label>
                             <input id="txtSon" th:field="*{son}"  placeholder="" class="form-control"readonly/>
-                        </div>
                         <div id="alert"></div>
                     </div>
                 </div>

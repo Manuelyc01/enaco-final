@@ -7,7 +7,7 @@
 <body>
 <div th:fragment="transferencia">
     <div class="header">
-        <h1>Transferencia Hoja de Coca</h1>
+        <h2>Transferencia Hoja de Coca</h2>
         <span th:if="${msg!=null}" th:text="${msg}" style="color: red"></span>
     </div>
     <form method="post" th:action="@{/auth/saveTransferencia}" th:object="${transferencia}">
@@ -25,7 +25,7 @@
                     <label > UNIDAD ORIGEN</label>
                     <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label > OFICINA(ORIGEN): </label>
                     <select class="form-control" th:field="*{origen}" id="selectUnidadOpe" >
                         <option value="0">
@@ -47,14 +47,12 @@
                         </option>
                     </select>
                 </div>
+                <div class="col-md-1">
+                    <a type="button" class="btn btn-info" id="btnStock">Stock</a>
+                </div>
                 <div class="col-md-3">
-                    <div class="col-md-3">
-                        <a type="button" class="btn btn-info" id="btnStock">Stock</a>
-                    </div>
-                    <div class="col-md-9">
-                        <label >Cantidad: </label>
-                        <input id="txtStock" class="form-control" type="text" placeholder="0.0" readonly>
-                    </div>
+                    <label >Cantidad: </label>
+                    <input id="txtStock" class="form-control" type="text" placeholder="0.0" readonly>
                 </div>
             </div>
         </div>
