@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const formUnidadOpe = document.querySelector('#formUnidadOpe');
     const listUnidadOpe = document.querySelector("#listUnidadOpe");
     var pageNumber= 1;
-    var pageSize=14;
+    var pageSize=10;
     $.ajax({
         type: 'GET',
         url:'/unidadesOpe/',

@@ -105,6 +105,31 @@ public class privateController {
             return "redirect:/private/index";
         }
     }
+    //ROL SUP & OPE FOR ADMIN
+    @GetMapping("/auth/rolSupervisor")
+    public String rolSupervisor(Model model, Authentication auth ){
+        String username=auth.getName();
+        Usuario usuario = usuarioService.findByUsua(username);
+        //Only admin "1" can register new users
+        if(usuario.getId_rol().getId_rol()==1){
+            model.addAttribute("rolSupervisor", "yes");
+            return "menu";
+        }else{
+            return "redirect:/private/index";
+        }
+    }
+    @GetMapping("/auth/rolOperador")
+    public String rolOperador(Model model, Authentication auth ){
+        String username=auth.getName();
+        Usuario usuario = usuarioService.findByUsua(username);
+        //Only admin "1" can register new users
+        if(usuario.getId_rol().getId_rol()==1){
+            model.addAttribute("rolOperador", "yes");
+            return "menu";
+        }else{
+            return "redirect:/private/index";
+        }
+    }
     @PostMapping("/auth/registro")
     public String registro(Usuario usuario,Model model,Authentication auth){
         String username=auth.getName();
@@ -398,17 +423,21 @@ public class privateController {
 
     //CAJA BOVEDA
     @GetMapping("/auth/cajaBoveda")
-    public String cajaBoveda(Model model){
+    public String cajaBoveda(Model model,Authentication auth){
         List<UnidadOperativa> listarU = unidadOpeService.listar();
+        String username=auth.getName();
+        Usuario usuario = usuarioService.findByUsua(username);
+        //Only admin "1" can register new users
+        if(usuario.getId_rol().getId_rol()==1 || usuario.getId_rol().getId_rol()==2){
+            model.addAttribute("cajaBoveda",new CajaBoveda());
+            model.addAttribute("unidadesOpe", listarU);
+            model.addAttribute("fc", new Date());
 
-
-        model.addAttribute("cajaBoveda",new CajaBoveda());
-        model.addAttribute("unidadesOpe", listarU);
-        model.addAttribute("fc", new Date());
-
-        model.addAttribute("cB","yes");
-
-        return "menu";
+            model.addAttribute("cB","yes");
+            return "menu";
+        }else {
+            return "redirect:/private/index";
+        }
     }
     @PostMapping("/auth/saveCaja")
     public String saveCaja(CajaBoveda cajaBoveda,Authentication auth){
@@ -426,13 +455,24 @@ public class privateController {
     }
     //AlMACEN
     @GetMapping("/auth/almacen")
-    public String almacen(Model model){
-        List<UnidadOperativa> listar = unidadOpeService.listar();
-        List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
-        model.addAttribute("almacen","almacen");
-        model.addAttribute("unidadesOpe",listar);
-        model.addAttribute("tiposHc",tipoHojaCocas);
-        return "menu";
+    public String almacen(Model model,Authentication auth){
+        Usuario byUsua = usuarioService.findByUsua(auth.getName());
+        if (byUsua.getId_rol().getId_rol()==2 ||byUsua.getId_rol().getId_rol()==2){
+            if (byUsua.getId_rol().getId_rol()==2){
+            }
+
+
+            List<UnidadOperativa> listar = unidadOpeService.listar();
+            List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
+            model.addAttribute("almacen","almacen");
+            model.addAttribute("unidadesOpe",listar);
+            model.addAttribute("tiposHc",tipoHojaCocas);
+            return "menu";
+        }else {
+            return "redirect:/private/index";
+        }
+
+
     }
 
     //INGRESO POR DECOMISO

@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const selectUnidadOpe =document.querySelector('#selectUnidadOpe');
 
     var pageNumber= 1;
-    var pageSize=13;
+    var pageSize=10;
     let listCostoHc=$.ajax({//listTIPOHC
         type: 'GET',
         url:'/listCostoHc/',

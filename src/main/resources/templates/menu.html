@@ -1,297 +1,518 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head >
-    <!-- Required meta tags -->
+<head>
+
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-    <link type="text/css" rel="stylesheet" th:href="@{/css/menuStyles.css}">
-    <link  th:if="${listP!=null}" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
+    <title>MENU</title>
 
+    <!-- Bootstrap core CSS-->
+    <link type="text/css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Custom fonts for this template-->
+    <link type="text/css" th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet">
+    <!-- Page level plugin CSS-->
+    <link type="text/css" th:href="@{/vendor/datatables/dataTables.bootstrap4.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link type="text/css" th:href="@{/css/sb-admin.css}" rel="stylesheet">
+    <!--referencias-->
     <script th:if="${listCompras!=null}" th:inline="javascript">
         const id_usuario = /*[[${id}]]*/ "id";
     </script>
-    <title>MENU</title>
+    <base th:href="@{/}">
 </head>
-<body class="home">
-<div class="container-fluid display-table">
-    <div class="row display-table-row">
-        <div class="col-md-2 col-sm-1 hidden-xs display-table-cell v-align box" id="navigation">
-            <div class="logo">
-                <h1 style="color: white">
-                    ENACO
-                </h1>
-            </div>
-            <div class="navi">
-                <ul>
-                    <li class="active"><a th:href="@{/private/index}"><i class="fa fa-home" aria-hidden="true"></i><span class="hidden-xs hidden-sm">INICIO</span></a></li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                                th:href="@{/auth/listaUsuarios}">
-                            <i class="fa fa-user" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Usuarios</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                                th:href="@{/auth/listProductor}">
-                            <i class="fa fa-user" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Productores</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                                th:href="@{/auth/listCostoHC}">
-                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Costo Hoja de Coca</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                                th:href="@{/auth/listSucursal}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Sucursal</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                                th:href="@{/auth/listAgencia}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Agencia</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                                th:href="@{/auth/listUnidadOpe}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Unidad Operativa</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                                th:href="@{/auth/listTipoHc}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Tipo Hoja de Coca</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
-                           th:href="@{/auth/compraUsuario}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Realizar Compra</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                           th:href="@{/auth/cajaBoveda}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Caja Bóveda</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==2}"
-                           th:href="@{/auth/cajaBoveda}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Caja Bóveda</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                           th:href="@{/auth/almacen}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Almacen</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
-                           th:href="@{/auth/decomiso}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Ingreso por Decomiso</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
-                           th:href="@{/auth/demasia}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Ingreso por Demasia</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
-                           th:href="@{/auth/merma}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Merma</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:if="${session.usuario.getId_rol().getId_rol()==3}"
-                           th:href="@{/auth/transferencia}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Transferencia</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                           th:href="@{/auth/listCompras}">
-                            <i class="fa fa-tasks" aria-hidden="true"></i>
-                            <span class="hidden-xs hidden-sm">Compras</span>
-                        </a>
-                    </li>
-                </ul>
+
+<body id="page-top">
+
+<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+
+    <a class="navbar-brand mr-1" th:href="@{/private/index}">ENACO</a>
+
+    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navbar Search -->
+    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0" >
+        <div class="input-group">
+            <input th:if="${listP!=null}" type="text" class="form-control" id="formProductor" placeholder="Buscar Productor" aria-label="Search" aria-describedby="basic-addon2">
+            <input th:if="${list!=null}" type="text" class="form-control" id="formUsuario" placeholder="Buscar usuario" aria-label="Search" aria-describedby="basic-addon2">
+            <input th:if="${listC!=null}" type="text" class="form-control" id="formCosto"  placeholder="Buscar Hoja de Coca" aria-label="Search" aria-describedby="basic-addon2">
+            <input  th:if="${listU!=null}" type="text" class="form-control" id="formUnidadOpe"  placeholder="Buscar unidad" aria-label="Search" aria-describedby="basic-addon2">
+            <input th:if="${listT!=null}" type="text" class="form-control" id="formTipoHc"  placeholder="Buscar Tipo" aria-label="Search" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
         </div>
-        <div class="col-md-10 col-sm-11 display-table-cell v-align">
-            <!--<button type="button" class="slide-toggle">Slide Toggle</button> -->
-            <div class="row">
-                <header>
-                    <div class="col-md-7">
-                        <nav class="navbar-default pull-left">
-                            <div class="navbar-header">
-                                <button type="button" class="navbar-toggle collapsed" data-toggle="offcanvas" data-target="#side-menu" aria-expanded="false">
-                                    <span class="sr-only">Toggle navigation</span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                </button>
-                            </div>
-                        </nav>
-                        <div class="search hidden-xs hidden-sm" th:if="${list!=null}" >
-                            <input type="search" class="form-control rounded" id="formUsuario" placeholder="Buscar usuario" aria-label="Search"
-                                   aria-describedby="search-addon" />
-                        </div>
-                        <div class="search hidden-xs hidden-sm" th:if="${listP!=null}" >
-                            <input type="search" class="form-control rounded" id="formProductor" placeholder="Buscar Productor" aria-label="Search"
-                                   aria-describedby="search-addon" />
-                        </div>
-                        <div class="search hidden-xs hidden-sm" th:if="${listC!=null}" >
-                            <input type="search" class="form-control rounded" id="formCosto" aria-label="Search" placeholder="Buscar Hoja de Coca"
-                                   aria-describedby="search-addon" />
-                        </div>
-                        <div class="search hidden-xs hidden-sm" th:if="${listU!=null}" >
-                        <input type="search" class="form-control rounded" id="formUnidadOpe" aria-label="Search" placeholder="Buscar Hoja de Coca"
-                               aria-describedby="search-addon" />
-                        </div>
-                        <div class="search hidden-xs hidden-sm" th:if="${listT!=null}" >
-                            <input type="search" class="form-control rounded" id="formTipoHc" aria-label="Search" placeholder="Buscar Hoja de Coca"
-                                   aria-describedby="search-addon" />
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="header-rightside">
-                            <ul class="list-inline header-top pull-right">
-                                <li>
-                                    <form th:action="@{/logout}" method="post">
-                                        <button type="submit" class="add-project" data-toggle="modal"  style="background-color: #7bb44d">Cerrar sesión</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </header>
-            </div>
-            <div class="user-dashboard" th:if="${session.usuario!=null}">
-                <h1 th:if="${inicio!=null}">Bienvenido, <span th:text="${session.usuario.nombre}" ></span></h1>
+    </form>
 
-                    <!--LISTAS-->
-                <div class="row" th:if="${list!=null}">
-                    <div class="row" style="padding-bottom: 5px">
-                            <a class="btn btn-success"
-                               th:if="${session.usuario.getId_rol().getId_rol()==1}"
-                               th:href="@{/auth/registrar}">Agregar Usuario</a>
-                    </div>
-                    <div class="row">
-                    <table th:replace="views/listUsuario :: tablaUsuarios"></table>
-                    </div>
+    <!-- Navbar -->
+    <ul class="navbar-nav ml-auto ml-md-0">
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user-circle fa-fw"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Salir</a>
+            </div>
+        </li>
+    </ul>
+
+</nav>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:if="${session.usuario.getId_rol().getId_rol()==1}" class="sidebar navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>MENU</span>
+            </a>
+        </li>
+        <li class="nav-item dropdown"ftables>
+            <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Información ENACO</span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                <h6 class="dropdown-header">Registros:</h6>
+                <a class="dropdown-item" th:href="@{/auth/listProductor}">Productores</a>
+                <a class="dropdown-item" th:href="@{/auth/listSucursal}">Sucursales</a>
+                <a class="dropdown-item" th:href="@{/auth/listAgencia}">Agencia</a>
+                <a class="dropdown-item" th:href="@{/auth/listUnidadOpe}">Unidades operativas</a>
+                <a class="dropdown-item" th:href="@{/auth/listTipoHc}">Tipo Hoja de Coca</a>
+                <a class="dropdown-item" th:href="@{/auth/listCostoHC}">Costo Hoja de Coca</a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/auth/listaUsuarios}">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Usuarios</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/auth/rolSupervisor}">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Rol Supervisor</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/auth/rolOperador}">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Rol Operador</span></a>
+        </li>
+    </ul>
+    <ul th:if="${session.usuario.getId_rol().getId_rol()==2}" class="sidebar navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>MENU</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/auth/cajaBoveda}">
+                <i class="fa fa-user"></i>
+                <span>Caja Bóveda</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/auth/almacen}">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Movimiento de Inventario</span></a>
+        </li>
+    </ul>
+    <ul th:if="${session.usuario.getId_rol().getId_rol()==3}" class="sidebar navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>MENU</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/auth/compraUsuario}">
+                <i class="fas fa-fw fa-shopping-cart"></i>
+                <span>Realizar Compra</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/auth/listCompras}">
+                <i class="fas fa-fw fa-receipt"></i>
+                <span>Compras Realizadas</span></a>
+        </li>
+        <li class="nav-item dropdown"ftables>
+            <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Movimiento</span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                <h6 class="dropdown-header">Ingresos por:</h6>
+                <a class="dropdown-item" th:href="@{/auth/decomiso}">Decomiso</a>
+                <a class="dropdown-item" th:href="@{/auth/demasia}">Demasía</a>
+                <a class="dropdown-item" th:href="@{/auth/merma}">Merma</a>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Salida por:</h6>
+                <a class="dropdown-item" th:href="@{/auth/transferencia}">Transferencia</a>
+            </div>
+        </li>
+    </ul>
+
+    <div id="content-wrapper">
+
+        <div class="container-fluid">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span>Dashboard</span>
+                </li>
+            </ol>
+            <!-- content wrapper-->
+            <div class="row" th:if="${listP!=null}">
+                <div class="col-sm-12">
+                <table th:replace="views/listProdructor :: tablaProductor" ></table>
                 </div>
-                <div class="row" th:if="${listP!=null}">
-                    <table th:replace="views/listProdructor :: tablaProductor" ></table>
+            </div>
+            <div class="row" th:if="${listS!=null}">
+                <div class="col-sm-12">
+                <table th:replace="views/listSucursal :: tablaSucursal"></table>
                 </div>
-                <div class="row" th:if="${listC!=null}">
-                    <table th:replace="views/listCostoHC :: tablaCostoHC"></table>
+            </div>
+            <div class="row" th:if="${listA!=null}">
+                <div class="col-sm-12">
+                <table th:replace="views/listAgencia :: tablaAgencia"></table>
                 </div>
-                <div class="row" th:if="${listA!=null}">
-                    <table th:replace="views/listAgencia :: tablaAgencia"></table>
-                </div>
-                <div class="row" th:if="${listS!=null}">
-                    <table th:replace="views/listSucursal :: tablaSucursal"></table>
-                </div>
-                <div class="row" th:if="${listU!=null}">
+            </div>
+            <div class="row" th:if="${listU!=null}">
+                <div class="col-sm-12">
                     <table th:replace="views/listUnidadOpe :: tablaUnidadOpe"></table>
                 </div>
-                <div class="row" th:if="${listT!=null}">
+            </div>
+            <div class="row" th:if="${listT!=null}">
+                <div class="col-sm-12">
                     <table th:replace="views/listTipoHc :: tablaTipoHc"></table>
                 </div>
-                <div class="row" th:if="${listCompras!=null}">
+            </div>
+            <div class="row" th:if="${listC!=null}">
+                <div class="col-sm-12">
+                    <table th:replace="views/listCostoHC :: tablaCostoHC"></table>
+                </div>
+            </div>
+            <div class="row" th:if="${list!=null}">
+                <div class="col-sm-12">
+                    <div class="row" style="padding-bottom: 5px">
+                        <div class="col-sm-12">
+                            <a class="btn btn-success"
+                               th:href="@{/auth/registrar}">Agregar Usuario</a>
+                        </div>
+                    </div>
+                    <table th:replace="views/listUsuario :: tablaUsuarios"></table>
+                </div>
+
+            </div>
+            <div class="row" th:if="${listCompras!=null}">
+                <div class="col-sm-12">
                     <table th:replace="views/listCompras :: tablaCompras"></table>
                 </div>
-                <!-- FORMS -->
-                <div class="row" th:if="${r!=null}">
+            </div>
+            <!-- FORMS -->
+            <div class="row" th:if="${r!=null}">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6">
                     <div th:replace="registro :: registro"></div>
                 </div>
-                <div class="row" th:if="${e!=null}">
+                <div class="col-sm-3"></div>
+            </div>
+            <div class="row" th:if="${e!=null}">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6">
                     <div th:replace="registro :: registro"></div>
                 </div>
-                <div class="row" th:if="${c!=null}">
+
+                <div class="col-sm-3"></div>
+            </div>
+            <div class="row" th:if="${c!=null}">
+                <div class="col-sm-12">
                     <div th:replace="compra :: compra"></div>
                 </div>
-                <div class="row" th:if="${cB!=null}">
+            </div>
+            <div class="row" th:if="${cB!=null}">
+                <div class="col-sm-12">
                     <div th:replace="views/cajaBoveda :: cajaBoveda"></div>
                 </div>
-                <div class="row" th:if="${almacen!=null}">
-                    <div th:replace="views/almacen :: almacen"></div>
-                </div>
-                <div class="row" th:if="${decom!=null}">
-                    <div th:replace="views/decomiso :: decomiso"></div>
-                </div>
-                <div class="row" th:if="${demas!=null}">
-                    <div th:replace="views/demasia :: demasia"></div>
-                </div>
-                <div class="row" th:if="${merm!=null}">
-                    <div th:replace="views/Merma :: merma"></div>
-                </div>
-                <div class="row" th:if="${transf!=null}">
-                    <div th:replace="views/transferencia :: transferencia"></div>
-                </div>
-                <div class="row" th:if="${compraRealizada!=null}">
+            </div>
+            <div class="row" th:if="${almacen!=null}">
+                <div class="col-sm-12">
+                    <div th:replace="views/almacen :: almacen"></div></div>
+            </div>
+            <div class="row" th:if="${decom!=null}">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-11">
+                    <div th:replace="views/decomiso :: decomiso"></div></div>
+            </div>
+            <div class="row" th:if="${demas!=null}">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-11">
+                    <div th:replace="views/demasia :: demasia"></div></div>
+            </div>
+            <div class="row" th:if="${merm!=null}">
+                <div class="col-sm-12">
+                    <div th:replace="views/Merma :: merma"></div></div>
+            </div>
+            <div class="row" th:if="${transf!=null}">
+                <div class="col-sm-12">
+                    <div th:replace="views/transferencia :: transferencia"></div></div>
+            </div>
+            <div class="row" th:if="${compraRealizada!=null}">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-11">
                     <div th:replace="views/compraRealizada :: compraRealizada"></div>
                 </div>
             </div>
+            <!-- Icon Cards-->
+            <div class="row" th:if="${rolSupervisor!=null}">
+                <div class="col-xl-3 col-sm-6 mb-3">
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-warning o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-list"></i>
+                            </div>
+                            <div class="mr-5">Caja Bóveda</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" th:href="@{/auth/cajaBoveda}">
+                            <span class="float-left">Ingresar</span>
+                            <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-danger o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-life-ring"></i>
+                            </div>
+                            <div class="mr-5">Movimiento Inventario</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" th:href="@{/auth/almacen}">
+                            <span class="float-left">Ingresar</span>
+                            <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-3">
+                </div>
+            </div>
+            <div class="row" th:if="${rolOperador!=null}">
+                <div class="col-xl-3 col-sm-6 mb-3">
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-success o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-shopping-cart"></i>
+                            </div>
+                            <div class="mr-5">Realizar Compra</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" th:href="@{/auth/compraUsuario}">
+                            <span class="float-left">Ingresar</span>
+                            <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-warning o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-list"></i>
+                            </div>
+                            <div class="mr-5">Compras Realizadas</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" th:href="@{/auth/listCompras}">
+                            <span class="float-left">Ingresar</span>
+                            <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-3">
+                </div>
+            </div>
+            <div class="row" th:if="${rolOperador!=null}">
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-danger o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-ban  "></i>
+                            </div>
+                            <div class="mr-5">Ingreso Por Decomiso</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" th:href="@{/auth/decomiso}">
+                            <span class="float-left">Ingresar</span>
+                            <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-primary o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-angle-double-up"></i>
+                            </div>
+                            <div class="mr-5">Ingreso por Demasía</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" th:href="@{/auth/demasia}">
+                            <span class="float-left">Ingresar</span>
+                            <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-info o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-angle-double-down"></i>
+                            </div>
+                            <div class="mr-5">Ingreso por Merma</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" th:href="@{/auth/merma}">
+                            <span class="float-left">Ingresar</span>
+                            <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-secondary o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-bus"></i>
+                            </div>
+                            <div class="mr-5">Salida por Transferencia</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" th:href="@{/auth/transferencia}">
+                            <span class="float-left">Ingresar</span>
+                            <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright © ENACO 2021</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Salir de cuenta?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Seleccione "Cerrar sesión" a continuación si está listo para finalizar su sesión actual.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn btn-primary" data-toggle="modal" >Cerrar sesión</button>
+                </form>
+            </div>
         </div>
     </div>
+</div>
 
-    </div>
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
-    <script th:if="${r!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
-    <script th:if="${e!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+<!-- Core plugin JavaScript-->
+<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
 
-    <script th:if="${list!=null}"th:src="@{/js/listsUsuarios.js}"></script>
-    <script th:if="${listP!=null}" th:src="@{/js/listsProductores.js}"></script>
-    <script th:if="${listC!=null}" th:src="@{/js/costoHc.js}"></script>
-    <script th:if="${listU!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
-    <script th:if="${listT!=null}" th:src="@{/js/listTipoHc.js}"></script>
-    <script th:if="${listCompras!=null}" th:src="@{/js/listCompras.js}"></script>
+<!-- Page level plugin JavaScript-->
+<script th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+<script th:src="@{/vendor/datatables/jquery.dataTables.js}"></script>
+<script th:src="@{/vendor/datatables/dataTables.bootstrap4.js}"></script>
 
-    <script th:if="${c!=null}" th:src="@{/js/BusquedaCompra.js}"></script>
-    <script th:if="${c!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
-    <script th:if="${c!=null}" th:src="@{/js/costoHc.js}"></script>
-    <script th:if="${cB!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+<!-- Custom scripts for all pages-->
+<script th:src="@{/js/sb-admin.min.js}"></script>
+<!-- Demo scripts for this page-->
+<script th:src="@{/js/demo/datatables-demo.js}"></script>
+<script th:src="@{/js/demo/chart-area-demo.js}"></script>
 
-    <script th:if="${almacen!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
-    <script th:if="${almacen!=null}" th:src="@{/js/almacen.js}"></script>
-    <script th:if="${decom!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
-    <script th:if="${demas!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
-    <script th:if="${transf!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
-    <script th:if="${transf!=null}" th:src="@{/js/transferencia.js}"></script>
-    <script th:if="${merm!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
-    <script th:if="${merm!=null}" th:src="@{/js/merma.js}"></script>
+<!-- scripts private-->
+<script th:if="${r!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+<script th:if="${e!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
 
-    <script th:if="${cB!=null}" th:src="@{/js/cajaBoveda.js}"></script>
-    <script th:if="${c!=null}" th:src="@{/js/cajaBoveda.js}"></script>
+<script th:if="${list!=null}"th:src="@{/js/listsUsuarios.js}"></script>
+<script th:if="${listP!=null}" th:src="@{/js/listsProductores.js}"></script>
+<script th:if="${listC!=null}" th:src="@{/js/costoHc.js}"></script>
+<script th:if="${listU!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+<script th:if="${listT!=null}" th:src="@{/js/listTipoHc.js}"></script>
+<script th:if="${listCompras!=null}" th:src="@{/js/listCompras.js}"></script>
 
+<script th:if="${c!=null}" th:src="@{/js/BusquedaCompra.js}"></script>
+<script th:if="${c!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+<script th:if="${c!=null}" th:src="@{/js/costoHc.js}"></script>
+
+<script th:if="${cB!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+
+<script th:if="${almacen!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+<script th:if="${almacen!=null}" th:src="@{/js/almacen.js}"></script>
+
+<script th:if="${decom!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+
+<script th:if="${demas!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+
+<script th:if="${transf!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+<script th:if="${transf!=null}" th:src="@{/js/transferencia.js}"></script>
+
+<script th:if="${merm!=null}" th:src="@{/js/listsUnidadOpe.js}"></script>
+<script th:if="${merm!=null}" th:src="@{/js/merma.js}"></script>
+
+<script th:if="${cB!=null}" th:src="@{/js/cajaBoveda.js}"></script>
+<script th:if="${c!=null}" th:src="@{/js/cajaBoveda.js}"></script>
 </body>
+
 </html>

@@ -40,30 +40,34 @@
                     </option>
                 </select>
             </div>
+            <div>
             <a class="btn btn-success" id="btnBuscarAlmacen">Buscar</a>
+            </div>
         </div>
     </div>
     <div class="row">
             <h3 style="padding-left: 25px">Registro Hojas de coca</h3><br>
     </div>
     <div class="row">
-        <table class="table table-bordered" th:fragment="tablaAlmacen" id="tablaAlmacen">
-            <thead class="thead-dark" style="background-color: #cde49f">
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Usuario</th>
-                <th scope="col">Almacen</th>
-                <th scope="col">Movimiento</th>
-                <th scope="col">Documento</th>
-                <th scope="col">Tipo Hoja</th>
-                <th scope="col">Peso Neto</th>
-                <th scope="col">Stock Inicial</th>
-                <th scope="col">Stock Final</th>
-            </tr>
-            </thead>
-            <tbody id="listTipoHcAlmacen">
-            </tbody>
-        </table>
+        <div class="col-sm-12">
+            <table class="table table-bordered" th:fragment="tablaAlmacen" id="tablaAlmacen">
+                <thead class="thead-dark" style="background-color: #cde49f">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Almacen</th>
+                    <th scope="col">Movimiento</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">Tipo Hoja</th>
+                    <th scope="col">Peso Neto</th>
+                    <th scope="col">Stock Inicial</th>
+                    <th scope="col">Stock Final</th>
+                </tr>
+                </thead>
+                <tbody id="listTipoHcAlmacen">
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>

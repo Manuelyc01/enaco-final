@@ -7,17 +7,17 @@
 <body>
 <div th:fragment="decomiso">
     <div class="header">
-        <h1>Ingreso Hoja de Coca por DECOMISO</h1>
+        <h2>Ingreso Hoja de Coca por DECOMISO</h2>
     </div>
     <form method="post" th:action="@{/auth/saveDecomiso}" th:object="${decomiso}">
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    <label > Número de Movimiento </label>
+                    <label >Num. Movimiento</label>
                     <input th:value="${num_Movimiento}" class="form-control" type="text" readonly>
                 </div>
                 <div class="col-md-2">
-                    <label > FECHA</label>
+                    <label >FECHA</label>
                     <input th:value="${#dates.format(fc,'dd/MM/yyyy')}" class="form-control" type="text"  readonly>
                 </div>
             </div>
