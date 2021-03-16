@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import prueba1.Service.*;
 import prueba1.models.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -136,7 +137,6 @@ public class AjaxRestController {
             return new ResponseEntity<List<CajaBoveda>>(HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(
             value = "productores",
             method = RequestMethod.GET,
@@ -149,7 +149,6 @@ public class AjaxRestController {
             return new ResponseEntity<List<Productor>>(HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(
             value = "usuarios",
             method = RequestMethod.GET,
