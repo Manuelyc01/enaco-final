@@ -45,4 +45,17 @@ public class UnidadOpeServiceImpl   implements UnidadOpeService {
         }
         repository.save(u);
     }
+    //FILTRADO
+    @Override
+    public List<UnidadOperativa> listarAgeSu(String cod_agencia, String cod_sucursal){
+        return repository.listarAgeSu(cod_agencia,cod_sucursal);
+    }
+    @Override
+    public List<UnidadOperativa> listarAgencia(String cod_agencia){
+        return repository.listarAgencia(cod_agencia);
+    }
+    @Override
+    public List<UnidadOperativa> listarSucursal(String cod_sucursal){
+        return repository.listarSucursal(cod_sucursal);
+    }
 }

@@ -13,6 +13,7 @@ import prueba1.models.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -123,7 +124,7 @@ public class privateController {
         String username=auth.getName();
         Usuario usuario = usuarioService.findByUsua(username);
         //Only admin "1" can register new users
-        if(usuario.getId_rol().getId_rol()==1){
+        if(usuario.getId_rol().getId_rol()==1 || usuario.getId_rol().getId_rol()==2 ){
             model.addAttribute("rolOperador", "yes");
             return "menu";
         }else{
@@ -294,13 +295,33 @@ public class privateController {
     public String compraUsuario(Model model,Authentication auth){
         String name = auth.getName();
         Usuario byUsua = usuarioService.findByUsua(name);
-            List<UnidadOperativa> listarU = unidadOpeService.listar();
+        List<UnidadOperativa> listarU;
 
             model.addAttribute("c","yes");//
+        //FILTRADO POR LOCALIDAD EN SUPERVISOR Y OPERADOR
+            if(byUsua.getId_rol().getId_rol()==3||byUsua.getId_rol().getId_rol()==2){
 
-            model.addAttribute("unidadesOpe", listarU);
+                Agencia cod_agencia = byUsua.getCod_uniOpe().getCod_agencia();
+                Sucursal cod_sucursal = byUsua.getCod_uniOpe().getCod_sucursal();
+
+                if (cod_agencia!= null && cod_sucursal != null){
+                    listarU = unidadOpeService.listarAgeSu(cod_agencia.getCod_agencia(),cod_sucursal.getCod_sucursal());
+                    model.addAttribute("unidadesOpe", listarU);
+                }else if (cod_agencia!= null && cod_sucursal == null){
+                    listarU=unidadOpeService.listarAgencia(cod_agencia.getCod_agencia());
+                    model.addAttribute("unidadesOpe", listarU);
+                }else if (cod_agencia== null && cod_sucursal != null){
+                    listarU=unidadOpeService.listarSucursal(cod_sucursal.getCod_sucursal());
+                    model.addAttribute("unidadesOpe", listarU);
+                }
+            }else{
+                listarU = unidadOpeService.listar();
+                model.addAttribute("unidadesOpe", listarU);
+            }
+
 
             model.addAttribute("realizarCompra", "yes");//
+            model.addAttribute("id", byUsua.getId_usuario());//
 
             model.addAttribute("compra",nuevaCompra(byUsua.getId_usuario()));
             return "menu";
@@ -424,7 +445,28 @@ public class privateController {
     //CAJA BOVEDA
     @GetMapping("/auth/cajaBoveda")
     public String cajaBoveda(Model model,Authentication auth){
-        List<UnidadOperativa> listarU = unidadOpeService.listar();
+        Usuario byUsua = usuarioService.findByUsua(auth.getName());
+        List<UnidadOperativa> listarU=new ArrayList<>();
+        //FILTRADO POR LOCALIDAD EN SUPERVISOR Y OPERADOR
+        if(byUsua.getId_rol().getId_rol()==3||byUsua.getId_rol().getId_rol()==2){
+
+            Agencia cod_agencia = byUsua.getCod_uniOpe().getCod_agencia();
+            Sucursal cod_sucursal = byUsua.getCod_uniOpe().getCod_sucursal();
+
+            if (cod_agencia!= null && cod_sucursal != null){
+                listarU = unidadOpeService.listarAgeSu(cod_agencia.getCod_agencia(),cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia!= null && cod_sucursal == null){
+                listarU=unidadOpeService.listarAgencia(cod_agencia.getCod_agencia());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia== null && cod_sucursal != null){
+                listarU=unidadOpeService.listarSucursal(cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
+            }
+        }else{
+            listarU = unidadOpeService.listar();
+            model.addAttribute("unidadesOpe", listarU);
+        }
         String username=auth.getName();
         Usuario usuario = usuarioService.findByUsua(username);
         //Only admin "1" can register new users
@@ -457,15 +499,34 @@ public class privateController {
     @GetMapping("/auth/almacen")
     public String almacen(Model model,Authentication auth){
         Usuario byUsua = usuarioService.findByUsua(auth.getName());
-        if (byUsua.getId_rol().getId_rol()==2 ||byUsua.getId_rol().getId_rol()==2){
-            if (byUsua.getId_rol().getId_rol()==2){
+        List<UnidadOperativa> listarU =new ArrayList<>();
+        //FILTRADO POR LOCALIDAD EN SUPERVISOR Y OPERADOR
+        if(byUsua.getId_rol().getId_rol()==3||byUsua.getId_rol().getId_rol()==2){
+
+            Agencia cod_agencia = byUsua.getCod_uniOpe().getCod_agencia();
+            Sucursal cod_sucursal = byUsua.getCod_uniOpe().getCod_sucursal();
+
+            if (cod_agencia!= null && cod_sucursal != null){
+                listarU = unidadOpeService.listarAgeSu(cod_agencia.getCod_agencia(),cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia!= null && cod_sucursal == null){
+                listarU=unidadOpeService.listarAgencia(cod_agencia.getCod_agencia());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia== null && cod_sucursal != null){
+                listarU=unidadOpeService.listarSucursal(cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
             }
+        }else{
+            listarU = unidadOpeService.listar();
+            model.addAttribute("unidadesOpe", listarU);
+        }
+
+        if (byUsua.getId_rol().getId_rol()==2 ||byUsua.getId_rol().getId_rol()==1){
 
 
-            List<UnidadOperativa> listar = unidadOpeService.listar();
             List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
             model.addAttribute("almacen","almacen");
-            model.addAttribute("unidadesOpe",listar);
+            model.addAttribute("unidadesOpe",listarU);
             model.addAttribute("tiposHc",tipoHojaCocas);
             return "menu";
         }else {
@@ -477,9 +538,10 @@ public class privateController {
 
     //INGRESO POR DECOMISO
     @GetMapping("/auth/decomiso")
-    public String decomiso(Model model){
+    public String decomiso(Model model,Authentication authentication){
+        Usuario byUsua = usuarioService.findByUsua(authentication.getName());
         List<Decomiso> decomiso = decomisoService.numMoviento();
-        List<UnidadOperativa> listarU = unidadOpeService.listar();
+        List<UnidadOperativa> listarU;
         List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
 
         Integer num;
@@ -489,10 +551,29 @@ public class privateController {
             Decomiso d = decomiso.get(0);
             num=d.getId_decomiso()+1;
         }
+        //FILTRADO POR LOCALIDAD EN SUPERVISOR Y OPERADOR
+        if(byUsua.getId_rol().getId_rol()==3||byUsua.getId_rol().getId_rol()==2){
+
+            Agencia cod_agencia = byUsua.getCod_uniOpe().getCod_agencia();
+            Sucursal cod_sucursal = byUsua.getCod_uniOpe().getCod_sucursal();
+
+            if (cod_agencia!= null && cod_sucursal != null){
+                listarU = unidadOpeService.listarAgeSu(cod_agencia.getCod_agencia(),cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia!= null && cod_sucursal == null){
+                listarU=unidadOpeService.listarAgencia(cod_agencia.getCod_agencia());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia== null && cod_sucursal != null){
+                listarU=unidadOpeService.listarSucursal(cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
+            }
+        }else{
+            listarU = unidadOpeService.listar();
+            model.addAttribute("unidadesOpe", listarU);
+        }
         model.addAttribute("decom","decomiso");
         model.addAttribute("decomiso",new Decomiso());
         model.addAttribute("fc", new Date());
-        model.addAttribute("unidadesOpe", listarU);
         model.addAttribute("tiposHc",tipoHojaCocas);
         model.addAttribute("num_Movimiento",num);
         return "menu";
@@ -505,11 +586,11 @@ public class privateController {
         return "menu";
     }
     @GetMapping("/auth/merma")
-    public String merma(Model model){
+    public String merma(Model model,Authentication authentication){
         List<Merma> merma = mermaService.numMovimiento();
-        List<UnidadOperativa> listarU = unidadOpeService.listar();
+        List<UnidadOperativa> listarU;
         List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
-
+        Usuario byUsua = usuarioService.findByUsua(authentication.getName());
         Integer num;
         if(merma.size()==0){
             num=1;
@@ -517,10 +598,29 @@ public class privateController {
             Merma m = merma.get(0);
             num=m.getId_merma()+1;
         }
+        //FILTRADO POR LOCALIDAD EN SUPERVISOR Y OPERADOR
+        if(byUsua.getId_rol().getId_rol()==3||byUsua.getId_rol().getId_rol()==2){
+
+            Agencia cod_agencia = byUsua.getCod_uniOpe().getCod_agencia();
+            Sucursal cod_sucursal = byUsua.getCod_uniOpe().getCod_sucursal();
+
+            if (cod_agencia!= null && cod_sucursal != null){
+                listarU = unidadOpeService.listarAgeSu(cod_agencia.getCod_agencia(),cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia!= null && cod_sucursal == null){
+                listarU=unidadOpeService.listarAgencia(cod_agencia.getCod_agencia());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia== null && cod_sucursal != null){
+                listarU=unidadOpeService.listarSucursal(cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
+            }
+        }else{
+            listarU = unidadOpeService.listar();
+            model.addAttribute("unidadesOpe", listarU);
+        }
         model.addAttribute("merm","merma");
         model.addAttribute("merma",new Merma());
         model.addAttribute("fc", new Date());
-        model.addAttribute("unidadesOpe", listarU);
         model.addAttribute("tiposHc",tipoHojaCocas);
         model.addAttribute("num_Movimiento",num);
         return "menu";
@@ -560,10 +660,30 @@ public class privateController {
     }
     //TRANSFERENCIA HOJA DE COCA
     @GetMapping("/auth/transferencia")
-    public String transferencia(Model model){
-        List<UnidadOperativa> listarU = unidadOpeService.listar();
+    public String transferencia(Model model,Authentication authentication){
+        Usuario byUsua = usuarioService.findByUsua(authentication.getName());
+        List<UnidadOperativa> listarU = new ArrayList<>();
         List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
+        //FILTRADO POR LOCALIDAD EN SUPERVISOR Y OPERADOR
+        if(byUsua.getId_rol().getId_rol()==3||byUsua.getId_rol().getId_rol()==2){
 
+            Agencia cod_agencia = byUsua.getCod_uniOpe().getCod_agencia();
+            Sucursal cod_sucursal = byUsua.getCod_uniOpe().getCod_sucursal();
+
+            if (cod_agencia!= null && cod_sucursal != null){
+                listarU = unidadOpeService.listarAgeSu(cod_agencia.getCod_agencia(),cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia!= null && cod_sucursal == null){
+                listarU=unidadOpeService.listarAgencia(cod_agencia.getCod_agencia());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia== null && cod_sucursal != null){
+                listarU=unidadOpeService.listarSucursal(cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
+            }
+        }else{
+            listarU = unidadOpeService.listar();
+            model.addAttribute("unidadesOpe", listarU);
+        }
 
         model.addAttribute("transf","transferencia");
         model.addAttribute("transferencia",new Transferencia());
@@ -598,9 +718,10 @@ public class privateController {
     }
     //INGRESO POR DEMASIA
     @GetMapping("/auth/demasia")
-    public String demasia(Model model){
+    public String demasia(Model model,Authentication authentication){
+        Usuario byUsua = usuarioService.findByUsua(authentication.getName());
         List<Demasia> demasia = demasiaService.numMovimiento();
-        List<UnidadOperativa> listarU = unidadOpeService.listar();
+        List<UnidadOperativa> listarU;
         List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
 
         Integer num;
@@ -610,10 +731,29 @@ public class privateController {
             Demasia d = demasia.get(0);
             num=d.getId_demasia()+1;
         }
+        //FILTRADO POR LOCALIDAD EN SUPERVISOR Y OPERADOR
+        if(byUsua.getId_rol().getId_rol()==3||byUsua.getId_rol().getId_rol()==2){
+
+            Agencia cod_agencia = byUsua.getCod_uniOpe().getCod_agencia();
+            Sucursal cod_sucursal = byUsua.getCod_uniOpe().getCod_sucursal();
+
+            if (cod_agencia!= null && cod_sucursal != null){
+                listarU = unidadOpeService.listarAgeSu(cod_agencia.getCod_agencia(),cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia!= null && cod_sucursal == null){
+                listarU=unidadOpeService.listarAgencia(cod_agencia.getCod_agencia());
+                model.addAttribute("unidadesOpe", listarU);
+            }else if (cod_agencia== null && cod_sucursal != null){
+                listarU=unidadOpeService.listarSucursal(cod_sucursal.getCod_sucursal());
+                model.addAttribute("unidadesOpe", listarU);
+            }
+        }else{
+            listarU = unidadOpeService.listar();
+            model.addAttribute("unidadesOpe", listarU);
+        }
         model.addAttribute("demas","demasia");
         model.addAttribute("demasia",new Demasia());
         model.addAttribute("fc", new Date());
-        model.addAttribute("unidadesOpe", listarU);
         model.addAttribute("tiposHc",tipoHojaCocas);
         model.addAttribute("num_Movimiento",num);
         return "menu";

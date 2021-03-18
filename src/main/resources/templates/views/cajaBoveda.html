@@ -24,10 +24,6 @@
         </div>
         <div class="form-group">
             <div class="row">
-                <div class="col-md-2">
-                    <label > NOMBRE DE UNIDAD</label>
-                    <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
-                </div>
                 <div class="col-md-4">
                     <label > OFICINA(Unidad Operativa): </label>
                     <select class="form-control" th:field="*{cod_uniOpe}" id="selectUnidadOpe" >
@@ -77,7 +73,7 @@
         <button type="submit" class="btn btn-primary">REGISTRAR</button>
         </div>
     </form>
-    <div class="row">
+    <div class="row" th:if="${session.usuario.getId_rol().getId_rol()==1}">
         <div class="col-sm-12">
             <h2>Registros</h2>
             <table class="table table-bordered" th:fragment="tablaCajaBoveda" id="tablaCajaBoveda">

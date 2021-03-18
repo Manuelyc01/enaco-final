@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //INPUT BUSQUEDA
     const formUnidadOpe = document.querySelector('#formUnidadOpe');
     const listUnidadOpe = document.querySelector("#listUnidadOpe");
+
     var pageNumber= 1;
     var pageSize=10;
     $.ajax({
