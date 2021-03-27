@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -22,10 +23,6 @@ public class Compra {
     private Integer id_compra;
     @Column(name = "num_liquidacion")
     private String num_liquidacion;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "fecha")
-    private Date fecha;
 
     @OneToOne
     @JoinColumn(name = "cedula_productor",referencedColumnName = "cedula")
@@ -69,5 +66,7 @@ public class Compra {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario id_usuario;
 
-
+    @Basic(optional = false)
+    @Column(name = "fecha",insertable = false, updatable = false)
+    private Date fecha;
 }

@@ -30,12 +30,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
         var pagination=paginate(lista,pageSize,pageNumber)
         comprasHtml="";
         pagination.forEach(compras =>{
+            const str = (new Date(compras.fecha)).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "---Hora: ");
             comprasHtml += `
                     <tr>
                     <th scope="row">
                     <a class="fas fa-fw fa-eye" href="/compraRealizada/${compras.id_compra}"></a>${compras.num_liquidacion}</th>
                     <td>${compras.dni_repre}</td>
-                    <td>${compras.fecha}</td>
+                    <td>${str}</td>
                     <td>${compras.id_usuario.nombre}</td>
                     <td>
                     <a class="btn btn-info" href="/auth/report/${compras.id_compra}">Boleta</a>

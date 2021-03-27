@@ -95,7 +95,7 @@ public class privateController {
         String username=auth.getName();
         Usuario usuario = usuarioService.findByUsua(username);
         List<UnidadOperativa> listar = unidadOpeService.listar();
-
+        
         //Only admin "1" can register new users
         if(usuario.getId_rol().getId_rol()==1){
             model.addAttribute("user", new Usuario());
@@ -426,6 +426,7 @@ public class privateController {
             }
         }
     }
+
     @GetMapping("/compraRealizada/{id}")
     public String compraRealizada(@PathVariable Integer id, Model model){
         Compra compra = compraService.findById(id);

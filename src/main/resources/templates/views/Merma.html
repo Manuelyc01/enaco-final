@@ -25,6 +25,10 @@
         </div>
         <div class="form-group">
             <div class="row">
+                <div class="col-md-2" th:if="${session.usuario.getId_rol().getId_rol()==1}">
+                    <label > NOMBRE DE UNIDAD</label>
+                    <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
+                </div>
                 <div class="col-md-3">
                     <label > OFICINA(Unidad Operativa): </label>
                     <select class="form-control" th:field="*{cod_uniOpe}" id="selectUnidadOpe" >
