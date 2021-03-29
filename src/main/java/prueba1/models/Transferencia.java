@@ -47,7 +47,8 @@ public class Transferencia {
     @Column(name = "cantidad")
     private Double cantidad;
 
-    @Column(name = "fecha")
+    @Basic(optional = false)
+    @Column(name = "fecha",insertable = false, updatable = false)
     private Date fecha;
 
 }

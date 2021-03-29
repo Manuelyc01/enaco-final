@@ -24,6 +24,10 @@
     <script th:if="${listCompras!=null}" th:inline="javascript">
         const id_usuario = /*[[${id}]]*/ "id";
     </script>
+    <!--date filter--><!--
+    <link type="text/css" th:href="@{css/bootstrap-datetimepicker.min.css}" rel="stylesheet">
+    <script src="js/bootstrap-datetimepicker.min.js"></script>-->
+
     <base th:href="@{/}">
 </head>
 
@@ -123,7 +127,7 @@
         <li class="nav-item">
             <a class="nav-link" th:href="@{/auth/almacen}">
                 <i class="fas fa-fw fa-folder"></i>
-                <span>Movimiento de Inventario</span></a>
+                <span>Reporte de Movimiento de Inventario</span></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" th:href="@{/auth/rolOperador}">
@@ -303,7 +307,7 @@
                             <div class="card-body-icon">
                                 <i class="fas fa-fw fa-life-ring"></i>
                             </div>
-                            <div class="mr-5">Movimiento Inventario</div>
+                            <div class="mr-5">Reporte de Movimiento Inventario</div>
                         </div>
                         <a class="card-footer text-white clearfix small z-1" th:href="@{/auth/almacen}">
                             <span class="float-left">Ingresar</span>

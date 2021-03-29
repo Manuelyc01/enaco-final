@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -45,6 +46,9 @@ public class Inventario {
     @Column(name = "stockfinal")
     private Double stockFinal;
 
+    @Basic(optional = false)
+    @Column(name = "fecha",insertable = false, updatable = false)
+    private Date fecha;
 
 
 }

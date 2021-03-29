@@ -19,7 +19,8 @@ public class Decomiso {
     @Column(name = "id_decomiso")
     private Integer id_decomiso;
 
-    @Column(name = "fecha")
+    @Basic(optional = false)
+    @Column(name = "fecha",insertable = false, updatable = false)
     private Date fecha;
 
     @OneToOne

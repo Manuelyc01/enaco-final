@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import prueba1.Service.*;
 import prueba1.models.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -197,6 +198,34 @@ public class AjaxRestController {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<Inventario>> registrosAlmacen(@PathVariable("uni") String uni,@PathVariable("hoj") String hoj) {
         List<Inventario> inventarios = inventarioService.listByProductAlmacen(hoj, uni);
+        try {
+            return ResponseEntity.accepted().body(inventarios);
+        } catch (Exception e) {
+
+            return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    //FILTRADO FECHA REPORTE INVENTARIO
+    @RequestMapping(
+            value = "filterDate/{inicio}/{fin}/{codUni}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Inventario>> registrosFechaAlmacen(@PathVariable("inicio") String inicio,@PathVariable("fin") String fin,@PathVariable("codUni") String cod) throws ParseException {
+        List<Inventario> inventarios = inventarioService.registrosFechaAlmacen(inicio, fin,cod);
+        try {
+            return ResponseEntity.accepted().body(inventarios);
+        } catch (Exception e) {
+
+            return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    //FILTRADO FECHA REPORTE INVENTARIO por producto
+    @RequestMapping(
+            value = "filterDate/{inicio}/{fin}/{codUni}/{codHc}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Inventario>> registrosFechaAlmacenHc(@PathVariable("inicio") String inicio,@PathVariable("fin") String fin,@PathVariable("codUni") String cod,@PathVariable("codHc") String codHc) throws ParseException {
+        List<Inventario> inventarios = inventarioService.registrosFechaAlmacenHc(inicio, fin,cod,codHc);
         try {
             return ResponseEntity.accepted().body(inventarios);
         } catch (Exception e) {

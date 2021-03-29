@@ -19,7 +19,8 @@ public class Demasia {
     @Column(name = "id_demasia")
     private Integer id_demasia;
 
-    @Column(name = "fecha")
+    @Basic(optional = false)
+    @Column(name = "fecha",insertable = false, updatable = false)
     private Date fecha;
 
     @OneToOne

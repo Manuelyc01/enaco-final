@@ -30,8 +30,8 @@ public class CajaBoveda {
     @JoinColumn(name = "id_tipotransac",referencedColumnName = "id_tipotransac")
     private TipoTransaccion id_tipoTransac;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "fecha")
+    @Basic(optional = false)
+    @Column(name = "fecha",insertable = false, updatable = false)
     private Date fecha;
 
     @Column(name = "monto")

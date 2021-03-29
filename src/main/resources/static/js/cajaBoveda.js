@@ -108,13 +108,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var pagination=paginate(lista,pageSize,pageNumber)
             cajaBhtml="";
             pagination.forEach(cajaB =>{
+                const str = (new Date(cajaB.fecha)).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "---Hora: ");
                 cajaBhtml+=`
                     <tr>
                     <th scope="row">${cajaB.id_usuario.nombre}</th>
                     <th scope="row">${cajaB.cod_uniOpe.nom_uniOpe}</th>
                     <th scope="row">${cajaB.id_tipoTransac.nombre}</th>
-                    <th scope="row">${cajaB.fecha}</th>
-                    <th scope="row">${cajaB.monto}</th>
+                    <th scope="row">${str}</th>
+                    <th scope="row">S/ ${cajaB.monto}</th>
                     </tr>
                 `
             });

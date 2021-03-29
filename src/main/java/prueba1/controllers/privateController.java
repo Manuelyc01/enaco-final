@@ -488,7 +488,7 @@ public class privateController {
         Usuario u = usuarioService.findByUsua(name);
         cajaBoveda.setId_usuario(u);
         cajaBovedaService.save(cajaBoveda);
-        return "menu";
+        return "redirect:/auth/cajaBoveda";
     }
     //REPORT PDF
     @GetMapping("/auth/report/{id}")
@@ -584,7 +584,7 @@ public class privateController {
         Usuario u = usuarioService.findByUsua(auth.getName());
         decomiso.setId_usuario(u);
         decomisoService.save(decomiso);
-        return "menu";
+        return "redirect:/auth/decomiso";
     }
     @GetMapping("/auth/merma")
     public String merma(Model model,Authentication authentication){

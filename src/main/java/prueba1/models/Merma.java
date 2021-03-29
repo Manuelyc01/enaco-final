@@ -19,7 +19,8 @@ public class Merma {
     @Column(name = "id_merma")
     private Integer id_merma;
 
-    @Column(name = "fecha")
+    @Basic(optional = false)
+    @Column(name = "fecha",insertable = false, updatable = false)
     private Date fecha;
 
     @OneToOne

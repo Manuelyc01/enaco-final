@@ -9,6 +9,9 @@ import prueba1.models.UnidadOperativa;
 import prueba1.repository.InventarioRepository;
 
 import java.awt.print.Pageable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -34,6 +37,20 @@ public class InventarioServiceImpl implements InventarioService{
     @Override
     public List<Inventario> listByProductAlmacen(String cod_tipoHoja, String cod_uniOpe){
         return repository.listByProductAlmacen(cod_tipoHoja,cod_uniOpe);
+    }
+    @Override
+    public List<Inventario> registrosFechaAlmacen(String inicio, String fin,String cod) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio);
+        Date fn= format.parse(fin);
+        return repository.filterFechaAlmacen(ini,fn,cod);
+    }
+    @Override
+    public List<Inventario> registrosFechaAlmacenHc(String inicio, String fin,String cod,String codHc) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio);
+        Date fn= format.parse(fin);
+        return repository.filterFechaAlmacenHc(ini,fn,cod,codHc);
     }
     @Override
     public List<Inventario> listByProductAlmacenOne(TipoHojaCoca cod_tipoHoja, UnidadOperativa cod_uniOpe){

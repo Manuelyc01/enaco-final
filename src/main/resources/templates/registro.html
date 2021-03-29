@@ -21,15 +21,15 @@
                     <form  th:action="@{/auth/registro}" th:object="${user}" method="post">
                         <div class="form-group">
                             <label > Nombre completo: </label>
-                            <input class="form-control" type="text" th:field="*{nombre}" placeholder="Nombre" >
+                            <input class="form-control" type="text" th:field="*{nombre}" placeholder="Nombre" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label > Celular: </label>
-                            <input class="form-control" type="text" th:field="*{telefono}" placeholder="Telefono" >
+                            <input class="form-control" type="text" th:field="*{telefono}" placeholder="Telefono" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label > Correo electronico: </label>
-                            <input class="form-control" type="text" th:field="*{correo}" placeholder="Correo" >
+                            <input class="form-control" type="text" th:field="*{correo}" placeholder="Correo" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label > Rol: </label>
@@ -51,21 +51,21 @@
                             </div>
                                 <div class="col-md-3">
                                     <input type="search" class="form-control rounded" id="formUnidadOpe" placeholder="Buscar unidad" aria-label="Search"
-                                           aria-describedby="search-addon" />
+                                           aria-describedby="search-addon" autocomplete="off">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label > Usuario: </label><span th:if="${userExist != null}" style="color: red"> Nombre de usuario ya existente</span>
-                            <input class="form-control" type="text" th:field="*{usua}" placeholder="Usuario" required id="usuario">
+                            <input class="form-control" type="text" th:field="*{usua}" placeholder="Usuario" required id="usuario" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label > Contraseña: </label>
-                            <input class="form-control" type="password" th:field="*{passw}" placeholder="Password" required>
+                            <input class="form-control" type="password" th:field="*{passw}" placeholder="Password" required autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label > Serie de compra: </label>
-                            <input class="form-control" type="text" th:field="*{serie_compra}">
+                            <input class="form-control" type="text" th:field="*{serie_compra}" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label > Estado: </label>

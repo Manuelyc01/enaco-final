@@ -7,7 +7,7 @@
 <body>
 <div th:fragment="almacen">
     <div class="row">
-        <h1 style="padding-left: 25px">INVENTARIO ALMACEN</h1>
+        <h1 style="padding-left: 25px">Reporte de movimiento de inventario</h1>
     </div>
     <div class="form-group">
         <div class="row">
@@ -18,7 +18,7 @@
                 <label > NOMBRE DE UNIDAD</label>
                 <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label > OFICINA(Unidad Operativa): </label>
                 <select class="form-control" id="selectUnidadOpe">
                     <option value="0">
@@ -29,7 +29,7 @@
                     </option>
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label >FILTRAR TIPO HOJA DE COCA: </label>
                 <select class="form-control" id="TipoHc" >
                     <option value="0">
@@ -39,6 +39,14 @@
                         <span th:text="${tiposHc.cod_tipoHoja}"></span>---<span th:text="${tiposHc.nombre}"></span>
                     </option>
                 </select>
+            </div>
+            <div class="col-md-2">
+                <label>Fecha Inicio</label>
+                <input type="datetime-local" class="form-control" id="fcInicio">
+            </div>
+            <div class="col-md-2">
+                <label>Fecha Fin</label>
+                <input type="datetime-local" class="form-control" id="fcFin">
             </div>
             <div>
             <a class="btn btn-success" id="btnBuscarAlmacen">Buscar</a>
@@ -53,12 +61,12 @@
             <table class="table table-bordered" th:fragment="tablaAlmacen" id="tablaAlmacen">
                 <thead class="thead-dark" style="background-color: #cde49f">
                 <tr>
-                    <th scope="col">Id</th>
+                    <th scope="col">Fecha-Hora</th>
                     <th scope="col">Usuario</th>
-                    <th scope="col">Almacen</th>
+                    <th scope="col">Almacén</th>
                     <th scope="col">Movimiento</th>
                     <th scope="col">Documento</th>
-                    <th scope="col">Tipo Hoja</th>
+                    <th scope="col">Tipo de HC</th>
                     <th scope="col">Peso Neto</th>
                     <th scope="col">Stock Inicial</th>
                     <th scope="col">Stock Final</th>
