@@ -1,14 +1,18 @@
 package prueba1.Service;
 
+import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import prueba1.controllers.ExportExcelKardex;
 import prueba1.models.Inventario;
 import prueba1.models.TipoHojaCoca;
 import prueba1.models.UnidadOperativa;
 import prueba1.repository.InventarioRepository;
 
-import java.awt.print.Pageable;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,15 +45,15 @@ public class InventarioServiceImpl implements InventarioService{
     @Override
     public List<Inventario> registrosFechaAlmacen(String inicio, String fin,String cod) throws ParseException {
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date ini= format.parse(inicio);
-        Date fn= format.parse(fin);
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
         return repository.filterFechaAlmacen(ini,fn,cod);
     }
     @Override
     public List<Inventario> registrosFechaAlmacenHc(String inicio, String fin,String cod,String codHc) throws ParseException {
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date ini= format.parse(inicio);
-        Date fn= format.parse(fin);
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
         return repository.filterFechaAlmacenHc(ini,fn,cod,codHc);
     }
     @Override
@@ -64,4 +68,6 @@ public class InventarioServiceImpl implements InventarioService{
     public List<Inventario> listByUni(String cod_uniOpe){
         return repository.listByUni(cod_uniOpe);
     }
+
+
 }

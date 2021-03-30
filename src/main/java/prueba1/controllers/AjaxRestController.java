@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import prueba1.Service.*;
 import prueba1.models.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @RestController
 @RequestMapping(value = {"/private",""})
@@ -34,8 +38,10 @@ public class AjaxRestController {
     private final CajaBovedaService cajaBovedaService;
     @Autowired
     private final InventarioService inventarioService;
+    @Autowired
+    private final privateController privateController;
 
-    public AjaxRestController(ProductorService productorService, RepresentanteService representanteService, UnidadOpeService unidadOpeService, UsuarioService usuarioService, CostoHcService costoHcService, TipoHcService tipoHcService, CompraService compraService, CajaBovedaService cajaBovedaService, InventarioService inventarioService) {
+    public AjaxRestController(ProductorService productorService, RepresentanteService representanteService, UnidadOpeService unidadOpeService, UsuarioService usuarioService, CostoHcService costoHcService, TipoHcService tipoHcService, CompraService compraService, CajaBovedaService cajaBovedaService, InventarioService inventarioService, prueba1.controllers.privateController privateController) {
         this.productorService = productorService;
         this.representanteService = representanteService;
         this.unidadOpeService = unidadOpeService;
@@ -45,6 +51,7 @@ public class AjaxRestController {
         this.compraService = compraService;
         this.cajaBovedaService = cajaBovedaService;
         this.inventarioService = inventarioService;
+        this.privateController = privateController;
     }
 
     //LISTS
@@ -70,18 +77,6 @@ public class AjaxRestController {
             return ResponseEntity.accepted().body(list);
         } catch (Exception e) {
             return new ResponseEntity<List<CostoHojaCoca>>(HttpStatus.BAD_REQUEST);
-        }
-    }
-    @RequestMapping(
-            value = "listRegistrosUni/{cod}",
-            method = RequestMethod.GET,
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<Inventario>> listRegistrosUni(@PathVariable("cod") String cod) {
-        List<Inventario> list = inventarioService.listByUni(cod);
-        try {
-            return ResponseEntity.accepted().body(list);
-        } catch (Exception e) {
-            return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
         }
     }
     @RequestMapping(
@@ -193,6 +188,41 @@ public class AjaxRestController {
         }
     }
     @RequestMapping(
+            value = "viewStock/{uni}/{hoj}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> stockHcAlmacen(@PathVariable("uni") String uni,@PathVariable("hoj") String hoj) {
+        List<Inventario> inventario = inventarioService.stockHcAlmacen(hoj, uni);
+
+        try {
+            Double stockFinal=0.0;
+            if(inventario.size()==1){
+                Inventario i = inventario.get(0);
+                stockFinal= i.getStockFinal();
+            }
+            return ResponseEntity.accepted().body(stockFinal+"");
+        } catch (Exception e) {
+
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    //REGISTRO POR ALMACEN
+    @RequestMapping(
+            value = "listRegistrosUni/{cod}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Inventario>> listRegistrosUni(@PathVariable("cod") String cod) {
+        List<Inventario> list = inventarioService.listByUni(cod);
+        try {
+            return ResponseEntity.accepted().body(list);
+        } catch (Exception e) {
+            return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    //REGISTRO POR ALMACEN Y HOJA DE COCA
+    @RequestMapping(
             value = "viewRegisters/{uni}/{hoj}",
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -205,7 +235,7 @@ public class AjaxRestController {
             return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
         }
     }
-    //FILTRADO FECHA REPORTE INVENTARIO
+    //FILTRADO FECHA REPORTE ALMACEN
     @RequestMapping(
             value = "filterDate/{inicio}/{fin}/{codUni}",
             method = RequestMethod.GET,
@@ -219,7 +249,7 @@ public class AjaxRestController {
             return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
         }
     }
-    //FILTRADO FECHA REPORTE INVENTARIO por producto
+    //FILTRADO FECHA REPORTE INVENTARIO POR PRODUCTO
     @RequestMapping(
             value = "filterDate/{inicio}/{fin}/{codUni}/{codHc}",
             method = RequestMethod.GET,
@@ -231,25 +261,6 @@ public class AjaxRestController {
         } catch (Exception e) {
 
             return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
-        }
-    }
-    @RequestMapping(
-            value = "viewStock/{uni}/{hoj}",
-            method = RequestMethod.GET,
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> stockHcAlmacen(@PathVariable("uni") String uni,@PathVariable("hoj") String hoj) {
-        List<Inventario> inventario = inventarioService.stockHcAlmacen(hoj, uni);
-
-        try {
-            Double stockFinal=0.0;
-            if(inventario.size()==1){
-                Inventario i = inventario.get(0);
-                 stockFinal= i.getStockFinal();
-            }
-            return ResponseEntity.accepted().body(stockFinal+"");
-        } catch (Exception e) {
-
-            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }
     }
 }

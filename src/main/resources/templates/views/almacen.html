@@ -9,6 +9,7 @@
     <div class="row">
         <h1 style="padding-left: 25px">Reporte de movimiento de inventario</h1>
     </div>
+    <form method="post" th:action="@{/download/excel}" th:object="${reporte}">
     <div class="form-group">
         <div class="row">
             <h3 style="padding-left: 25px">Buscar unidad operativa</h3><br>
@@ -20,7 +21,7 @@
             </div>
             <div class="col-md-2">
                 <label > OFICINA(Unidad Operativa): </label>
-                <select class="form-control" id="selectUnidadOpe">
+                <select class="form-control" th:field="*{codUni}" id="selectUnidadOpe" >
                     <option value="0">
                         <span> Seleccionar...</span>
                     </option>
@@ -31,7 +32,7 @@
             </div>
             <div class="col-md-2">
                 <label >FILTRAR TIPO HOJA DE COCA: </label>
-                <select class="form-control" id="TipoHc" >
+                <select class="form-control" th:field="*{codHc}" id="TipoHc">
                     <option value="0">
                         Seleccionar...
                     </option>
@@ -42,19 +43,25 @@
             </div>
             <div class="col-md-2">
                 <label>Fecha Inicio</label>
-                <input type="datetime-local" class="form-control" id="fcInicio">
+                <input type="datetime-local" class="form-control"  th:field="*{fcInicio}" id="fcInicio">
             </div>
             <div class="col-md-2">
                 <label>Fecha Fin</label>
-                <input type="datetime-local" class="form-control" id="fcFin">
+                <input type="datetime-local" class="form-control" th:field="*{fcFin}" id="fcFin">
             </div>
             <div>
-            <a class="btn btn-success" id="btnBuscarAlmacen">Buscar</a>
+                <a class="btn btn-success" id="btnBuscarAlmacen" type="submit">Buscar</a>
             </div>
         </div>
     </div>
     <div class="row">
-            <h3 style="padding-left: 25px">Registro Hojas de coca</h3><br>
+            <div class="col-sm-2">
+                <button type="submit" class="btn btn-info" id="btnExc" >Descargar<span class="fas fa-fw fa-file-excel"></span></button>
+            </div>
+    </div>
+    </form>
+    <div class="row">
+            <h4 style="padding-left: 25px">Registro Hojas de coca</h4><br>
     </div>
     <div class="row">
         <div class="col-sm-12">

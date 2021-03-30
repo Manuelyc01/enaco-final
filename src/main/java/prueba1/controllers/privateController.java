@@ -1,6 +1,7 @@
 package prueba1.controllers;
 
 import net.sf.jasperreports.engine.JRException;
+import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,9 @@ import prueba1.models.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -523,12 +526,11 @@ public class privateController {
         }
 
         if (byUsua.getId_rol().getId_rol()==2 ||byUsua.getId_rol().getId_rol()==1){
-
-
             List<TipoHojaCoca> tipoHojaCocas = tipoHcService.list();
             model.addAttribute("almacen","almacen");
             model.addAttribute("unidadesOpe",listarU);
             model.addAttribute("tiposHc",tipoHojaCocas);
+            model.addAttribute("reporte",new Reporte());
             return "menu";
         }else {
             return "redirect:/private/index";
@@ -765,5 +767,23 @@ public class privateController {
         demasia.setId_usuario(u);
         demasiaService.save(demasia);
         return "menu";
+    }
+
+    @PostMapping("/download/excel")
+    public void downloadCsv(Reporte reporte,HttpServletResponse response) throws IOException, ParseException {
+        List<Inventario> inventarios= new ArrayList<>();
+        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()==""){
+            inventarios =inventarioService.listByUni(reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!=""){
+            inventarios =inventarioService.registrosFechaAlmacen(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()==""){
+            inventarios=inventarioService.listByProductAlmacen(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!=""){
+            inventarios=inventarioService.registrosFechaAlmacenHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
+        }
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=KARDEX.xlsx");
+        ByteArrayInputStream stream = ExportExcelKardex.listToExcelFile(inventarios);
+        IOUtils.copy(stream, response.getOutputStream());
     }
 }

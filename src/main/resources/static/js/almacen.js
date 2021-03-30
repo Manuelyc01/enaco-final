@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const TipoHc =document.querySelector('#TipoHc');
     const fcInicio =document.querySelector('#fcInicio');
     const fcFin =document.querySelector('#fcFin');
+
+    const btnExc =document.querySelector('#btnExc');
+
     const btnBuscarAlmacen =document.querySelector('#btnBuscarAlmacen');
 
     const listTipoHcAlmacen= document.querySelector('#listTipoHcAlmacen');
@@ -18,7 +21,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     if(result.length!=0){
                         listTipoHcAlmacen.innerHTML+=``
                         for(let regist of result){
-                            const str = (new Date(regist.fecha)).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                            const event=new Date(regist.fecha);
+                            event.setUTCHours(event.getUTCHours()-5);//cambio de horario
+                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+
                             listTipoHcAlmacen.innerHTML += `
                             <tr>
                             <td scope="row">${str}</td>
@@ -55,7 +61,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         if(result.length!=0){
                             listTipoHcAlmacen.innerHTML+=``
                             for(let regist of result){
-                                const str = (new Date(regist.fecha)).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                const event=new Date(regist.fecha);
+                                event.setUTCHours(event.getUTCHours()-5);
+                                const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
 
                                 listTipoHcAlmacen.innerHTML += `
                             <tr>
@@ -75,11 +83,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             listTipoHcAlmacen.innerHTML += `
                             <h4>Sin Registros</h4>
                         `
+                            btnExcel.innerHTML=``;
                         }
                     }
                 }]
             });
-        }else if(valueHoja==0 && fcInicio.value!='' && fcFin.value!=''){
+        }
+        else if(valueHoja==0 && fcInicio.value!='' && fcFin.value!=''){
             //FILTRADO POR FECHAS
             const inicio = fcInicio.value.replace("T", " ");
             const fin = fcFin.value.replace("T", " ");
@@ -92,7 +102,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         if(result.length!=0){
                             listTipoHcAlmacen.innerHTML+=``
                             for(let regist of result){
-                                const str = (new Date(regist.fecha)).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                const event=new Date(regist.fecha);
+                                event.setUTCHours(event.getUTCHours()-5);
+                                const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
 
                                 listTipoHcAlmacen.innerHTML += `
                             <tr>
@@ -112,12 +124,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             listTipoHcAlmacen.innerHTML += `
                             <h4>Sin Registros</h4>
                         `
+                            btnExcel.innerHTML=``;
                         }
                     }
                 }]
             });
 
-        }else if(valueHoja!=0 && fcInicio.value=='' && fcFin.value==''){
+        }
+        else if(valueHoja!=0 && fcInicio.value=='' && fcFin.value==''){
             $.ajax({
                 type: 'GET',
                 url:'/viewRegisters/'+valueUni+'/'+valueHoja,
@@ -127,44 +141,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         if(result.length!=0){
                             listTipoHcAlmacen.innerHTML+=``
                             for(let regist of result){
-                                const str = (new Date(regist.fecha)).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
-                                listTipoHcAlmacen.innerHTML += `
-                            <tr>
-                            <td scope="row">${str}</td>
-                            <td scope="col">${regist.id_usuario.nombre}</td>
-                            <td scope="col">${regist.cod_almacen.nom_uniOpe}</td>
-                            <td scope="col">${regist.id_movimiento.nombre}</td>
-                            <td scope="col">${regist.documento}</td>
-                            <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
-                            <td scope="col">${regist.pesoNeto}</td>
-                            <td scope="col">${regist.stockInicial}</td>
-                            <td scope="col">${regist.stockFinal}</td>
-                            </tr>
-                        `
-                            }
-                        }else {
-                            listTipoHcAlmacen.innerHTML += `
-                            <h4>Sin Registros</h4>
-                        `
-                        }
-                    }
-                }]
-            });
-        }else if(valueHoja!=0 && fcInicio.value!='' && fcFin.value!=''){
-            //FILTRADO POR FECHAS
-            const inicio = fcInicio.value.replace("T", " ");
-            const fin = fcFin.value.replace("T", " ");
-            $.ajax({
-                type: 'GET',
-                url:'/filterDate/'+inicio+'/'+fin+'/'+valueUni+'/'+valueHoja,
-                success:[function (result) {
-                    if(listTipoHcAlmacen!=null){
-                        listTipoHcAlmacen.innerHTML=``
-                        if(result.length!=0){
-                            listTipoHcAlmacen.innerHTML+=``
-                            for(let regist of result){
-                                const str = (new Date(regist.fecha)).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
-
+                                const event=new Date(regist.fecha);
+                                event.setUTCHours(event.getUTCHours()-5);
+                                const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
                                 listTipoHcAlmacen.innerHTML += `
                             <tr>
                             <td scope="row">${str}</td>
@@ -188,7 +167,49 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 }]
             });
         }
+        else if(valueHoja!=0 && fcInicio.value!='' && fcFin.value!=''){
+            //FILTRADO POR FECHAS
+            const inicio = fcInicio.value.replace("T", " ");
+            const fin = fcFin.value.replace("T", " ");
+            $.ajax({
+                type: 'GET',
+                url:'/filterDate/'+inicio+'/'+fin+'/'+valueUni+'/'+valueHoja,
+                success:[function (result) {
+                    if(listTipoHcAlmacen!=null){
+                        listTipoHcAlmacen.innerHTML=``
+                        if(result.length!=0){
+                            listTipoHcAlmacen.innerHTML+=``
+                            for(let regist of result){
+                                const event=new Date(regist.fecha);
+                                event.setUTCHours(event.getUTCHours()-5);
+                                const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+
+                                listTipoHcAlmacen.innerHTML += `
+                            <tr>
+                            <td scope="row">${str}</td>
+                            <td scope="col">${regist.id_usuario.nombre}</td>
+                            <td scope="col">${regist.cod_almacen.nom_uniOpe}</td>
+                            <td scope="col">${regist.id_movimiento.nombre}</td>
+                            <td scope="col">${regist.documento}</td>
+                            <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                            <td scope="col">${regist.pesoNeto}</td>
+                            <td scope="col">${regist.stockInicial}</td>
+                            <td scope="col">${regist.stockFinal}</td>
+                            </tr>
+                        `
+                            }
+
+                        }else {
+                            listTipoHcAlmacen.innerHTML += `
+                            <h4>Sin Registros</h4>
+                        `
+                        }
+                    }
+                }]
+            });
+        }
     }
+
     if (selectUnidadOpe!=null){
         selectUnidadOpe.addEventListener('change',registrosU)
     }
@@ -196,4 +217,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if(btnBuscarAlmacen!=null){
         btnBuscarAlmacen.addEventListener('click',registros)
     }
+
 });
