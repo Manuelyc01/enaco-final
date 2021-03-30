@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const TipoHc =document.querySelector('#TipoHc');
     const fcInicio =document.querySelector('#fcInicio');
     const fcFin =document.querySelector('#fcFin');
+    const formHc =document.querySelector('#formHc');
 
     const btnExc =document.querySelector('#btnExc');
 
@@ -209,7 +210,32 @@ document.addEventListener("DOMContentLoaded", function(event) {
             });
         }
     }
-
+    let hojasC=$.ajax({
+        type: 'GET',
+        url:'/listTipoHc/',
+        success:[function (result) {
+            hojasC=result;
+        }]
+    });
+    function filtrar() {
+        TipoHc.innerHTML='';
+        const text=formHc.value.toLowerCase();
+        for(let hc of hojasC){
+            let val = hc.cod_tipoHoja.toLowerCase();
+            if(val.indexOf(text) !== -1){
+                TipoHc.innerHTML += `
+                            <option value="${hc.cod_tipoHoja}">
+                                        <span>${hc.cod_tipoHoja}</span>---<span>${hc.nombre}</span>
+                             </option>
+                        `
+            }
+        }
+        if(TipoHc.innerHTML === ''){
+            TipoHc.innerHTML+= `
+                            <option value="0">Sin registro</option>
+                        `
+        }
+    }
     if (selectUnidadOpe!=null){
         selectUnidadOpe.addEventListener('change',registrosU)
     }
@@ -217,5 +243,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if(btnBuscarAlmacen!=null){
         btnBuscarAlmacen.addEventListener('click',registros)
     }
-
+    if (formHc !=null){
+        formHc.addEventListener('keyup',filtrar)
+    }
 });

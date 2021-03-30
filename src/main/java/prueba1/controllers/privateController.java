@@ -783,7 +783,7 @@ public class privateController {
         }
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=KARDEX.xlsx");
-        ByteArrayInputStream stream = ExportExcelKardex.listToExcelFile(inventarios);
+        ByteArrayInputStream stream = ExportExcelKardex.listToExcelFile(inventarios,reporte);
         IOUtils.copy(stream, response.getOutputStream());
     }
 }
