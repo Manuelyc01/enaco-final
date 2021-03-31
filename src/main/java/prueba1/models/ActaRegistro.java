@@ -15,4 +15,9 @@ public class ActaRegistro {
     private Double ingresoCompra;
     private Double ingresoDecomiso;
     private Double ingresoDemasia;
+    private Double ingresoTransferencia;
+
+    private Double salidaTransferencia;
+    private Double salidaMerma;
+
 }

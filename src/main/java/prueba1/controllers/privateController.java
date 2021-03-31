@@ -800,15 +800,22 @@ public class privateController {
 
             List<TipoHojaCoca> tipoHojaCocas = inventarioService.actaHojas(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe());//HOJAS DE COCA
             List<Ingreso> ingresos;
+            List<IngresoSalida> ingresoSalidas;
             for (int i=0;i<tipoHojaCocas.size();i++){
                 Double s = inventarioService.actaSaldo(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());
-                ingresos= inventarioService.actaIngreso(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());//INGRESOS(1,2,3)
+                ingresos= inventarioService.actaIngreso(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());//INGRESOS(1,2,3) SALIDA(4)
+                ingresoSalidas= inventarioService.actaIngresoSalida(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());
                     ActaRegistro actaRegistro= new ActaRegistro();
                         actaRegistro.setCodHc(tipoHojaCocas.get(i).getCod_tipoHoja());//CODHC
                         actaRegistro.setSaldoMesAnterior(s);//SALDO
                         actaRegistro.setIngresoCompra(ingresos.get(0).getMonto());//COMPRAS
                         actaRegistro.setIngresoDecomiso(ingresos.get(1).getMonto());//DECOMISO
                         actaRegistro.setIngresoDemasia(ingresos.get(2).getMonto());//DEMASIA
+                        actaRegistro.setSalidaMerma(ingresos.get(3).getMonto());//SALIDA MERMA
+
+                        actaRegistro.setIngresoTransferencia(ingresoSalidas.get(0).getMonto());//INGRESO TRANSF
+                        actaRegistro.setSalidaTransferencia(ingresoSalidas.get(1).getMonto());//SALIDA TRANSF
+
                     actaRegistros.add(actaRegistro);
             }
         }

@@ -1,5 +1,6 @@
 package prueba1.repository;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -45,7 +46,9 @@ public interface InventarioRepository extends JpaRepository<Inventario,Integer> 
     @Query("SELECT SUM(u.pesoNeto) from Inventario u where u.fecha between ?1 and ?2 and u.cod_almacen.cod_uniOpe=?3 and u.cod_tipoHoja.cod_tipoHoja=?4 and u.id_movimiento.id_movimiento=?5")
     public List<Double> actaIngreso(Date inicio, Date fin, String cod,String codHc,Integer id_movimiento,Pageable pageable);
 
+    @Query("SELECT SUM(u.pesoNeto) from Inventario u where u.fecha between ?1 and ?2 and u.cod_almacen.cod_uniOpe=?3 and u.cod_tipoHoja.cod_tipoHoja=?4 and u.id_movimiento.id_movimiento=5 and u.stockInicial<u.stockFinal")
+    List<Double> actaIngresoTransferencia(Date ini, Date fn, String cod, String codHc, PageRequest of);
 
-
-
+    @Query("SELECT SUM(u.pesoNeto) from Inventario u where u.fecha between ?1 and ?2 and u.cod_almacen.cod_uniOpe=?3 and u.cod_tipoHoja.cod_tipoHoja=?4 and u.id_movimiento.id_movimiento=5 and u.stockInicial>u.stockFinal")
+    List<Double> actaSalidaTransferencia(Date ini, Date fn, String cod, String codHc, PageRequest of);
 }

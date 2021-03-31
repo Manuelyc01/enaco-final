@@ -3,10 +3,7 @@ package prueba1.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import prueba1.models.Ingreso;
-import prueba1.models.Inventario;
-import prueba1.models.TipoHojaCoca;
-import prueba1.models.UnidadOperativa;
+import prueba1.models.*;
 import prueba1.repository.InventarioRepository;
 
 import java.text.ParseException;
@@ -84,7 +81,7 @@ public class InventarioServiceImpl implements InventarioService{
     @Override
     public List<Ingreso> actaIngreso(String inicio, String fin, String cod, String codHc) throws ParseException {
         List<Ingreso> ingresos=new ArrayList<>();
-        for (int i=1;i<4;i++){
+        for (int i=1;i<5;i++){
             SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Date ini= format.parse(inicio.replace("T"," "));
             Date fn= format.parse(fin.replace("T"," "));
@@ -100,6 +97,33 @@ public class InventarioServiceImpl implements InventarioService{
         }
         return ingresos;
     }
+    @Override
+    public List<IngresoSalida> actaIngresoSalida(String inicio, String fin, String cod, String codHc) throws ParseException {
+        List<IngresoSalida> ingresos=new ArrayList<>();
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
 
+        List<Double> i = repository.actaIngresoTransferencia(ini, fn, cod, codHc, PageRequest.of(0, 1));
+        List<Double> s = repository.actaSalidaTransferencia(ini, fn, cod, codHc, PageRequest.of(0, 1));
+
+        IngresoSalida ingreso=new IngresoSalida();
+        ingreso.setId(1);
+        if (i.get(0)==null){
+            ingreso.setMonto(0.00);
+        }else {
+            ingreso.setMonto(i.get(0));
+        }
+        IngresoSalida ingreso2=new IngresoSalida();
+        ingreso2.setId(2);
+        if (s.get(0)==null){
+            ingreso2.setMonto(0.00);
+        }else {
+            ingreso2.setMonto(s.get(0));
+        }
+        ingresos.add(ingreso);
+        ingresos.add(ingreso2);
+        return ingresos;
+    }
 
 }

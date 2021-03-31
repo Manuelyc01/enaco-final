@@ -1,9 +1,6 @@
 package prueba1.Service;
 
-import prueba1.models.Ingreso;
-import prueba1.models.Inventario;
-import prueba1.models.TipoHojaCoca;
-import prueba1.models.UnidadOperativa;
+import prueba1.models.*;
 
 import java.text.ParseException;
 import java.util.List;
@@ -31,4 +28,6 @@ public interface InventarioService {
     Double actaSaldo(String inicio, String fin, String cod, String codHc) throws ParseException;
 
     List<Ingreso> actaIngreso(String inicio, String fin, String cod, String codHc) throws ParseException;
+
+    List<IngresoSalida> actaIngresoSalida(String inicio, String fin, String cod, String codHc) throws ParseException;
 }
