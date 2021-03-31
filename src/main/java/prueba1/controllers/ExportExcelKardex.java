@@ -44,10 +44,11 @@ public class ExportExcelKardex {
                 celda.setCellValue("Del "+ reporte.getFcInicio().substring(0,10)+" al "+reporte.getFcFin().substring(0,10));
                 celda.setCellStyle(heads2);
             }
-
-            celda=head2.createCell(3);
-            celda.setCellValue("Unidad Operativa: "+inventario.get(0).getCod_almacen().getNom_uniOpe());
-            celda.setCellStyle(heads2);
+            if (reporte.getCodUni()!=null){
+                celda=head2.createCell(3);
+                celda.setCellValue("Unidad Operativa: "+inventario.get(0).getCod_almacen().getNom_uniOpe());
+                celda.setCellStyle(heads2);
+            }
 
             Row row = sheet.createRow(2);
             CellStyle headerCellStyle = workbook.createCellStyle();

@@ -769,21 +769,54 @@ public class privateController {
         return "menu";
     }
 
+    //REPORTES
     @PostMapping("/download/excel")
     public void downloadCsv(Reporte reporte,HttpServletResponse response) throws IOException, ParseException {
-        List<Inventario> inventarios= new ArrayList<>();
-        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()==""){
-            inventarios =inventarioService.listByUni(reporte.getCodUni().getCod_uniOpe());
-        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!=""){
-            inventarios =inventarioService.registrosFechaAlmacen(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
-        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()==""){
-            inventarios=inventarioService.listByProductAlmacen(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
-        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!=""){
-            inventarios=inventarioService.registrosFechaAlmacenHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
+        if (reporte.getCodRep()==1){
+            List<Inventario> inventarios= new ArrayList<>();
+            if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){
+                inventarios =inventarioService.listByUni(reporte.getCodUni().getCod_uniOpe());
+            }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){
+                inventarios =inventarioService.registrosFechaAlmacen(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+            }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){
+                inventarios=inventarioService.listByProductAlmacen(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
+            }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){
+                inventarios=inventarioService.registrosFechaAlmacenHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
+            }
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment; filename=KARDEX.xlsx");
+            ByteArrayInputStream stream = ExportExcelKardex.listToExcelFile(inventarios,reporte);
+            IOUtils.copy(stream, response.getOutputStream());
+        }else if (reporte.getCodRep()==2){
+        }else if (reporte.getCodRep()==3){
+        }else if (reporte.getCodRep()==4){
+        }else if (reporte.getCodRep()==5){
+        }else if (reporte.getCodRep()==6){
+        }else if (reporte.getCodRep()==7){
+        }else if (reporte.getCodRep()==8){
+        }else if (reporte.getCodRep()==9){
+        }else if (reporte.getCodRep()==10){
+            List<ActaRegistro> actaRegistros=new ArrayList<>();
+
+            List<TipoHojaCoca> tipoHojaCocas = inventarioService.actaHojas(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe());//HOJAS DE COCA
+            List<Ingreso> ingresos;
+            for (int i=0;i<tipoHojaCocas.size();i++){
+                Double s = inventarioService.actaSaldo(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());
+                ingresos= inventarioService.actaIngreso(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());//INGRESOS(1,2,3)
+                    ActaRegistro actaRegistro= new ActaRegistro();
+                        actaRegistro.setCodHc(tipoHojaCocas.get(i).getCod_tipoHoja());//CODHC
+                        actaRegistro.setSaldoMesAnterior(s);//SALDO
+                        actaRegistro.setIngresoCompra(ingresos.get(0).getMonto());//COMPRAS
+                        actaRegistro.setIngresoDecomiso(ingresos.get(1).getMonto());//DECOMISO
+                        actaRegistro.setIngresoDemasia(ingresos.get(2).getMonto());//DEMASIA
+                    actaRegistros.add(actaRegistro);
+            }
         }
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment; filename=KARDEX.xlsx");
-        ByteArrayInputStream stream = ExportExcelKardex.listToExcelFile(inventarios,reporte);
-        IOUtils.copy(stream, response.getOutputStream());
     }
+
+    @PostMapping("/reportActaInventario")
+    private String reporteActaInventario(Reporte reporte) {
+        return "menu";
+    }
+
 }

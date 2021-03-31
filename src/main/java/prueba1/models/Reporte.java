@@ -12,4 +12,5 @@ public class Reporte {
     private TipoHojaCoca codHc;
     private String fcInicio;
     private String fcFin;
+    private Integer codRep;
 }

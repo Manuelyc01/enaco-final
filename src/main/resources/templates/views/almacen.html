@@ -12,9 +12,6 @@
     <form method="post" th:action="@{/download/excel}" th:object="${reporte}">
     <div class="form-group">
         <div class="row">
-            <h3 style="padding-left: 25px">Buscar unidad operativa</h3><br>
-        </div>
-        <div class="row">
             <div class="col-md-2" th:if="${session.usuario.getId_rol().getId_rol()==1}">
                 <label > NOMBRE DE UNIDAD</label>
                 <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
@@ -53,17 +50,58 @@
                 <label>Fecha Fin</label>
                 <input type="datetime-local" class="form-control" th:field="*{fcFin}" id="fcFin">
             </div>
-            <div>
-                <a class="btn btn-success" id="btnBuscarAlmacen" type="submit">Buscar</a>
+            <div class="col-md-1">
+                <label >Reporte: </label>
+                <select class="form-control" th:field="*{codRep}" id="codRep">
+                    <option value="0">
+                        <span> Seleccionar...</span>
+                    </option>
+                    <option value="1">
+                        <span>KARDEX</span>
+                    </option>
+                    <option value="2">
+                        <span>Libro Almacén</span>
+                    </option>
+                    <option value="3">
+                        <span>Compras Móviles</span>
+                    </option>
+                    <option value="4">
+                        <span>Compras en Oficina</span>
+                    </option>
+                    <option value="5">
+                        <span>Ingreso por Demasía</span>
+                    </option>
+                    <option value="6">
+                        <span>Ingreso por Decomiso</span>
+                    </option>
+                    <option value="7">
+                        <span>Ingreso por merma</span>
+                    </option>
+                    <option value="8">
+                        <span>Movimiento de caja Bóveda</span>
+                    </option>
+                    <option value="9">
+                        <span>Salida por Transferencia</span>
+                    </option>
+                    <option value="10">
+                        <span>Acta de Inventario de Hoja de coca</span>
+                    </option>
+                </select>
             </div>
         </div>
     </div>
     <div class="row">
             <div class="col-sm-2">
-                <button type="submit" class="btn btn-info" id="btnExc" >Descargar<span class="fas fa-fw fa-file-excel"></span></button>
+                <a class="btn btn-info" id="btnBuscarAlmacen" >Buscar <span class="fas fa-fw fa-search"></span></a>
+                <button type="submit" class="btn btn-success" id="btnReport" style="visibility: hidden;">Descargar<span class="fas fa-fw fa-file-excel"></span></button>
             </div>
+        <div class="col-sm-6" id="spanACTA">
+        </div>
     </div>
     </form>
+        <div class="row">
+
+        </div>
     <div class="row">
             <h4 style="padding-left: 25px">Registro Hojas de coca</h4><br>
     </div>

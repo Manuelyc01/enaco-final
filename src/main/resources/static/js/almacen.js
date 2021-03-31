@@ -5,8 +5,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const fcInicio =document.querySelector('#fcInicio');
     const fcFin =document.querySelector('#fcFin');
     const formHc =document.querySelector('#formHc');
+    const spanACTA =document.querySelector('#spanACTA');
 
-    const btnExc =document.querySelector('#btnExc');
+    const codRep =document.querySelector('#codRep');
+    const btnReport =document.querySelector('#btnReport');
 
     const btnBuscarAlmacen =document.querySelector('#btnBuscarAlmacen');
 
@@ -236,14 +238,50 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         `
         }
     }
+    function mostrarBtn() {
+        const  val=codRep.value;
+        const  su=selectUnidadOpe.value;
+        const  st=TipoHc.value;
+        if(val=='0'){
+            btnReport.style.visibility='hidden'
+            spanACTA.innerHTML='';
+        }else if(val=='1' || val=='2'|| val=='3'|| val=='4'|| val=='5'|| val=='6'|| val=='7'|| val=='8'|| val=='9'){
+            btnReport.style.visibility = 'visible';
+            btnReport.innerHTML='Descargar<span class="fas fa-fw fa-file-excel"></span>'
+            btnReport.className = 'btn btn-success'
+            spanACTA.innerHTML=''
+        }else if (val=='10'){
+            if (su!='0'&& st!='0'&& fcInicio.value!=''&&fcFin.value!=''){
+                btnReport.style.visibility = 'visible'
+                btnReport.className = 'btn btn-danger'
+                btnReport.innerHTML='Descargar<span class="fas fa-fw fa-file-pdf"></span>';
+                spanACTA.innerHTML=''
+            }else {
+                btnReport.style.visibility = 'visible'
+                btnReport.className = 'btn btn-danger'
+                btnReport.innerHTML='Descargar<span class="fas fa-fw fa-file-pdf"></span>';
+                spanACTA.innerHTML='<span style="color: red"><span class="fas fa-fw fa-exclamation-circle"></span> Acta requiere: Oficina, Tipo HC, fecha inicio y fecha fin </span>'
+            }
+        }
+    }
+
+    if (formHc !=null){
+        formHc.addEventListener('keyup',filtrar)
+    }
     if (selectUnidadOpe!=null){
         selectUnidadOpe.addEventListener('change',registrosU)
+        selectUnidadOpe.addEventListener('change',mostrarBtn)
     }
+    if (codRep!=null){
+        codRep.addEventListener('change',mostrarBtn)
+    }
+    if (TipoHc!=null){
+        TipoHc.addEventListener('change',mostrarBtn)
+    }
+    fcInicio.addEventListener('change',mostrarBtn)
+    fcFin.addEventListener('change',mostrarBtn)
 
     if(btnBuscarAlmacen!=null){
         btnBuscarAlmacen.addEventListener('click',registros)
-    }
-    if (formHc !=null){
-        formHc.addEventListener('keyup',filtrar)
     }
 });
