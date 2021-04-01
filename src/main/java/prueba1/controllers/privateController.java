@@ -818,6 +818,13 @@ public class privateController {
 
                     actaRegistros.add(actaRegistro);
             }
+            for (int i=0;i<actaRegistros.size();i++){
+                ActaRegistro ar = actaRegistros.get(i);
+                ar.setSubtotalIngreso(ar.getIngresoCompra()+ar.getIngresoDecomiso()+ar.getIngresoDemasia()+ar.getIngresoTransferencia());
+                ar.setSubtotalSalida(ar.getSalidaMerma()+ar.getSalidaTransferencia());
+
+                ar.setTotal(ar.getSaldoMesAnterior()+ar.getSubtotalIngreso()-ar.getSubtotalSalida());
+            }
         }
     }
 
