@@ -1,7 +1,10 @@
 package prueba1.Service;
 
+import net.sf.jasperreports.engine.JRException;
 import prueba1.models.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -30,4 +33,6 @@ public interface InventarioService {
     List<Ingreso> actaIngreso(String inicio, String fin, String cod, String codHc) throws ParseException;
 
     List<IngresoSalida> actaIngresoSalida(String inicio, String fin, String cod, String codHc) throws ParseException;
+
+    void exportReport(List<ActaRegistro> actaRegistros, HttpServletResponse response) throws IOException, JRException;
 }

@@ -251,16 +251,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
             btnReport.className = 'btn btn-success'
             spanACTA.innerHTML=''
         }else if (val=='10'){
-            if (su!='0'&& st!='0'&& fcInicio.value!=''&&fcFin.value!=''){
+            if (su!='0'&& fcInicio.value!=''&&fcFin.value!=''){
+                btnReport.disabled=false
                 btnReport.style.visibility = 'visible'
                 btnReport.className = 'btn btn-danger'
                 btnReport.innerHTML='Descargar<span class="fas fa-fw fa-file-pdf"></span>';
                 spanACTA.innerHTML=''
             }else {
+                btnReport.disabled=true
                 btnReport.style.visibility = 'visible'
                 btnReport.className = 'btn btn-danger'
                 btnReport.innerHTML='Descargar<span class="fas fa-fw fa-file-pdf"></span>';
-                spanACTA.innerHTML='<span style="color: red"><span class="fas fa-fw fa-exclamation-circle"></span> Acta requiere: Oficina, Tipo HC, fecha inicio y fecha fin </span>'
+                spanACTA.innerHTML='<span style="color: red"><span class="fas fa-fw fa-exclamation-circle"></span> Acta requiere: Oficina, fecha inicio y fecha fin </span>'
             }
         }
     }

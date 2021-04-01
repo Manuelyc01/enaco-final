@@ -1,11 +1,25 @@
 package prueba1.Service;
 
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import prueba1.models.*;
 import prueba1.repository.InventarioRepository;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -124,6 +138,31 @@ public class InventarioServiceImpl implements InventarioService{
         ingresos.add(ingreso);
         ingresos.add(ingreso2);
         return ingresos;
+    }
+    @Override
+    public void exportReport(List<ActaRegistro> actaRegistros, HttpServletResponse response) throws IOException, JRException {
+
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource( actaRegistros);
+
+        InputStream jrmxmlInput=this.getClass().getResourceAsStream("/report/pruebaActa.jrxml");
+        JasperDesign design= JRXmlLoader.load(jrmxmlInput);
+        JasperReport jasperReport = JasperCompileManager.compileReport(design);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+
+        JRPdfExporter pdfExporter=new JRPdfExporter();
+        pdfExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        ByteArrayOutputStream pdfReportStream = new ByteArrayOutputStream();
+        pdfExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(pdfReportStream));
+        pdfExporter.exportReport();
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Length",String.valueOf(pdfReportStream.size()));
+        response.addHeader("Content-Disposition","inline; filename=ACTA");
+
+        OutputStream responseOutputStream = response.getOutputStream();
+        responseOutputStream.write(pdfReportStream.toByteArray());
+        responseOutputStream.close();
+        pdfReportStream.close();
     }
 
 }

@@ -9,7 +9,7 @@
     <div class="row">
         <h1 style="padding-left: 25px">Reporte de movimiento de inventario</h1>
     </div>
-    <form method="post" th:action="@{/download/excel}" th:object="${reporte}">
+    <form method="post" th:action="@{/download/reporte}" th:object="${reporte}">
     <div class="form-group">
         <div class="row">
             <div class="col-md-2" th:if="${session.usuario.getId_rol().getId_rol()==1}">

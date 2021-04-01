@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -770,8 +771,8 @@ public class privateController {
     }
 
     //REPORTES
-    @PostMapping("/download/excel")
-    public void downloadCsv(Reporte reporte,HttpServletResponse response) throws IOException, ParseException {
+    @PostMapping("/download/reporte")
+    public void downloadCsv(Reporte reporte,HttpServletResponse response,Authentication auth) throws IOException, ParseException, JRException {
         if (reporte.getCodRep()==1){
             List<Inventario> inventarios= new ArrayList<>();
             if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){
@@ -820,11 +821,24 @@ public class privateController {
             }
             for (int i=0;i<actaRegistros.size();i++){
                 ActaRegistro ar = actaRegistros.get(i);
-                ar.setSubtotalIngreso(ar.getIngresoCompra()+ar.getIngresoDecomiso()+ar.getIngresoDemasia()+ar.getIngresoTransferencia());
-                ar.setSubtotalSalida(ar.getSalidaMerma()+ar.getSalidaTransferencia());
+                ar.setSubtotalIngreso(ar.getIngresoCompra()+ar.getIngresoDecomiso()+ar.getIngresoDemasia()+ar.getIngresoTransferencia());//SUB INGRESO
+                ar.setSubtotalSalida(ar.getSalidaMerma()+ar.getSalidaTransferencia());//SUB SALIDA
 
-                ar.setTotal(ar.getSaldoMesAnterior()+ar.getSubtotalIngreso()-ar.getSubtotalSalida());
+                ar.setTotal(ar.getSaldoMesAnterior()+ar.getSubtotalIngreso()-ar.getSubtotalSalida());//TOTAL
             }
+
+            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date ini= format.parse(reporte.getFcInicio().replace("T"," "));
+            Date fn= format.parse(reporte.getFcFin().replace("T"," "));
+
+            if (actaRegistros.size()>0){
+                actaRegistros.get(0).setUnidadOpe(reporte.getCodUni().getNom_uniOpe());
+                actaRegistros.get(0).setUsuario(usuarioService.findByUsua(auth.getName()).getNombre());
+                actaRegistros.get(0).setFechaInicio(ini);
+                actaRegistros.get(0).setFechaFin(fn);
+            }
+
+            inventarioService.exportReport(actaRegistros,response);
         }
     }
 
