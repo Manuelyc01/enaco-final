@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import prueba1.models.Decomiso;
+import prueba1.models.Demasia;
 import prueba1.models.Inventario;
 import prueba1.models.Movimiento;
 import prueba1.repository.DecomisoRepository;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -57,4 +60,28 @@ public class DecomisoServiceImpl implements DecomisoService {
         inventarioService.save(inventario);
         repository.save(decomiso);
     }
+
+    @Override
+    public List<Decomiso> listByUni(String cod){
+        return repository.lisByUni(cod);
+    }
+    @Override
+    public List<Decomiso> registrosFechaDecomiso(String inicio, String fin, String cod) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
+        return repository.filterFechaDecomisoHc(ini,fn,cod);
+    }
+    @Override
+    public List<Decomiso> listByProductDecomiso(String cod_tipoHoja, String cod_uniOpe){
+        return repository.listByProductDecomiso(cod_tipoHoja,cod_uniOpe);
+    }
+    @Override
+    public List<Decomiso> registrosFechaDecomisoHc(String inicio, String fin, String cod, String codHc) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
+        return repository.filterFechaDecomisoHc(ini,fn,cod,codHc);
+    }
+
 }

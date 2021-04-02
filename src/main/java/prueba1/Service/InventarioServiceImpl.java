@@ -82,7 +82,8 @@ public class InventarioServiceImpl implements InventarioService{
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date ini= format.parse(inicio.replace("T"," "));
         Date fn= format.parse(fin.replace("T"," "));
-        return repository.actaHojas(ini,fn,cod);
+       /* return repository.actaHojas(ini,fn,cod);*/
+        return repository.actaHojas(cod);
     }
     @Override
     public Double actaSaldo(String inicio, String fin, String cod, String codHc) throws ParseException {

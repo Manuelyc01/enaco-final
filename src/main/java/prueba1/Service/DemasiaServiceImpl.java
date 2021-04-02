@@ -8,6 +8,8 @@ import prueba1.models.Inventario;
 import prueba1.models.Movimiento;
 import prueba1.repository.DemasiaRepository;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -57,4 +59,28 @@ public class DemasiaServiceImpl implements DemasiaService{
     public List<Demasia> numMovimiento(){
         return repository.list(PageRequest.of(0,1));
     }
+
+    @Override
+    public List<Demasia> listByUni(String cod){
+        return repository.lisByUni(cod);
+    }
+    @Override
+    public List<Demasia> registrosFechaCompra(String inicio, String fin, String cod) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
+        return repository.filterFechaDemasiaHc(ini,fn,cod);
+    }
+    @Override
+    public List<Demasia> listByProductCompra(String cod_tipoHoja, String cod_uniOpe){
+        return repository.listByProductDemasia(cod_tipoHoja,cod_uniOpe);
+    }
+    @Override
+    public List<Demasia> registrosFechaCompraHc(String inicio, String fin, String cod, String codHc) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
+        return repository.filterFechaDemasiaHc(ini,fn,cod,codHc);
+    }
+
 }

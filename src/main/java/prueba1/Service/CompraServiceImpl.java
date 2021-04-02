@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -196,5 +196,29 @@ public class CompraServiceImpl implements CompraService{
     @Override
     public Compra findById(Integer id){
         return  compraRepository.getOne(id);
+    }
+
+
+    @Override
+    public List<Compra> listByUni(String cod){
+        return compraRepository.lisByUni(cod);
+    }
+    @Override
+    public List<Compra> registrosFechaCompra(String inicio, String fin, String cod) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
+        return compraRepository.filterFechaCompraHc(ini,fn,cod);
+    }
+    @Override
+    public List<Compra> listByProductCompra(String cod_tipoHoja, String cod_uniOpe){
+        return compraRepository.listByProductCompra(cod_tipoHoja,cod_uniOpe);
+    }
+    @Override
+    public List<Compra> registrosFechaCompraHc(String inicio, String fin, String cod, String codHc) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
+        return compraRepository.filterFechaCompraHc(ini,fn,cod,codHc);
     }
 }

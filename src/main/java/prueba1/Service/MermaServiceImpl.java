@@ -3,11 +3,14 @@ package prueba1.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import prueba1.models.Demasia;
 import prueba1.models.Inventario;
 import prueba1.models.Merma;
 import prueba1.models.Movimiento;
 import prueba1.repository.MermaRepository;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -53,4 +56,28 @@ public class MermaServiceImpl implements MermaService{
         inventarioService.save(inventario);
         repository.save(merma);
     }
+
+    @Override
+    public List<Merma> listByUni(String cod){
+        return repository.lisByUni(cod);
+    }
+    @Override
+    public List<Merma> registrosFechaMerma(String inicio, String fin, String cod) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
+        return repository.filterFechaMermaHc(ini,fn,cod);
+    }
+    @Override
+    public List<Merma> listByProductMerma(String cod_tipoHoja, String cod_uniOpe){
+        return repository.listByProductMerma(cod_tipoHoja,cod_uniOpe);
+    }
+    @Override
+    public List<Merma> registrosFechaMermaHc(String inicio, String fin, String cod, String codHc) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
+        return repository.filterFechaMermaHc(ini,fn,cod,codHc);
+    }
+
 }

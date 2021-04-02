@@ -2,11 +2,14 @@ package prueba1.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import prueba1.models.Demasia;
 import prueba1.models.Inventario;
 import prueba1.models.Movimiento;
 import prueba1.models.Transferencia;
 import prueba1.repository.TransferenciaRepository;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -65,4 +68,28 @@ public class TransferenciaServiceImpl implements TransferenciaService {
         inventarioService.save(inventario2);
         repository.save(transferencia);
     }
+
+    @Override
+    public List<Transferencia> listByUni(String cod){
+        return repository.lisByUni(cod);
+    }
+    @Override
+    public List<Transferencia> registrosFechaTransferencia(String inicio, String fin, String cod) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
+        return repository.filterFechaTransferenciaHc(ini,fn,cod);
+    }
+    @Override
+    public List<Transferencia> listByProductTransferencia(String cod_tipoHoja, String cod_uniOpe){
+        return repository.listByProductTransferencia(cod_tipoHoja,cod_uniOpe);
+    }
+    @Override
+    public List<Transferencia> registrosFechaTransferenciaHc(String inicio, String fin, String cod, String codHc) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
+        return repository.filterFechaTransferenciaHc(ini,fn,cod,codHc);
+    }
+
 }

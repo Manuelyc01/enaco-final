@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import prueba1.Service.*;
+import prueba1.controllers.report.*;
 import prueba1.models.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -773,74 +774,188 @@ public class privateController {
     //REPORTES
     @PostMapping("/download/reporte")
     public void downloadCsv(Reporte reporte,HttpServletResponse response,Authentication auth) throws IOException, ParseException, JRException {
-        if (reporte.getCodRep()==1){
-            List<Inventario> inventarios= new ArrayList<>();
-            if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){
-                inventarios =inventarioService.listByUni(reporte.getCodUni().getCod_uniOpe());
-            }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){
-                inventarios =inventarioService.registrosFechaAlmacen(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
-            }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){
-                inventarios=inventarioService.listByProductAlmacen(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
-            }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){
-                inventarios=inventarioService.registrosFechaAlmacenHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
-            }
-            response.setContentType("application/octet-stream");
-            response.setHeader("Content-Disposition", "attachment; filename=KARDEX.xlsx");
-            ByteArrayInputStream stream = ExportExcelKardex.listToExcelFile(inventarios,reporte);
-            IOUtils.copy(stream, response.getOutputStream());
-        }else if (reporte.getCodRep()==2){
-        }else if (reporte.getCodRep()==3){
-        }else if (reporte.getCodRep()==4){
-        }else if (reporte.getCodRep()==5){
-        }else if (reporte.getCodRep()==6){
-        }else if (reporte.getCodRep()==7){
-        }else if (reporte.getCodRep()==8){
-        }else if (reporte.getCodRep()==9){
-        }else if (reporte.getCodRep()==10){
-            List<ActaRegistro> actaRegistros=new ArrayList<>();
+        switch (reporte.getCodRep()){
+            case 1://KARDEX
+                response.setContentType("application/octet-stream");
+                response.setHeader("Content-Disposition", "attachment; filename=REPORT-KARDEX.xlsx");
+                ByteArrayInputStream stream = ExportExcelKardex.listToExcelFile(reporteInventario(reporte),reporte);
+                IOUtils.copy(stream, response.getOutputStream());
+                break;
+            case 4://COMPRA
+                response.setContentType("application/octet-stream");
+                response.setHeader("Content-Disposition", "attachment; filename=REPORT-COMPRAS.xlsx");
+                stream = ExportExcelCompra.listToExcelFile(reporteCompra(reporte),reporte);
+                IOUtils.copy(stream, response.getOutputStream());
+                break;
+            case 5://DEMASIA
+                response.setContentType("application/octet-stream");
+                response.setHeader("Content-Disposition", "attachment; filename=REPORT-DEMASIAS.xlsx");
+                stream = ExportExcelDemasia.listToExcelFile(reporteDemasia(reporte),reporte);
+                IOUtils.copy(stream, response.getOutputStream());
+                break;
+            case 6://DECOMISO
+                response.setContentType("application/octet-stream");
+                response.setHeader("Content-Disposition", "attachment; filename=REPORT-DECOMISOS.xlsx");
+                stream = ExportExcelDecomiso.listToExcelFile(reporteDecomiso(reporte),reporte);
+                IOUtils.copy(stream, response.getOutputStream());
+                break;
+            case 7://MERMA
+                response.setContentType("application/octet-stream");
+                response.setHeader("Content-Disposition", "attachment; filename=REPORT-MERMAS.xlsx");
+                stream = ExportExcelMerma.listToExcelFile(reporteMerma(reporte),reporte);
+                IOUtils.copy(stream, response.getOutputStream());
+                break;
+            case 8://CAJA BOVEDA
+                response.setContentType("application/octet-stream");
+                response.setHeader("Content-Disposition", "attachment; filename=REPORT-CAJA B.xlsx");
+                stream = ExportExcelCajaBoveda.listToExcelFile(reporteCajaBoveda(reporte),reporte);
+                IOUtils.copy(stream, response.getOutputStream());
+                break;
+            case 9://SALIDA POR TRANSFERENCIA
+                response.setContentType("application/octet-stream");
+                response.setHeader("Content-Disposition", "attachment; filename=REPORT-S.TRANSFERENCIA.xlsx");
+                stream = ExportExcelSalidaT.listToExcelFile(reporteTransferencia(reporte),reporte);
+                IOUtils.copy(stream, response.getOutputStream());
+                break;
+            case 10:
+                inventarioService.exportReport(reporteActaRegistro(reporte,auth),response);
+                break;
 
-            List<TipoHojaCoca> tipoHojaCocas = inventarioService.actaHojas(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe());//HOJAS DE COCA
-            List<Ingreso> ingresos;
-            List<IngresoSalida> ingresoSalidas;
-            for (int i=0;i<tipoHojaCocas.size();i++){
-                Double s = inventarioService.actaSaldo(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());
-                ingresos= inventarioService.actaIngreso(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());//INGRESOS(1,2,3) SALIDA(4)
-                ingresoSalidas= inventarioService.actaIngresoSalida(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());
-                    ActaRegistro actaRegistro= new ActaRegistro();
-                        actaRegistro.setCodHc(tipoHojaCocas.get(i).getCod_tipoHoja());//CODHC
-                        actaRegistro.setSaldoMesAnterior(s);//SALDO
-                        actaRegistro.setIngresoCompra(ingresos.get(0).getMonto());//COMPRAS
-                        actaRegistro.setIngresoDecomiso(ingresos.get(1).getMonto());//DECOMISO
-                        actaRegistro.setIngresoDemasia(ingresos.get(2).getMonto());//DEMASIA
-                        actaRegistro.setSalidaMerma(ingresos.get(3).getMonto());//SALIDA MERMA
-
-                        actaRegistro.setIngresoTransferencia(ingresoSalidas.get(0).getMonto());//INGRESO TRANSF
-                        actaRegistro.setSalidaTransferencia(ingresoSalidas.get(1).getMonto());//SALIDA TRANSF
-
-                    actaRegistros.add(actaRegistro);
-            }
-            for (int i=0;i<actaRegistros.size();i++){
-                ActaRegistro ar = actaRegistros.get(i);
-                ar.setSubtotalIngreso(ar.getIngresoCompra()+ar.getIngresoDecomiso()+ar.getIngresoDemasia()+ar.getIngresoTransferencia());//SUB INGRESO
-                ar.setSubtotalSalida(ar.getSalidaMerma()+ar.getSalidaTransferencia());//SUB SALIDA
-
-                ar.setTotal(ar.getSaldoMesAnterior()+ar.getSubtotalIngreso()-ar.getSubtotalSalida());//TOTAL
-            }
-
-            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            Date ini= format.parse(reporte.getFcInicio().replace("T"," "));
-            Date fn= format.parse(reporte.getFcFin().replace("T"," "));
-
-            if (actaRegistros.size()>0){
-                actaRegistros.get(0).setUnidadOpe(reporte.getCodUni().getNom_uniOpe());
-                actaRegistros.get(0).setUsuario(usuarioService.findByUsua(auth.getName()).getNombre());
-                actaRegistros.get(0).setFechaInicio(ini);
-                actaRegistros.get(0).setFechaFin(fn);
-            }
-
-            inventarioService.exportReport(actaRegistros,response);
         }
     }
+    //REPORTE LISTAS//
+    public List<Inventario> reporteInventario(Reporte reporte) throws ParseException {
+        List<Inventario> inventarios= new ArrayList<>();
+        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
+            inventarios =inventarioService.listByUni(reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
+            inventarios =inventarioService.registrosFechaAlmacen(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD y TIPO HC
+            inventarios=inventarioService.listByProductAlmacen(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD, TIPO HC y FECHAS
+            inventarios=inventarioService.registrosFechaAlmacenHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
+        }
+        return inventarios;
+    }
+    public List<ActaRegistro> reporteActaRegistro(Reporte reporte,Authentication auth) throws ParseException {
+        List<ActaRegistro> actaRegistros=new ArrayList<>();
+
+        List<TipoHojaCoca> tipoHojaCocas = inventarioService.actaHojas(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe());//HOJAS DE COCA
+        List<Ingreso> ingresos;
+        List<IngresoSalida> ingresoSalidas;
+        for (int i=0;i<tipoHojaCocas.size();i++){
+            Double s = inventarioService.actaSaldo(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());
+            ingresos= inventarioService.actaIngreso(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());//INGRESOS(1,2,3) SALIDA(4)
+            ingresoSalidas= inventarioService.actaIngresoSalida(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());
+            ActaRegistro actaRegistro= new ActaRegistro();
+            actaRegistro.setCodHc(tipoHojaCocas.get(i).getCod_tipoHoja());//CODHC
+            actaRegistro.setSaldoMesAnterior(s);//SALDO
+            actaRegistro.setIngresoCompra(ingresos.get(0).getMonto());//COMPRAS
+            actaRegistro.setIngresoDecomiso(ingresos.get(1).getMonto());//DECOMISO
+            actaRegistro.setIngresoDemasia(ingresos.get(2).getMonto());//DEMASIA
+            actaRegistro.setSalidaMerma(ingresos.get(3).getMonto());//SALIDA MERMA
+
+            actaRegistro.setIngresoTransferencia(ingresoSalidas.get(0).getMonto());//INGRESO TRANSF
+            actaRegistro.setSalidaTransferencia(ingresoSalidas.get(1).getMonto());//SALIDA TRANSF
+
+            actaRegistros.add(actaRegistro);
+        }
+        for (int i=0;i<actaRegistros.size();i++){
+            ActaRegistro ar = actaRegistros.get(i);
+            ar.setSubtotalIngreso(ar.getIngresoCompra()+ar.getIngresoDecomiso()+ar.getIngresoDemasia()+ar.getIngresoTransferencia());//SUB INGRESO
+            ar.setSubtotalSalida(ar.getSalidaMerma()+ar.getSalidaTransferencia());//SUB SALIDA
+
+            ar.setTotal(ar.getSaldoMesAnterior()+ar.getSubtotalIngreso()-ar.getSubtotalSalida());//TOTAL
+        }
+
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(reporte.getFcInicio().replace("T"," "));
+        Date fn= format.parse(reporte.getFcFin().replace("T"," "));
+
+        if (actaRegistros.size()>0){
+            actaRegistros.get(0).setUnidadOpe(reporte.getCodUni().getNom_uniOpe());
+            actaRegistros.get(0).setUsuario(usuarioService.findByUsua(auth.getName()).getNombre());
+            actaRegistros.get(0).setFechaInicio(ini);
+            actaRegistros.get(0).setFechaFin(fn);
+        }
+        return actaRegistros;
+    }
+    public List<Compra> reporteCompra(Reporte reporte) throws ParseException {
+        List<Compra> compras=new ArrayList<>();
+        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
+            compras=compraService.listByUni(reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
+            compras= compraService.registrosFechaCompra(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD y TIPO H
+            compras= compraService.listByProductCompra(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD, TIPO HC y FECHAS
+            compras=compraService.registrosFechaCompraHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
+        }
+        return compras;
+    }
+    public List<Demasia> reporteDemasia(Reporte reporte) throws ParseException {
+        List<Demasia> demasias=new ArrayList<>();
+        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
+            demasias=demasiaService.listByUni(reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
+            demasias= demasiaService.registrosFechaCompra(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD y TIPO H
+            demasias= demasiaService.listByProductCompra(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD, TIPO HC y FECHAS
+            demasias=demasiaService.registrosFechaCompraHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
+        }
+        return demasias;
+    }
+    public List<Decomiso> reporteDecomiso(Reporte reporte) throws ParseException {
+        List<Decomiso> decomisos=new ArrayList<>();
+        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
+            decomisos=decomisoService.listByUni(reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
+            decomisos= decomisoService.registrosFechaDecomiso(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD y TIPO H
+            decomisos= decomisoService.listByProductDecomiso(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD, TIPO HC y FECHAS
+            decomisos=decomisoService.registrosFechaDecomisoHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
+        }
+        return decomisos;
+    }
+    public List<Merma> reporteMerma(Reporte reporte) throws ParseException {
+        List<Merma> mermas=new ArrayList<>();
+        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
+            mermas=mermaService.listByUni(reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
+            mermas= mermaService.registrosFechaMerma(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD y TIPO H
+            mermas= mermaService.listByProductMerma(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD, TIPO HC y FECHAS
+            mermas=mermaService.registrosFechaMermaHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
+        }
+        return mermas;
+    }
+    public List<CajaBoveda> reporteCajaBoveda(Reporte reporte) throws ParseException {
+        List<CajaBoveda> cajaBovedas=new ArrayList<>();
+        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
+            cajaBovedas=cajaBovedaService.listByUni(reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
+            cajaBovedas= cajaBovedaService.registrosFechaCajaBoveda(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+        }
+        return cajaBovedas;
+    }
+    public List<Transferencia> reporteTransferencia(Reporte reporte) throws ParseException {
+        List<Transferencia> transferencias=new ArrayList<>();
+        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
+            transferencias=transferenciaService.listByUni(reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
+            transferencias= transferenciaService.registrosFechaTransferencia(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD y TIPO H
+            transferencias= transferenciaService.listByProductTransferencia(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD, TIPO HC y FECHAS
+            transferencias=transferenciaService.registrosFechaTransferenciaHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
+        }
+        return transferencias;
+    }
+    //REPORTE LISTAS//
+
 
     @PostMapping("/reportActaInventario")
     private String reporteActaInventario(Reporte reporte) {

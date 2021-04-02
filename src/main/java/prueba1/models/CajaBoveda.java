@@ -37,4 +37,10 @@ public class CajaBoveda {
     @Column(name = "monto")
     private Double monto;
 
+    @Column(name = "saldoinicial")
+    private Double saldoInicial;
+
+    @Column(name = "saldofinal")
+    private Double saldoFinal;
+
 }
