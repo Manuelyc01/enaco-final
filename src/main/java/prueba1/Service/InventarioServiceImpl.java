@@ -91,7 +91,11 @@ public class InventarioServiceImpl implements InventarioService{
         Date ini= format.parse(inicio.replace("T"," "));
         Date fn= format.parse(fin.replace("T"," "));
         List<Inventario> in = repository.actaSaldo(ini, fn, cod, codHc, PageRequest.of(0, 1));
-        return in.get(0).getStockInicial();
+        if (in.size()==0){
+            return 0.00;
+        }else {
+            return in.get(0).getStockInicial();
+        }
     }
     @Override
     public List<Ingreso> actaIngreso(String inicio, String fin, String cod, String codHc) throws ParseException {

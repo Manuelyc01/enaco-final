@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const btnBuscarAlmacen =document.querySelector('#btnBuscarAlmacen');
 
     const listTipoHcAlmacen= document.querySelector('#listTipoHcAlmacen');
+
+
     function registrosU() {
         let value=selectUnidadOpe.value;
         $.ajax({
@@ -54,7 +56,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     function registros() {
         let valueUni = selectUnidadOpe.value;
         let valueHoja = TipoHc.value;
-        if(valueHoja==0 && fcInicio.value=='' && fcFin.value==''){
+        //INVENTARIO
+        if(valueHoja==0 && fcInicio.value=='' && fcFin.value=='' ){
             $.ajax({
                 type: 'GET',
                 url:'/listRegistrosUni/'+valueUni,
@@ -92,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 }]
             });
         }
-        else if(valueHoja==0 && fcInicio.value!='' && fcFin.value!=''){
+        else if(valueHoja==0 && fcInicio.value!='' && fcFin.value!='' ){
             //FILTRADO POR FECHAS
             const inicio = fcInicio.value.replace("T", " ");
             const fin = fcFin.value.replace("T", " ");
@@ -134,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             });
 
         }
-        else if(valueHoja!=0 && fcInicio.value=='' && fcFin.value==''){
+        else if(valueHoja!=0 && fcInicio.value=='' && fcFin.value=='' ){
             $.ajax({
                 type: 'GET',
                 url:'/viewRegisters/'+valueUni+'/'+valueHoja,
@@ -170,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 }]
             });
         }
-        else if(valueHoja!=0 && fcInicio.value!='' && fcFin.value!=''){
+        else if(valueHoja!=0 && fcInicio.value!='' && fcFin.value!='' ){
             //FILTRADO POR FECHAS
             const inicio = fcInicio.value.replace("T", " ");
             const fin = fcFin.value.replace("T", " ");
@@ -211,6 +214,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 }]
             });
         }
+
+
     }
     let hojasC=$.ajax({
         type: 'GET',
@@ -280,6 +285,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (TipoHc!=null){
         TipoHc.addEventListener('change',mostrarBtn)
     }
+
     fcInicio.addEventListener('change',mostrarBtn)
     fcFin.addEventListener('change',mostrarBtn)
 

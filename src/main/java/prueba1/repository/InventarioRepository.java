@@ -37,8 +37,9 @@ public interface InventarioRepository extends JpaRepository<Inventario,Integer> 
     @Query("SELECT u FROM Inventario u where u.fecha between ?1 and ?2 and u.cod_almacen.cod_uniOpe=?3 and u.cod_tipoHoja.cod_tipoHoja=?4 order by u.fecha desc ")
     public List<Inventario> filterFechaAlmacenHc(Date inicio, Date fin,String cod,String codHc);
 
-    @Query("SELECT u.cod_tipoHoja from Inventario u where u.cod_almacen.cod_uniOpe=?3 group by u.cod_tipoHoja")
+    @Query("SELECT u.cod_tipoHoja from Inventario u where u.cod_almacen.cod_uniOpe=?1 group by u.cod_tipoHoja")
     public List<TipoHojaCoca> actaHojas( String cod);
+
     /*CONSULTA DE HOJAS POR FECHAS
     @Query("SELECT u.cod_tipoHoja from Inventario u where u.fecha between ?1 and ?2 and u.cod_almacen.cod_uniOpe=?3 group by u.cod_tipoHoja")
     public List<TipoHojaCoca> actaHojas(Date inicio, Date fin, String cod);*/
