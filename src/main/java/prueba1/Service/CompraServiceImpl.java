@@ -89,7 +89,11 @@ public class CompraServiceImpl implements CompraService{
         }
         //ENVIO FECHA HOY
         Date date = new Date();
+        Representante representante = representanteService.findByDni(compra.getDni_repre());
+
+        compra.setId_repre(representante);
         compra.setFecha(date);
+
         usuarioService.compra(id);
         unidadOpeService.saveCajaBoveda(compra.getCod_uniOpe().getCod_uniOpe(), compra.getTotalCompra(), 2);
 

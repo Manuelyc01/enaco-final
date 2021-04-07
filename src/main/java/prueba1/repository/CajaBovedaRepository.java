@@ -16,7 +16,7 @@ public interface CajaBovedaRepository extends JpaRepository<CajaBoveda,Integer> 
     @Query("SELECT u FROM CajaBoveda u order by u.id_cajaBoveda desc")
     public List<CajaBoveda> list();
 
-    @Query("select u from  CajaBoveda u where u.cod_uniOpe.cod_uniOpe=?1")
+    @Query("select u from  CajaBoveda u where u.cod_uniOpe.cod_uniOpe=?1 order by u.fecha desc")
     public List<CajaBoveda> getStockFinal(String cod,Pageable pageable);
 
     @Query("SELECT u from CajaBoveda u where u.cod_uniOpe.cod_uniOpe=?1 order by u.fecha desc")

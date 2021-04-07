@@ -47,11 +47,11 @@ public class CajaBovedaServiceImpl implements CajaBovedaService{
                 break;
             case 2://REEMBOLSO
                 cajaBoveda.setSaldoInicial(stockFinal.get(0).getSaldoFinal());
-                cajaBoveda.setSaldoFinal(monto-stockFinal.get(0).getSaldoFinal());
+                cajaBoveda.setSaldoFinal(stockFinal.get(0).getSaldoFinal()-monto);
                 break;
             case 3://COMPRA
                 cajaBoveda.setSaldoInicial(stockFinal.get(0).getSaldoFinal());
-                cajaBoveda.setSaldoFinal(monto-stockFinal.get(0).getSaldoFinal());
+                cajaBoveda.setSaldoFinal(stockFinal.get(0).getSaldoFinal()-monto);
         }
 
         repository.save(cajaBoveda);

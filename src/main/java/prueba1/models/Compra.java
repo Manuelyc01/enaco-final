@@ -34,6 +34,7 @@ public class Compra {
     @OneToOne
     @JoinColumn(name = "cod_uniope",referencedColumnName = "cod_uniope")
     private UnidadOperativa cod_uniOpe;
+
     @OneToOne
     @JoinColumn(name = "cod_tipohoja", referencedColumnName = "cod_tipohoja")
     private TipoHojaCoca cod_tipoHoja;
@@ -69,4 +70,9 @@ public class Compra {
     @Basic(optional = false)
     @Column(name = "fecha",insertable = false, updatable = false)
     private Date fecha;
+
+    @OneToOne
+    @JoinColumn(name = "id_repre",referencedColumnName = "id_representante")
+    private Representante id_repre;
+
 }

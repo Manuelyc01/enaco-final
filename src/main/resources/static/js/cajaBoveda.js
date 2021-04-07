@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var pagination=paginate(lista,pageSize,pageNumber)
             cajaBhtml="";
             pagination.forEach(cajaB =>{
-                const event=new Date(regist.fecha);
+                const event=new Date(cajaB.fecha);
                 event.setUTCHours(event.getUTCHours()-5);
                 const str = event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "---Hora: ");
                 cajaBhtml+=`

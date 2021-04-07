@@ -221,6 +221,18 @@ public class AjaxRestController {
             return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
         }
     }
+    @RequestMapping(
+            value = "listRegistrosUniCompras/{cod}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Compra>> listRegistrosUniCompras(@PathVariable("cod") String cod) {
+        List<Compra> list = compraService.listByUni(cod);
+        try {
+            return ResponseEntity.accepted().body(list);
+        } catch (Exception e) {
+            return new ResponseEntity<List<Compra>>(HttpStatus.BAD_REQUEST);
+        }
+    }
     //REGISTRO POR ALMACEN Y HOJA DE COCA
     @RequestMapping(
             value = "viewRegisters/{uni}/{hoj}",
@@ -233,6 +245,19 @@ public class AjaxRestController {
         } catch (Exception e) {
 
             return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "viewRegistersCompras/{uni}/{hoj}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Compra>> registrosAlmacenCompras(@PathVariable("uni") String uni,@PathVariable("hoj") String hoj) {
+        List<Compra> inventarios = compraService.listByProductCompra(hoj, uni);
+        try {
+            return ResponseEntity.accepted().body(inventarios);
+        } catch (Exception e) {
+
+            return new ResponseEntity<List<Compra>>(HttpStatus.BAD_REQUEST);
         }
     }
     //FILTRADO FECHA REPORTE ALMACEN
@@ -249,6 +274,19 @@ public class AjaxRestController {
             return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
         }
     }
+    @RequestMapping(
+            value = "filterDateCompras/{inicio}/{fin}/{codUni}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Compra>> registrosFechaAlmacenCompras(@PathVariable("inicio") String inicio,@PathVariable("fin") String fin,@PathVariable("codUni") String cod) throws ParseException {
+        List<Compra> inventarios = compraService.registrosFechaCompra(inicio, fin,cod);
+        try {
+            return ResponseEntity.accepted().body(inventarios);
+        } catch (Exception e) {
+
+            return new ResponseEntity<List<Compra>>(HttpStatus.BAD_REQUEST);
+        }
+    }
     //FILTRADO FECHA REPORTE INVENTARIO POR PRODUCTO
     @RequestMapping(
             value = "filterDate/{inicio}/{fin}/{codUni}/{codHc}",
@@ -261,6 +299,19 @@ public class AjaxRestController {
         } catch (Exception e) {
 
             return new ResponseEntity<List<Inventario>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "filterDateCompras/{inicio}/{fin}/{codUni}/{codHc}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Compra>> registrosFechaComprasHc(@PathVariable("inicio") String inicio,@PathVariable("fin") String fin,@PathVariable("codUni") String cod,@PathVariable("codHc") String codHc) throws ParseException {
+        List<Compra> inventarios = compraService.registrosFechaCompraHc(inicio, fin,cod,codHc);
+        try {
+            return ResponseEntity.accepted().body(inventarios);
+        } catch (Exception e) {
+
+            return new ResponseEntity<List<Compra>>(HttpStatus.BAD_REQUEST);
         }
     }
 }

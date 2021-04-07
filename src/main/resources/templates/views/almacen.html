@@ -10,116 +10,113 @@
         <h1 style="padding-left: 25px">Reporte de movimiento de inventario</h1>
     </div>
     <form method="post" th:action="@{/download/reporte}" th:object="${reporte}">
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2" th:if="${session.usuario.getId_rol().getId_rol()==1}">
-                <label > NOMBRE DE UNIDAD</label>
-                <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
-            </div>
-            <div class="col-md-2">
-                <label > OFICINA(Unidad Operativa): </label>
-                <select class="form-control" th:field="*{codUni}" id="selectUnidadOpe" >
-                    <option value="0">
-                        <span> Seleccionar...</span>
-                    </option>
-                    <option  th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
-                        <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
-                    </option>
-                </select>
-            </div>
-            <div class="col-md-1">
-                <label >COD.Hoja: </label>
-                <input id="formHc" class="form-control" type="text" placeholder="Código" autocomplete="off" >
-            </div>
-            <div class="col-md-2">
-                <label >FILTRAR TIPO HOJA DE COCA: </label>
-                <select class="form-control" th:field="*{codHc}" id="TipoHc">
-                    <option value="0">
-                        Seleccionar...
-                    </option>
-                    <option  th:each="tiposHc : ${tiposHc}" th:value="${tiposHc.cod_tipoHoja}">
-                        <span th:text="${tiposHc.cod_tipoHoja}"></span>---<span th:text="${tiposHc.nombre}"></span>
-                    </option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label>Fecha Inicio</label>
-                <input type="datetime-local" class="form-control"  th:field="*{fcInicio}" id="fcInicio">
-            </div>
-            <div class="col-md-2">
-                <label>Fecha Fin</label>
-                <input type="datetime-local" class="form-control" th:field="*{fcFin}" id="fcFin">
-            </div>
-            <div class="col-md-1">
-                <label >Reporte: </label>
-                <select class="form-control" th:field="*{codRep}" id="codRep">
-                    <option value="0">
-                        <span> Seleccionar...</span>
-                    </option>
-                    <option value="1">
-                        <span>KARDEX</span>
-                    </option><!--
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    <span style="color: #00a2aa" id="spanSelectR"><span class="fas fa-fw fa-exclamation-circle"></span> Seleccionar Reporte </span>
+                    <select class="form-control" th:field="*{codRep}" id="codRep">
+                        <option value="0">
+                            <span> Reporte...</span>
+                        </option>
+                        <option value="1">
+                            <span>KARDEX</span>
+                        </option><!--
                     <option value="2">
                         <span>Libro Almacén</span>
                     </option>
                     <option value="3">
                         <span>Compras Móviles</span>-->
-                    </option>
-                    <option value="4">
-                        <span>Compras en Oficina</span>
-                    </option>
-                    <option value="5">
-                        <span>Ingreso por Demasía</span>
-                    </option>
-                    <option value="6">
-                        <span>Ingreso por Decomiso</span>
-                    </option>
-                    <option value="7">
-                        <span>Ingreso por merma</span>
-                    </option>
-                    <option value="8">
-                        <span>Movimiento de caja Bóveda</span>
-                    </option>
-                    <option value="9">
-                        <span>Salida por Transferencia</span>
-                    </option>
-                    <option value="10">
-                        <span>Acta de Inventario de Hoja de coca</span>
-                    </option>
-                </select>
+                        </option>
+                        <option value="4">
+                            <span>Compras en Oficina</span>
+                        </option>
+                        <option value="5">
+                            <span>Ingreso por Demasía</span>
+                        </option>
+                        <option value="6">
+                            <span>Ingreso por Decomiso</span>
+                        </option>
+                        <option value="7">
+                            <span>Ingreso por merma</span>
+                        </option>
+                        <option value="8">
+                            <span>Movimiento de caja Bóveda</span>
+                        </option>
+                        <option value="9">
+                            <span>Salida por Transferencia</span>
+                        </option>
+                        <option value="10">
+                            <span>Acta de Inventario de Hoja de coca</span>
+                        </option>
+                    </select>
+                </div>
             </div>
         </div>
+    <div class="form-group">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2" th:if="${session.usuario.getId_rol().getId_rol()==1}">
+                            <label > NOMBRE DE UNIDAD</label>
+                            <input id="formUnidadOpe" class="form-control" type="text" placeholder="Buscar Unidad" autocomplete="off" >
+                        </div>
+                        <div class="col-md-2">
+                            <label > OFICINA(Unidad Operativa): </label>
+                            <select class="form-control" th:field="*{codUni}" id="selectUnidadOpe" >
+                                <option value="0">
+                                    <span> Seleccionar...</span>
+                                </option>
+                                <option  th:each="unidadesOpe : ${unidadesOpe}" th:value="${unidadesOpe.cod_uniOpe}">
+                                    <span th:text="${unidadesOpe.cod_uniOpe}"></span>---<span th:text="${unidadesOpe .nom_uniOpe}"></span>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <label >COD.Hoja: </label>
+                            <input id="formHc" class="form-control" type="text" placeholder="Código" autocomplete="off" >
+                        </div>
+                        <div class="col-md-3">
+                            <label >FILTRAR TIPO HOJA DE COCA: </label>
+                            <select class="form-control" th:field="*{codHc}" id="TipoHc">
+                                <option value="0">
+                                    Seleccionar...
+                                </option>
+                                <option  th:each="tiposHc : ${tiposHc}" th:value="${tiposHc.cod_tipoHoja}">
+                                    <span th:text="${tiposHc.cod_tipoHoja}"></span>---<span th:text="${tiposHc.nombre}"></span>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Fecha Inicio</label>
+                            <input type="datetime-local" class="form-control"  th:field="*{fcInicio}" id="fcInicio">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Fecha Fin</label>
+                            <input type="datetime-local" class="form-control" th:field="*{fcFin}" id="fcFin">
+                        </div>
+                    </div>
+                </div>
+            </div>
     </div>
     <div class="row">
             <div class="col-sm-2">
-                <a class="btn btn-info" id="btnBuscarAlmacen" >Buscar <span class="fas fa-fw fa-search"></span></a>
+                <a class="btn btn-info" id="btnBuscarAlmacen" style="color:white;"> <span class="fas fa-fw fa-search"></span>Buscar</a>
                 <button type="submit" class="btn btn-success" id="btnReport" style="visibility: hidden;">Descargar<span class="fas fa-fw fa-file-excel"></span></button>
             </div>
-        <div class="col-sm-6" id="spanACTA">
-        </div>
+            <div class="col-sm-6" id="spanACTA">
+            </div>
     </div>
     </form>
-        <div class="row">
-
-        </div>
     <div class="row">
-            <h4 style="padding-left: 25px">Registro Hojas de coca</h4><br>
+        <div class="col-md-6" id="registrosTabla">
+            <br><h3>Seleccionar reporte</h3>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-12">
             <table class="table table-bordered" th:fragment="tablaAlmacen" id="tablaReporte">
-                <thead class="thead-dark" style="background-color: #cde49f">
-                <tr>
-                    <th scope="col">Fecha-Hora</th>
-                    <th scope="col">Usuario</th>
-                    <th scope="col">Almacén</th>
-                    <th scope="col">Movimiento</th>
-                    <th scope="col">Documento</th>
-                    <th scope="col">Tipo de HC</th>
-                    <th scope="col">Peso Neto</th>
-                    <th scope="col">Stock Inicial</th>
-                    <th scope="col">Stock Final</th>
-                </tr>
+                <thead class="thead-dark" style="background-color: #cde49f" id="theadTable">
+                <!---->
                 </thead>
                 <tbody id="listTipoHcAlmacen">
                 </tbody>
