@@ -12,9 +12,9 @@ public interface DemasiaService {
 
     List<Demasia> listByUni(String cod);
 
-    List<Demasia> registrosFechaCompra(String inicio, String fin, String cod) throws ParseException;
+    List<Demasia> registrosFechaDemasia(String inicio, String fin, String cod) throws ParseException;
 
-    List<Demasia> listByProductCompra(String cod_tipoHoja, String cod_uniOpe);
+    List<Demasia> listByProductDemasia(String cod_tipoHoja, String cod_uniOpe);
 
-    List<Demasia> registrosFechaCompraHc(String inicio, String fin, String cod, String codHc) throws ParseException;
+    List<Demasia> registrosFechaDemasiaHc(String inicio, String fin, String cod, String codHc) throws ParseException;
 }

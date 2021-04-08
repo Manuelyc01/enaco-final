@@ -65,18 +65,18 @@ public class DemasiaServiceImpl implements DemasiaService{
         return repository.lisByUni(cod);
     }
     @Override
-    public List<Demasia> registrosFechaCompra(String inicio, String fin, String cod) throws ParseException {
+    public List<Demasia> registrosFechaDemasia(String inicio, String fin, String cod) throws ParseException {
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date ini= format.parse(inicio.replace("T"," "));
         Date fn= format.parse(fin.replace("T"," "));
         return repository.filterFechaDemasiaHc(ini,fn,cod);
     }
     @Override
-    public List<Demasia> listByProductCompra(String cod_tipoHoja, String cod_uniOpe){
+    public List<Demasia> listByProductDemasia(String cod_tipoHoja, String cod_uniOpe){
         return repository.listByProductDemasia(cod_tipoHoja,cod_uniOpe);
     }
     @Override
-    public List<Demasia> registrosFechaCompraHc(String inicio, String fin, String cod, String codHc) throws ParseException {
+    public List<Demasia> registrosFechaDemasiaHc(String inicio, String fin, String cod, String codHc) throws ParseException {
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date ini= format.parse(inicio.replace("T"," "));
         Date fn= format.parse(fin.replace("T"," "));

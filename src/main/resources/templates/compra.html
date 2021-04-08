@@ -114,32 +114,36 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group" style="border-style:groove">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label > Peso Bruto (Kg)</label>
-                        <input th:field="*{pesoBruto}" class="form-control" type="text" placeholder="Ingresar kilogramos" id="pesoBruto" autocomplete="off" required>
-                        <label > Tara (Kg)</label>
-                        <input th:field="*{tara}"  class="form-control" type="text" placeholder="Ingresar tara"  id="tara" autocomplete="off">
-                        <label > Humedad (Kg)</label>
-                        <input th:field="*{humedad}" class="form-control" type="text" placeholder="Ingresar humedad" id="humedad" autocomplete="off">
-                    </div>
-                    <div class="col-md-6">
-                        <label > Peso Neto (kg)</label>
-                        <input id="pesoNeto" th:field="*{pesoNeto}" class="form-control" type="text" placeholder="0.0" readonly>
+            <div class="form-group">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label > Peso Bruto (Kg)</label>
+                                <input th:field="*{pesoBruto}" class="form-control" type="text" placeholder="Ingresar kilogramos" id="pesoBruto" autocomplete="off" required>
+                                <label > Tara (Kg)</label>
+                                <input th:field="*{tara}"  class="form-control" type="text" placeholder="Ingresar tara"  id="tara" autocomplete="off">
+                                <label > Humedad (Kg)</label>
+                                <input th:field="*{humedad}" class="form-control" type="text" placeholder="Ingresar humedad" id="humedad" autocomplete="off">
+                            </div>
+                            <div class="col-md-6">
+                                <label > Peso Neto (kg)</label>
+                                <input id="pesoNeto" th:field="*{pesoNeto}" class="form-control" type="text" placeholder="0.0" readonly>
 
-                        <label > Valor de la compra (S/.)</label>
-                        <input id="valorCompra" th:field="*{valorCompra}" class="form-control" type="text" placeholder="0.00" readonly>
+                                <label > Valor de la compra (S/.)</label>
+                                <input id="valorCompra" th:field="*{valorCompra}" class="form-control" type="text" placeholder="0.00" readonly>
 
-                        <label > IGV (S/.)</label>
-                        <input id="igv" th:field="*{igv}" class="form-control" type="text" placeholder="0.00" readonly>
+                                <label > IGV (S/.)</label>
+                                <input id="igv" th:field="*{igv}" class="form-control" type="text" placeholder="0.00" readonly>
 
-                        <label > Total de Compra(S/.)</label>
-                            <input id="totalCompra"  th:field="*{totalCompra}"class="form-control" type="text" placeholder="S/0.00" readonly>
+                                <label > Total de Compra(S/.)</label>
+                                <input id="totalCompra"  th:field="*{totalCompra}"class="form-control" type="text" placeholder="S/0.00" readonly>
 
-                        <label > SON: </label>
-                            <input id="txtSon" th:field="*{son}"  placeholder="" class="form-control"readonly/>
-                        <div id="alert"></div>
+                                <label > SON: </label>
+                                <input id="txtSon" th:field="*{son}"  placeholder="" class="form-control"readonly/>
+                                <div id="alert"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

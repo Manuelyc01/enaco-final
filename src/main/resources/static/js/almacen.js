@@ -1,223 +1,25 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
-    const selectUnidadOpe =document.querySelector('#selectUnidadOpe');
-    const TipoHc =document.querySelector('#TipoHc');
-    const fcInicio =document.querySelector('#fcInicio');
-    const fcFin =document.querySelector('#fcFin');
-    const formHc =document.querySelector('#formHc');
-    const spanACTA =document.querySelector('#spanACTA');
-    const registrosTabla =document.querySelector('#registrosTabla');
+    const selectUnidadOpe = document.querySelector('#selectUnidadOpe');
+    const TipoHc = document.querySelector('#TipoHc');
+    const fcInicio = document.querySelector('#fcInicio');
+    const fcFin = document.querySelector('#fcFin');
+    const formHc = document.querySelector('#formHc');
+    const spanACTA = document.querySelector('#spanACTA');
+    const registrosTabla = document.querySelector('#registrosTabla');
 
-    const codRep =document.querySelector('#codRep');
-    const spanSelectR =document.querySelector('#spanSelectR');
-    const btnReport =document.querySelector('#btnReport');
-    const thTable =document.querySelector('#theadTable');
+    const codRep = document.querySelector('#codRep');
+    const spanSelectR = document.querySelector('#spanSelectR');
+    const btnReport = document.querySelector('#btnReport');
+    const thTable = document.querySelector('#theadTable');
+    const inputDlt = document.querySelector('#inputDlt');
+    const inputDlt2 = document.querySelector('#inputDlt2');
 
-    const btnBuscarAlmacen =document.querySelector('#btnBuscarAlmacen');
+    const btnBuscarAlmacen = document.querySelector('#btnBuscarAlmacen');
 
-    const listTipoHcAlmacen= document.querySelector('#listTipoHcAlmacen');
-
-
-    function registrosU() {
-        let value=selectUnidadOpe.value;
-        $.ajax({
-            type: 'GET',
-            url:'/listRegistrosUni/'+value,
-            success:[function (result) {
-                if(listTipoHcAlmacen!=null){
-                    listTipoHcAlmacen.innerHTML=``
-                    if(result.length!=0){
-                        listTipoHcAlmacen.innerHTML+=``
-                        for(let regist of result){
-                            const event=new Date(regist.fecha);
-                            event.setUTCHours(event.getUTCHours()-5);//cambio de horario
-                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
-
-                            listTipoHcAlmacen.innerHTML += `
-                            <tr>
-                            <td scope="row">${str}</td>
-                            <td scope="col">${regist.id_usuario.nombre}</td>
-                            <td scope="col">${regist.cod_almacen.nom_uniOpe}</td>
-                            <td scope="col">${regist.id_movimiento.nombre}</td>
-                            <td scope="col">${regist.documento}</td>
-                            <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
-                            <td scope="col">${regist.pesoNeto}</td>
-                            <td scope="col">${regist.stockInicial}</td>
-                            <td scope="col">${regist.stockFinal}</td>
-                            </tr>
-                        `
-                        }
-                    }else {
-                        listTipoHcAlmacen.innerHTML += `
-                            <h4>Sin Registros</h4>
-                        `
-                    }
-                }
-            }]
-        });
-    }
-    function registros() {
-        let valueUni = selectUnidadOpe.value;
-        let valueHoja = TipoHc.value;
-        //INVENTARIO
-        if(valueHoja==0 && fcInicio.value=='' && fcFin.value=='' ){
-            $.ajax({
-                type: 'GET',
-                url:'/listRegistrosUni/'+valueUni,
-                success:[function (result) {
-                    if(listTipoHcAlmacen!=null){
-                        listTipoHcAlmacen.innerHTML=``
-                        if(result.length!=0){
-                            listTipoHcAlmacen.innerHTML+=``
-                            for(let regist of result){
-                                const event=new Date(regist.fecha);
-                                event.setUTCHours(event.getUTCHours()-5);
-                                const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
-
-                                listTipoHcAlmacen.innerHTML += `
-                            <tr>
-                            <td scope="row">${str}</td>
-                            <td scope="col">${regist.id_usuario.nombre}</td>
-                            <td scope="col">${regist.cod_almacen.nom_uniOpe}</td>
-                            <td scope="col">${regist.id_movimiento.nombre}</td>
-                            <td scope="col">${regist.documento}</td>
-                            <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
-                            <td scope="col">${regist.pesoNeto}</td>
-                            <td scope="col">${regist.stockInicial}</td>
-                            <td scope="col">${regist.stockFinal}</td>
-                            </tr>
-                        `
-                            }
-                        }else {
-                            listTipoHcAlmacen.innerHTML += `
-                            <h4>Sin Registros</h4>
-                        `
-                        }
-                    }
-                }]
-            });
-        }
-        else if(valueHoja==0 && fcInicio.value!='' && fcFin.value!='' ){
-            //FILTRADO POR FECHAS
-            const inicio = fcInicio.value.replace("T", " ");
-            const fin = fcFin.value.replace("T", " ");
-            $.ajax({
-                type: 'GET',
-                url:'/filterDate/'+inicio+'/'+fin+'/'+valueUni,
-                success:[function (result) {
-                    if(listTipoHcAlmacen!=null){
-                        listTipoHcAlmacen.innerHTML=``
-                        if(result.length!=0){
-                            listTipoHcAlmacen.innerHTML+=``
-                            for(let regist of result){
-                                const event=new Date(regist.fecha);
-                                event.setUTCHours(event.getUTCHours()-5);
-                                const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
-
-                                listTipoHcAlmacen.innerHTML += `
-                            <tr>
-                            <td scope="row">${str}</td>
-                            <td scope="col">${regist.id_usuario.nombre}</td>
-                            <td scope="col">${regist.cod_almacen.nom_uniOpe}</td>
-                            <td scope="col">${regist.id_movimiento.nombre}</td>
-                            <td scope="col">${regist.documento}</td>
-                            <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
-                            <td scope="col">${regist.pesoNeto}</td>
-                            <td scope="col">${regist.stockInicial}</td>
-                            <td scope="col">${regist.stockFinal}</td>
-                            </tr>
-                        `
-                            }
-                        }else {
-                            listTipoHcAlmacen.innerHTML += `
-                            <h4>Sin Registros</h4>
-                        `
-                        }
-                    }
-                }]
-            });
-
-        }
-        else if(valueHoja!=0 && fcInicio.value=='' && fcFin.value=='' ){
-            $.ajax({
-                type: 'GET',
-                url:'/viewRegisters/'+valueUni+'/'+valueHoja,
-                success: [function (result) {
-                    if(listTipoHcAlmacen!=null){
-                        listTipoHcAlmacen.innerHTML=``
-                        if(result.length!=0){
-                            listTipoHcAlmacen.innerHTML+=``
-                            for(let regist of result){
-                                const event=new Date(regist.fecha);
-                                event.setUTCHours(event.getUTCHours()-5);
-                                const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
-                                listTipoHcAlmacen.innerHTML += `
-                            <tr>
-                            <td scope="row">${str}</td>
-                            <td scope="col">${regist.id_usuario.nombre}</td>
-                            <td scope="col">${regist.cod_almacen.nom_uniOpe}</td>
-                            <td scope="col">${regist.id_movimiento.nombre}</td>
-                            <td scope="col">${regist.documento}</td>
-                            <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
-                            <td scope="col">${regist.pesoNeto}</td>
-                            <td scope="col">${regist.stockInicial}</td>
-                            <td scope="col">${regist.stockFinal}</td>
-                            </tr>
-                        `
-                            }
-                        }else {
-                            listTipoHcAlmacen.innerHTML += `
-                            <h4>Sin Registros</h4>
-                        `
-                        }
-                    }
-                }]
-            });
-        }
-        else if(valueHoja!=0 && fcInicio.value!='' && fcFin.value!='' ){
-            //FILTRADO POR FECHAS
-            const inicio = fcInicio.value.replace("T", " ");
-            const fin = fcFin.value.replace("T", " ");
-            $.ajax({
-                type: 'GET',
-                url:'/filterDate/'+inicio+'/'+fin+'/'+valueUni+'/'+valueHoja,
-                success:[function (result) {
-                    if(listTipoHcAlmacen!=null){
-                        listTipoHcAlmacen.innerHTML=``
-                        if(result.length!=0){
-                            listTipoHcAlmacen.innerHTML+=``
-                            for(let regist of result){
-                                const event=new Date(regist.fecha);
-                                event.setUTCHours(event.getUTCHours()-5);
-                                const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
-
-                                listTipoHcAlmacen.innerHTML += `
-                            <tr>
-                            <td scope="row">${str}</td>
-                            <td scope="col">${regist.id_usuario.nombre}</td>
-                            <td scope="col">${regist.cod_almacen.nom_uniOpe}</td>
-                            <td scope="col">${regist.id_movimiento.nombre}</td>
-                            <td scope="col">${regist.documento}</td>
-                            <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
-                            <td scope="col">${regist.pesoNeto}</td>
-                            <td scope="col">${regist.stockInicial}</td>
-                            <td scope="col">${regist.stockFinal}</td>
-                            </tr>
-                        `
-                            }
-
-                        }else {
-                            listTipoHcAlmacen.innerHTML += `
-                            <h4>Sin Registros</h4>
-                        `
-                        }
-                    }
-                }]
-            });
-        }
+    const listTipoHcAlmacen = document.querySelector('#listTipoHcAlmacen');
 
 
-    }
     //REGISTROS
     function registers(){
         let codUnidad = selectUnidadOpe.value;
@@ -225,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let codHojaC=TipoHc.value;
         let fcI = fcInicio.value;
         let fcF= fcFin.value;
-
 
         if (codReporte!='0' && codUnidad!='0'){
             switch (codReporte) {
@@ -412,7 +213,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                                                              </tr>
                                                                          `
                                          }
-                                         setTimeout(function(){ console.log(representantes) }, 500);
                                      }else {
                                          listTipoHcAlmacen.innerHTML += `
                              <h4>Sin Registros</h4>
@@ -450,7 +250,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                                                              </tr>
                                                                          `
                                         }
-                                        setTimeout(function(){ console.log(representantes) }, 500);
                                     }else {
                                         listTipoHcAlmacen.innerHTML += `
                              <h4>Sin Registros</h4>
@@ -485,7 +284,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                                                              </tr>
                                                                          `
                                         }
-                                        setTimeout(function(){ console.log(representantes) }, 500);
                                     }else {
                                         listTipoHcAlmacen.innerHTML += `
                              <h4>Sin Registros</h4>
@@ -523,7 +321,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                                                              </tr>
                                                                          `
                                         }
-                                        setTimeout(function(){ console.log(representantes) }, 500);
                                     }else {
                                         listTipoHcAlmacen.innerHTML += `
                              <h4>Sin Registros</h4>
@@ -535,22 +332,643 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     }
                     break;
                 case '5':
-                    listTipoHcAlmacen.innerHTML=`5`
+                    if (codHojaC=='0' && fcI=='' && fcF==''){
+                        $.ajax({
+                            type: 'GET',
+                            url:'/listRegistrosUniDemasia/'+codUnidad,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.documento}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC=='0' && fcI!='' && fcF!=''){
+                        //FILTRADO POR FECHAS
+                        const inicio = fcI.replace("T", " ");
+                        const fin = fcF.replace("T", " ");
+                        $.ajax({
+                            type: 'GET',
+                            url:'/filterDateDemasias/'+inicio+'/'+fin+'/'+codUnidad,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.documento}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC!='0' && fcI=='' && fcF==''){
+                        $.ajax({
+                            type: 'GET',
+                            url:'/viewRegistersDemasias/'+codUnidad+'/'+codHojaC,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.documento}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC!='0' && fcI!='' && fcF!=''){
+                        //FILTRADO POR FECHAS
+                        const inicio = fcI.replace("T", " ");
+                        const fin = fcF.replace("T", " ");
+                        $.ajax({
+                            type: 'GET',
+                            url:'/filterDateDemasias/'+inicio+'/'+fin+'/'+codUnidad+'/'+codHojaC,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.documento}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
                     break;
                 case '6':
-                    listTipoHcAlmacen.innerHTML=`6`
+                    if (codHojaC=='0' && fcI=='' && fcF==''){
+                        $.ajax({
+                            type: 'GET',
+                            url:'/listRegistrosUniDecomiso/'+codUnidad,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.docReferencia}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC=='0' && fcI!='' && fcF!=''){
+                        //FILTRADO POR FECHAS
+                        const inicio = fcI.replace("T", " ");
+                        const fin = fcF.replace("T", " ");
+                        $.ajax({
+                            type: 'GET',
+                            url:'/filterDateDecomisos/'+inicio+'/'+fin+'/'+codUnidad,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.docReferencia}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC!='0' && fcI=='' && fcF==''){
+                        $.ajax({
+                            type: 'GET',
+                            url:'/viewRegistersDecomisos/'+codUnidad+'/'+codHojaC,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.docReferencia}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC!='0' && fcI!='' && fcF!=''){
+                        //FILTRADO POR FECHAS
+                        const inicio = fcI.replace("T", " ");
+                        const fin = fcF.replace("T", " ");
+                        $.ajax({
+                            type: 'GET',
+                            url:'/filterDateDecomisos/'+inicio+'/'+fin+'/'+codUnidad+'/'+codHojaC,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.docReferencia}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
                     break;
                 case '7':
-                    listTipoHcAlmacen.innerHTML=`7`
+                    if (codHojaC=='0' && fcI=='' && fcF==''){
+                        $.ajax({
+                            type: 'GET',
+                            url:'/listRegistrosUniMerma/'+codUnidad,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC=='0' && fcI!='' && fcF!=''){
+                        //FILTRADO POR FECHAS
+                        const inicio = fcI.replace("T", " ");
+                        const fin = fcF.replace("T", " ");
+                        $.ajax({
+                            type: 'GET',
+                            url:'/filterDateMerma/'+inicio+'/'+fin+'/'+codUnidad,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                            <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC!='0' && fcI=='' && fcF==''){
+                        $.ajax({
+                            type: 'GET',
+                            url:'/viewRegistersMerma/'+codUnidad+'/'+codHojaC,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                            <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC!='0' && fcI!='' && fcF!=''){
+                        //FILTRADO POR FECHAS
+                        const inicio = fcI.replace("T", " ");
+                        const fin = fcF.replace("T", " ");
+                        $.ajax({
+                            type: 'GET',
+                            url:'/filterDateMerma/'+inicio+'/'+fin+'/'+codUnidad+'/'+codHojaC,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidadNeta}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
                     break;
                 case '8':
-                    listTipoHcAlmacen.innerHTML=`8`
+                    if (codHojaC=='0' && fcI=='' && fcF==''){
+                        $.ajax({
+                            type: 'GET',
+                            url:'/listRegistrosUniCajaBoveda/'+codUnidad,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.id_tipoTransac.nombre}</td>
+                                                                             <td scope="col">${regist.monto}</td>
+                                                                             <td scope="col">${regist.saldoInicial}</td>
+                                                                             <td scope="col">${regist.saldoFinal}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC=='0' && fcI!='' && fcF!=''){
+                        //FILTRADO POR FECHAS
+                        const inicio = fcI.replace("T", " ");
+                        const fin = fcF.replace("T", " ");
+                        $.ajax({
+                            type: 'GET',
+                            url:'/filterDateCajaBoveda/'+inicio+'/'+fin+'/'+codUnidad,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.id_tipoTransac.nombre}</td>
+                                                                             <td scope="col">${regist.monto}</td>
+                                                                             <td scope="col">${regist.saldoInicial}</td>
+                                                                             <td scope="col">${regist.saldoFinal}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
                     break;
                 case '9':
-                    listTipoHcAlmacen.innerHTML=`9`
+                    if (codHojaC=='0' && fcI=='' && fcF==''){
+                        $.ajax({
+                            type: 'GET',
+                            url:'/listRegistrosUniTransferencia/'+codUnidad,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.origen.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.destino.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.transportista}</td>
+                                                                             <td scope="col">${regist.placaVehiculo}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidad}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC=='0' && fcI!='' && fcF!=''){
+                        //FILTRADO POR FECHAS
+                        const inicio = fcI.replace("T", " ");
+                        const fin = fcF.replace("T", " ");
+                        $.ajax({
+                            type: 'GET',
+                            url:'/filterDateTransferencia/'+inicio+'/'+fin+'/'+codUnidad,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.origen.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.destino.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.transportista}</td>
+                                                                             <td scope="col">${regist.placaVehiculo}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidad}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC!='0' && fcI=='' && fcF==''){
+                        $.ajax({
+                            type: 'GET',
+                            url:'/viewRegistersTransferencia/'+codUnidad+'/'+codHojaC,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.origen.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.destino.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.transportista}</td>
+                                                                             <td scope="col">${regist.placaVehiculo}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidad}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC!='0' && fcI!='' && fcF!=''){
+                        //FILTRADO POR FECHAS
+                        const inicio = fcI.replace("T", " ");
+                        const fin = fcF.replace("T", " ");
+                        $.ajax({
+                            type: 'GET',
+                            url:'/filterDateTransferencia/'+inicio+'/'+fin+'/'+codUnidad+'/'+codHojaC,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                              <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.origen.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.destino.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.transportista}</td>
+                                                                             <td scope="col">${regist.placaVehiculo}</td>
+                                                                             <td scope="col">${regist.cod_tipoHoja.cod_tipoHoja}</td>
+                                                                             <td scope="col">${regist.cantidad}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
                     break;
                 case '10':
-                    listTipoHcAlmacen.innerHTML=`10`
                     break;
             }
         }else {
@@ -638,11 +1056,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let value = codRep.value;
         switch (value) {
             case '0':
+                inputDlt.style.visibility='hidden'
+                inputDlt2.style.visibility='hidden'
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3><span class="fas fa-fw fa-exclamation-circle"></span>Seleccionar reporte</h3>`
                 thTable.innerHTML=''
                 break;
             case '1':
+                inputDlt.style.visibility='visible'
+                inputDlt2.style.visibility='visible'
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Registros Kardex</h3>`
                 thTable.innerHTML=`
@@ -660,6 +1082,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '4':
+                inputDlt.style.visibility='visible'
+                inputDlt2.style.visibility='visible'
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Registros de compras en oficina</h3>`
                 thTable.innerHTML=`
@@ -675,6 +1099,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '5':
+                inputDlt.style.visibility='visible'
+                inputDlt2.style.visibility='visible'
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Registros de demasías</h3>`
                 thTable.innerHTML=`
@@ -689,6 +1115,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '6':
+                inputDlt.style.visibility='visible'
+                inputDlt2.style.visibility='visible'
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Registros de decomisos</h3>`
                 thTable.innerHTML=`
@@ -703,6 +1131,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '7':
+                inputDlt.style.visibility='visible'
+                inputDlt2.style.visibility='visible'
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Registros de mermas</h3>`
                 thTable.innerHTML=`
@@ -716,6 +1146,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '8':
+                inputDlt.style.visibility='hidden'
+                inputDlt2.style.visibility='hidden'
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Movimientos de caja bóveda</h3>`
                 thTable.innerHTML=`
@@ -731,6 +1163,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '9':
+                inputDlt.style.visibility='visible'
+                inputDlt2.style.visibility='visible'
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Salidas por transferencia</h3>`
                 thTable.innerHTML=`
@@ -747,21 +1181,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '10':
+                inputDlt.style.visibility='hidden'
+                inputDlt2.style.visibility='hidden'
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Acta inventario de Hoja de Coca</h3>`
-                thTable.innerHTML=`
-                    <tr>
-                        <th scope="col">Fecha-Hora</th>
-                        <th scope="col">Usuario</th>
-                        <th scope="col">Almacén</th>
-                        <th scope="col">Movimiento</th>
-                        <th scope="col">Documento</th>
-                        <th scope="col">Tipo de HC</th>
-                        <th scope="col">Peso Neto</th>
-                        <th scope="col">Stock Inicial</th>
-                        <th scope="col">Stock Final</th>
-                    </tr>
-                `
+                thTable.innerHTML=``
                 break;
         }
     }//THEAD DE TABLA

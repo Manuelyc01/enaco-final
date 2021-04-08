@@ -898,11 +898,11 @@ public class privateController {
         if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
             demasias=demasiaService.listByUni(reporte.getCodUni().getCod_uniOpe());
         }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
-            demasias= demasiaService.registrosFechaCompra(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+            demasias= demasiaService.registrosFechaDemasia(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
         }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD y TIPO H
-            demasias= demasiaService.listByProductCompra(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
+            demasias= demasiaService.listByProductDemasia(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
         }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD, TIPO HC y FECHAS
-            demasias=demasiaService.registrosFechaCompraHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
+            demasias=demasiaService.registrosFechaDemasiaHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
         }
         return demasias;
     }
