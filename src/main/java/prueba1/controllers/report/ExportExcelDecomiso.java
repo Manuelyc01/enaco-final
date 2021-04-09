@@ -9,6 +9,7 @@ import prueba1.models.Reporte;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class ExportExcelDecomiso {
@@ -76,7 +77,9 @@ public class ExportExcelDecomiso {
 
                 for(int i = 0; i < decomisos.size(); i++) {
                     Row dataRow = sheet.createRow(i + 3);
-                    dataRow.createCell(0).setCellValue(decomisos.get(i).getFecha());
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    dataRow.createCell(0).setCellValue(formatter.format(decomisos.get(i).getFecha()));
                     dataRow.createCell(1).setCellValue(decomisos.get(i).getCod_uniOpe().getNom_uniOpe());
                     dataRow.createCell(2).setCellValue(decomisos.get(i).getId_usuario().getNombre());
                     dataRow.createCell(3).setCellValue(decomisos.get(i).getDocReferencia());

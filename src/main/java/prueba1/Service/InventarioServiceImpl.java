@@ -18,8 +18,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,18 +76,45 @@ public class InventarioServiceImpl implements InventarioService{
     }
     //ACTA DE INVERTARIO
     @Override
-    public List<TipoHojaCoca> actaHojas(String inicio, String fin, String cod) throws ParseException {
+    public List<TipoHojaCoca> actaHojas(Integer periodo, String cod) throws ParseException {
+        Date año=new Date();
+        int year = año.getYear();
+        Date globalinicio=new Date(year,periodo,01);
+        Date globalfin;
+        if (periodo==11){
+            globalfin=new Date(year,0,01);
+        }else {
+            globalfin=new Date(year,periodo+1,01);
+        }
+            globalinicio.toString();
+            globalfin.toString();
+
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date ini= format.parse(inicio.replace("T"," "));
-        Date fn= format.parse(fin.replace("T"," "));
-       /* return repository.actaHojas(ini,fn,cod);*/
-        return repository.actaHojas(cod);
+
+        Date ini =format.parse(format.format(globalinicio));
+        Date fn =format.parse(format.format(globalfin));
+
+         return repository.actaHojas(ini,fn,cod);
+       /* return repository.actaHojas(cod);*/
     }
     @Override
-    public Double actaSaldo(String inicio, String fin, String cod, String codHc) throws ParseException {
+    public Double actaSaldo(Integer periodo, String cod, String codHc) throws ParseException {
+        Date año=new Date();
+        int year = año.getYear();
+        Date globalinicio=new Date(year,periodo,01);
+        Date globalfin;
+        if (periodo==11){
+            globalfin=new Date(year,0,01);
+        }else {
+            globalfin=new Date(year,periodo+1,01);
+        }
+        globalinicio.toString();
+        globalfin.toString();
+
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date ini= format.parse(inicio.replace("T"," "));
-        Date fn= format.parse(fin.replace("T"," "));
+
+        Date ini =format.parse(format.format(globalinicio));
+        Date fn =format.parse(format.format(globalfin));
         List<Inventario> in = repository.actaSaldo(ini, fn, cod, codHc, PageRequest.of(0, 1));
         if (in.size()==0){
             return 0.00;
@@ -98,12 +123,25 @@ public class InventarioServiceImpl implements InventarioService{
         }
     }
     @Override
-    public List<Ingreso> actaIngreso(String inicio, String fin, String cod, String codHc) throws ParseException {
+    public List<Ingreso> actaIngreso(Integer periodo, String cod, String codHc) throws ParseException {
         List<Ingreso> ingresos=new ArrayList<>();
         for (int i=1;i<5;i++){
+            Date año=new Date();
+            int year = año.getYear();
+            Date globalinicio=new Date(year,periodo,01);
+            Date globalfin;
+            if (periodo==11){
+                globalfin=new Date(year,0,01);
+            }else {
+                globalfin=new Date(year,periodo+1,01);
+            }
+            globalinicio.toString();
+            globalfin.toString();
+
             SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            Date ini= format.parse(inicio.replace("T"," "));
-            Date fn= format.parse(fin.replace("T"," "));
+
+            Date ini =format.parse(format.format(globalinicio));
+            Date fn =format.parse(format.format(globalfin));
             List<Double> d = repository.actaIngreso(ini, fn, cod, codHc,i, PageRequest.of(0, 1));
             Ingreso ingreso=new Ingreso();
             ingreso.setId(i);
@@ -117,11 +155,24 @@ public class InventarioServiceImpl implements InventarioService{
         return ingresos;
     }
     @Override
-    public List<IngresoSalida> actaIngresoSalida(String inicio, String fin, String cod, String codHc) throws ParseException {
+    public List<IngresoSalida> actaIngresoSalida(Integer periodo, String cod, String codHc) throws ParseException {
         List<IngresoSalida> ingresos=new ArrayList<>();
+        Date año=new Date();
+        int year = año.getYear();
+        Date globalinicio=new Date(year,periodo,01);
+        Date globalfin;
+        if (periodo==11){
+            globalfin=new Date(year,0,01);
+        }else {
+            globalfin=new Date(year,periodo+1,01);
+        }
+        globalinicio.toString();
+        globalfin.toString();
+
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date ini= format.parse(inicio.replace("T"," "));
-        Date fn= format.parse(fin.replace("T"," "));
+
+        Date ini =format.parse(format.format(globalinicio));
+        Date fn =format.parse(format.format(globalfin));
 
         List<Double> i = repository.actaIngresoTransferencia(ini, fn, cod, codHc, PageRequest.of(0, 1));
         List<Double> s = repository.actaSalidaTransferencia(ini, fn, cod, codHc, PageRequest.of(0, 1));

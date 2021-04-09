@@ -376,6 +376,19 @@ public class AjaxRestController {
             return new ResponseEntity<List<Transferencia>>(HttpStatus.BAD_REQUEST);
         }
     }
+    @RequestMapping(
+            value = "viewRegistersCajaBoveda/{uni}/{hoj}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<CajaBoveda>> registrosAlmacenCajaBoveda(@PathVariable("uni") String uni,@PathVariable("hoj") String hoj) {
+        List<CajaBoveda> list = cajaBovedaService.listByUniT(uni,Integer.parseInt(hoj));
+        try {
+            return ResponseEntity.accepted().body(list);
+        } catch (Exception e) {
+
+            return new ResponseEntity<List<CajaBoveda>>(HttpStatus.BAD_REQUEST);
+        }
+    }
     //FILTRADO FECHA REPORTE ALMACEN
     @RequestMapping(
             value = "filterDate/{inicio}/{fin}/{codUni}",
@@ -545,6 +558,19 @@ public class AjaxRestController {
         } catch (Exception e) {
 
             return new ResponseEntity<List<Transferencia>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(
+            value = "filterDateCajaBoveda/{inicio}/{fin}/{codUni}/{codHc}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<CajaBoveda>> registrosFechaCajaBovedaT(@PathVariable("inicio") String inicio,@PathVariable("fin") String fin,@PathVariable("codUni") String cod,@PathVariable("codHc") String codHc) throws ParseException {
+        List<CajaBoveda> list = cajaBovedaService.registrosFechaCajaBovedaT(inicio, fin,cod,Integer.parseInt(codHc));
+        try {
+            return ResponseEntity.accepted().body(list);
+        } catch (Exception e) {
+
+            return new ResponseEntity<List<CajaBoveda>>(HttpStatus.BAD_REQUEST);
         }
     }
 }

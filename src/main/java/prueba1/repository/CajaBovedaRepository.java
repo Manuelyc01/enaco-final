@@ -22,7 +22,13 @@ public interface CajaBovedaRepository extends JpaRepository<CajaBoveda,Integer> 
     @Query("SELECT u from CajaBoveda u where u.cod_uniOpe.cod_uniOpe=?1 order by u.fecha desc")
     List<CajaBoveda> lisByUni(String cod);
 
+    @Query("SELECT u from CajaBoveda u where u.cod_uniOpe.cod_uniOpe=?1 and u.id_tipoTransac.id_tipoTransac=?2 order by u.fecha desc")
+    List<CajaBoveda> lisByUniT(String cod,Integer t);
+
     @Query("SELECT u from CajaBoveda u where u.fecha between ?1 and ?2 and u.cod_uniOpe.cod_uniOpe=?3 order by u.fecha desc")
-    List<CajaBoveda> filterFechaCajaBovedaHc(Date ini, Date fn, String cod);
+    List<CajaBoveda> filterFechaCajaBoveda(Date ini, Date fn, String cod);
+
+    @Query("SELECT u from CajaBoveda u where u.fecha between ?1 and ?2 and u.cod_uniOpe.cod_uniOpe=?3 and u.id_tipoTransac.id_tipoTransac=?4 order by u.fecha desc")
+    List<CajaBoveda> filterFechaCajaBovedaT(Date ini, Date fn, String cod,Integer transaccion);
 
 }

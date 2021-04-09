@@ -840,13 +840,13 @@ public class privateController {
     public List<ActaRegistro> reporteActaRegistro(Reporte reporte,Authentication auth) throws ParseException {
         List<ActaRegistro> actaRegistros=new ArrayList<>();
 
-        List<TipoHojaCoca> tipoHojaCocas = inventarioService.actaHojas(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe());//HOJAS DE COCA
+        List<TipoHojaCoca> tipoHojaCocas = inventarioService.actaHojas(reporte.getPeriodo(), reporte.getCodUni().getCod_uniOpe());//HOJAS DE COCA
         List<Ingreso> ingresos;
         List<IngresoSalida> ingresoSalidas;
         for (int i=0;i<tipoHojaCocas.size();i++){
-            Double s = inventarioService.actaSaldo(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());
-            ingresos= inventarioService.actaIngreso(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());//INGRESOS(1,2,3) SALIDA(4)
-            ingresoSalidas= inventarioService.actaIngresoSalida(reporte.getFcInicio(), reporte.getFcFin(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());
+            Double s = inventarioService.actaSaldo(reporte.getPeriodo(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());
+            ingresos= inventarioService.actaIngreso(reporte.getPeriodo(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());//INGRESOS(1,2,3) SALIDA(4)
+            ingresoSalidas= inventarioService.actaIngresoSalida(reporte.getPeriodo(), reporte.getCodUni().getCod_uniOpe(), tipoHojaCocas.get(i).getCod_tipoHoja());
             ActaRegistro actaRegistro= new ActaRegistro();
             actaRegistro.setCodHc(tipoHojaCocas.get(i).getCod_tipoHoja());//CODHC
             actaRegistro.setSaldoMesAnterior(s);//SALDO
@@ -868,15 +868,55 @@ public class privateController {
             ar.setTotal(ar.getSaldoMesAnterior()+ar.getSubtotalIngreso()-ar.getSubtotalSalida());//TOTAL
         }
 
-        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date ini= format.parse(reporte.getFcInicio().replace("T"," "));
-        Date fn= format.parse(reporte.getFcFin().replace("T"," "));
+        Date a=new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+        String year = formatter.format(a);
+
+        String mes="";
+        switch (reporte.getPeriodo()){
+            case 0:
+                mes="Enero";
+                break;
+            case 1:
+                mes="Febrero";
+                break;
+            case 2:
+                mes="Marzo";
+                break;
+            case 3:
+                mes="Abril";
+                break;
+            case 4:
+                mes="Mayo";
+                break;
+            case 5:
+                mes="Junio";
+                break;
+            case 6:
+                mes="Julio";
+                break;
+            case 7:
+                mes="Agosto";
+                break;
+            case 8:
+                mes="Septiembre";
+                break;
+            case 9:
+                mes="Octubre";
+                break;
+            case 10:
+                mes="Noviembre";
+                break;
+            case 11:
+                mes="Diciembre";
+                break;
+        }
 
         if (actaRegistros.size()>0){
             actaRegistros.get(0).setUnidadOpe(reporte.getCodUni().getNom_uniOpe());
             actaRegistros.get(0).setUsuario(usuarioService.findByUsua(auth.getName()).getNombre());
-            actaRegistros.get(0).setFechaInicio(ini);
-            actaRegistros.get(0).setFechaFin(fn);
+            actaRegistros.get(0).setFechaInicio(mes);
+            actaRegistros.get(0).setFechaFin(year);
         }
         return actaRegistros;
     }
@@ -934,10 +974,14 @@ public class privateController {
     }
     public List<CajaBoveda> reporteCajaBoveda(Reporte reporte) throws ParseException {
         List<CajaBoveda> cajaBovedas=new ArrayList<>();
-        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
+        if (reporte.getTransaccion()==0 && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
             cajaBovedas=cajaBovedaService.listByUni(reporte.getCodUni().getCod_uniOpe());
-        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
+        }else if (reporte.getTransaccion()==0 && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
             cajaBovedas= cajaBovedaService.registrosFechaCajaBoveda(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getTransaccion()!=0 && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD y trans
+            cajaBovedas= cajaBovedaService.listByUniT(reporte.getCodUni().getCod_uniOpe(),reporte.getTransaccion());
+        }else if (reporte.getTransaccion()!=0 &&reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA y trans
+            cajaBovedas= cajaBovedaService.registrosFechaCajaBovedaT(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getTransaccion());
         }
         return cajaBovedas;
     }

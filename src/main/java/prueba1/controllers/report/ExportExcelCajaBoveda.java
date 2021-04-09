@@ -9,6 +9,8 @@ import prueba1.models.Reporte;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ExportExcelCajaBoveda {
@@ -63,35 +65,33 @@ public class ExportExcelCajaBoveda {
                 cell.setCellStyle(headerCellStyle);
 
                 cell = row.createCell(3);
-                cell.setCellValue("Documento");
-                cell.setCellStyle(headerCellStyle);
-
-                cell = row.createCell(4);
                 cell.setCellValue("Tipo Transacción");
                 cell.setCellStyle(headerCellStyle);
 
-                cell = row.createCell(5);
+                cell = row.createCell(4);
                 cell.setCellValue("Monto Soles");
                 cell.setCellStyle(headerCellStyle);
 
-                cell = row.createCell(6);
+                cell = row.createCell(5);
                 cell.setCellValue("Saldo Inicial");
                 cell.setCellStyle(headerCellStyle);
 
-                cell = row.createCell(7);
+                cell = row.createCell(6);
                 cell.setCellValue("Saldo Final");
                 cell.setCellStyle(headerCellStyle);
 
                 for(int i = 0; i < cajaBovedas  .size(); i++) {
                     Row dataRow = sheet.createRow(i + 3);
-                    dataRow.createCell(0).setCellValue(cajaBovedas.get(i).getFecha());
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    dataRow.createCell(0).setCellValue(formatter.format(cajaBovedas.get(i).getFecha()));
                     dataRow.createCell(1).setCellValue(cajaBovedas.get(i).getCod_uniOpe().getNom_uniOpe());
                     dataRow.createCell(2).setCellValue(cajaBovedas.get(i).getId_usuario().getNombre());
-                    dataRow.createCell(3).setCellValue(cajaBovedas.get(i).getId_cajaBoveda());
-                    dataRow.createCell(4).setCellValue(cajaBovedas.get(i).getId_tipoTransac().getNombre());
-                    dataRow.createCell(5).setCellValue(cajaBovedas.get(i).getMonto());
-                    dataRow.createCell(6).setCellValue(cajaBovedas.get(i).getSaldoInicial());
-                    dataRow.createCell(7).setCellValue(cajaBovedas.get(i).getSaldoFinal());
+                    dataRow.createCell(3).setCellValue(cajaBovedas.get(i).getId_tipoTransac().getNombre());
+                    dataRow.createCell(4).setCellValue(cajaBovedas.get(i).getMonto());
+                    dataRow.createCell(5).setCellValue(cajaBovedas.get(i).getSaldoInicial());
+                    dataRow.createCell(6).setCellValue(cajaBovedas.get(i).getSaldoFinal());
                 }
 
                 sheet.autoSizeColumn(0);
@@ -101,7 +101,6 @@ public class ExportExcelCajaBoveda {
                 sheet.autoSizeColumn(4);
                 sheet.autoSizeColumn(5);
                 sheet.autoSizeColumn(6);
-                sheet.autoSizeColumn(7);
 
             }else {
                 Row head = sheet.createRow(0);

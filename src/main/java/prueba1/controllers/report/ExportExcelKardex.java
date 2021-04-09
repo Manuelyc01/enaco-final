@@ -82,20 +82,22 @@ public class ExportExcelKardex {
                 cell.setCellStyle(headerCellStyle);
 
                 cell = row.createCell(6);
-                cell.setCellValue("Peso Neto");
+                cell.setCellValue("Peso Neto (KG)");
                 cell.setCellStyle(headerCellStyle);
 
                 cell = row.createCell(7);
-                cell.setCellValue("Stock Inicial");
+                cell.setCellValue("Stock Inicial (KG)");
                 cell.setCellStyle(headerCellStyle);
 
                 cell = row.createCell(8);
-                cell.setCellValue("Stock final");
+                cell.setCellValue("Stock final (KG)");
                 cell.setCellStyle(headerCellStyle);
 
                 for(int i = 0; i < inventario.size(); i++) {
                     Row dataRow = sheet.createRow(i + 3);
-                    dataRow.createCell(0).setCellValue(inventario.get(i).getFecha());
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    dataRow.createCell(0).setCellValue(formatter.format(inventario.get(i).getFecha()));
                     dataRow.createCell(1).setCellValue(inventario.get(i).getId_usuario().getNombre());
                     dataRow.createCell(2).setCellValue(inventario.get(i).getCod_almacen().getNom_uniOpe());
                     dataRow.createCell(3).setCellValue(inventario.get(i).getId_movimiento().getNombre());

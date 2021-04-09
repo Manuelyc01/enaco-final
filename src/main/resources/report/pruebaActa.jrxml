@@ -37,8 +37,8 @@
 	</queryString>
 	<field name="unidadOpe" class="java.lang.String"/>
 	<field name="usuario" class="java.lang.String"/>
-	<field name="fechaInicio" class="java.util.Date"/>
-	<field name="fechaFin" class="java.util.Date"/>
+	<field name="fechaInicio" class="java.lang.String"/>
+	<field name="fechaFin" class="java.lang.String"/>
 	<field name="codHc" class="java.lang.String"/>
 	<field name="saldoMesAnterior" class="java.lang.Double"/>
 	<field name="ingresoCompra" class="java.lang.Double"/>
@@ -120,10 +120,10 @@
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Movimiento del ]]></text>
+				<text><![CDATA[Movimiento de]]></text>
 			</staticText>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="558" y="136" width="85" height="29" uuid="245d4232-96f5-4ea0-960f-ef023b842762"/>
+				<reportElement isPrintRepeatedValues="false" x="558" y="136" width="52" height="29" uuid="245d4232-96f5-4ea0-960f-ef023b842762"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Serif" size="11" isUnderline="false"/>
 				</textElement>
@@ -137,18 +137,18 @@
 				<textFieldExpression><![CDATA[$F{usuario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="666" y="136" width="130" height="29" uuid="8d0e601c-6420-43ed-9160-34049dc86bd6"/>
+				<reportElement isPrintRepeatedValues="false" x="630" y="136" width="70" height="29" uuid="8d0e601c-6420-43ed-9160-34049dc86bd6"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Serif" size="11" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fechaFin}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="646" y="134" width="20" height="30" uuid="2c470929-3668-4655-a50c-4122d4f30785"/>
+				<reportElement x="610" y="135" width="20" height="30" uuid="2c470929-3668-4655-a50c-4122d4f30785"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[al]]></text>
+				<text><![CDATA[del ]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -161,7 +161,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="260" splitType="Stretch">
+		<band height="261" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout"/>
 			<textField>
 				<reportElement x="110" y="0" width="89" height="20" uuid="e16eccdc-3b29-4812-b2b5-7e8c04486d41">
@@ -295,35 +295,83 @@
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="7" splitType="Stretch">
+		<band height="2" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="91" splitType="Stretch">
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="501ac6c4-e9d4-43cb-ba6b-7f2f44394cf3"/>
+				<reportElement positionType="FixRelativeToBottom" isPrintRepeatedValues="false" x="68" y="29" width="97" height="1" isPrintInFirstWholeBand="true" uuid="397a8bd5-8654-4aca-8c8a-149fbed67890"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
 			</line>
-		</band>
-	</columnFooter>
-	<pageFooter>
-		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="70" y="30" width="91" height="20" isPrintInFirstWholeBand="true" uuid="bce4b075-27f6-48c0-9347-dcbef3141254"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Administrador]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" isPrintRepeatedValues="false" x="218" y="29" width="97" height="1" isPrintInFirstWholeBand="true" uuid="2c6775f5-b774-4508-963e-48a732a85b03"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="220" y="30" width="91" height="20" isPrintInFirstWholeBand="true" uuid="d09d2372-17ca-49b1-82ae-67b220d093ea"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Jefe comercial]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" isPrintRepeatedValues="false" x="354" y="29" width="97" height="1" isPrintInFirstWholeBand="true" uuid="e745c558-8339-4a77-9679-6d64339c8c51"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="356" y="30" width="91" height="20" isPrintInFirstWholeBand="true" uuid="c025a82c-78f9-4a4d-a199-744ee40d5e58"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Jefe de Agencia]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" isPrintRepeatedValues="false" x="498" y="29" width="97" height="1" isPrintInFirstWholeBand="true" uuid="8a6daf3b-5afa-43cd-b0c8-614b811aa37c"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="500" y="30" width="91" height="20" isPrintInFirstWholeBand="true" uuid="a016df99-184f-4b1b-84b9-f671651caeff"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Jefe de Almacén]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" isPrintRepeatedValues="false" x="644" y="29" width="97" height="1" isPrintInFirstWholeBand="true" uuid="33649d5f-87dc-4d03-ac6c-f01b2a8645e1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="646" y="30" width="91" height="20" isPrintInFirstWholeBand="true" uuid="5e59488c-01db-4842-8192-636bcbe51097"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Inventariador]]></text>
+			</staticText>
 			<frame>
-				<reportElement mode="Opaque" x="0" y="0" width="802" height="25" forecolor="#D0B48E" backcolor="#000000" uuid="ffb10ec8-0371-4545-8eaa-96d62ad3cec0"/>
+				<reportElement mode="Opaque" x="0" y="60" width="802" height="25" forecolor="#D0B48E" backcolor="#000000" uuid="424317d4-6847-4524-aadf-6ac7db50f652"/>
 				<textField evaluationTime="Report">
-					<reportElement style="Column header" x="757" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="b5521ea6-5f36-4864-856f-58d0bcd011f2"/>
+					<reportElement style="Column header" x="757" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="398371c6-b26c-4335-b9c7-8c2a5521a099"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement style="Column header" x="677" y="3" width="80" height="20" forecolor="#FFFFFF" uuid="e625ea3c-1741-4cfe-81cf-fbbdd00162c8"/>
+					<reportElement style="Column header" x="677" y="3" width="80" height="20" forecolor="#FFFFFF" uuid="4ec02b93-3bd2-41b5-904d-4d13d04c5d13"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 				</textField>
 				<textField pattern="EEEEE dd MMMMM yyyy">
-					<reportElement style="Column header" x="2" y="3" width="197" height="20" forecolor="#FFFFFF" uuid="0c9f7e91-d3f5-47f9-82b7-0b2b3a43a5d6"/>
+					<reportElement style="Column header" x="2" y="3" width="197" height="20" forecolor="#FFFFFF" uuid="cc8d2aca-c33c-422b-94e6-1278360704d5"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>

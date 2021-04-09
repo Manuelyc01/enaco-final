@@ -61,12 +61,23 @@ public class CajaBovedaServiceImpl implements CajaBovedaService{
     public List<CajaBoveda> listByUni(String cod){
         return repository.lisByUni(cod);
     }
+   @Override
+    public List<CajaBoveda> listByUniT(String cod,Integer t){
+        return repository.lisByUniT(cod,t);
+    }
     @Override
     public List<CajaBoveda> registrosFechaCajaBoveda(String inicio, String fin, String cod) throws ParseException {
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date ini= format.parse(inicio.replace("T"," "));
         Date fn= format.parse(fin.replace("T"," "));
-        return repository.filterFechaCajaBovedaHc(ini,fn,cod);
+        return repository.filterFechaCajaBoveda(ini,fn,cod);
+    }
+    @Override
+    public List<CajaBoveda> registrosFechaCajaBovedaT(String inicio, String fin, String cod,Integer t) throws ParseException {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ini= format.parse(inicio.replace("T"," "));
+        Date fn= format.parse(fin.replace("T"," "));
+        return repository.filterFechaCajaBovedaT(ini,fn,cod,t);
     }
 
 }

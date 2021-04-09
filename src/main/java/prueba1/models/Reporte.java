@@ -13,4 +13,6 @@ public class Reporte {
     private String fcInicio;
     private String fcFin;
     private Integer codRep;
+    private Integer periodo;
+    private Integer transaccion;
 }

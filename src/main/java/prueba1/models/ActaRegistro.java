@@ -14,8 +14,8 @@ public class ActaRegistro {
 
     private String unidadOpe;
     private String usuario;
-    private Date fechaInicio;
-    private Date fechaFin;
+    private String fechaInicio;
+    private String fechaFin;
 
 
     private String codHc;

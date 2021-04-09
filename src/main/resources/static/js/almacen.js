@@ -14,11 +14,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const thTable = document.querySelector('#theadTable');
     const inputDlt = document.querySelector('#inputDlt');
     const inputDlt2 = document.querySelector('#inputDlt2');
+    const nombreLabel = document.querySelector('#nombreLabel');
+    const fecha1 = document.querySelector('#fecha1');
+    const fecha2 = document.querySelector('#fecha2');
 
     const btnBuscarAlmacen = document.querySelector('#btnBuscarAlmacen');
 
     const listTipoHcAlmacen = document.querySelector('#listTipoHcAlmacen');
 
+    $(document).ready(function() {
+        theadTable();
+        mostrarBtn()
+    });
 
     //REGISTROS
     function registers(){
@@ -819,6 +826,77 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             }]
                         });
                     }
+                    else if (codHojaC!='0' && fcI=='' && fcF==''){
+                        $.ajax({
+                            type: 'GET',
+                            url:'/viewRegistersCajaBoveda/'+codUnidad+'/'+codHojaC,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.id_tipoTransac.nombre}</td>
+                                                                             <td scope="col">${regist.monto}</td>
+                                                                             <td scope="col">${regist.saldoInicial}</td>
+                                                                             <td scope="col">${regist.saldoFinal}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    else if (codHojaC!='0' && fcI!='' && fcF!=''){
+                        //FILTRADO POR FECHAS
+                        const inicio = fcI.replace("T", " ");
+                        const fin = fcF.replace("T", " ");
+                        $.ajax({
+                            type: 'GET',
+                            url:'/filterDateCajaBoveda/'+inicio+'/'+fin+'/'+codUnidad+'/'+codHojaC,
+                            success:[function (result) {
+                                if(listTipoHcAlmacen!=null){
+                                    listTipoHcAlmacen.innerHTML=``
+                                    if(result.length!=0){
+                                        listTipoHcAlmacen.innerHTML+=``
+                                        for(let regist of result){
+                                            const event=new Date(regist.fecha);
+                                            event.setUTCHours(event.getUTCHours()-5);
+                                            const str =event.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", "    ");
+                                            listTipoHcAlmacen.innerHTML += `
+                                                                             <tr>
+                                                                             <td scope="row">${str}</td>
+                                                                             <td scope="col">${regist.cod_uniOpe.nom_uniOpe}</td>
+                                                                             <td scope="col">${regist.id_usuario.nombre}</td>
+                                                                             <td scope="col">${regist.id_tipoTransac.nombre}</td>
+                                                                             <td scope="col">${regist.monto}</td>
+                                                                             <td scope="col">${regist.saldoInicial}</td>
+                                                                             <td scope="col">${regist.saldoFinal}</td>
+                                                                             </tr>
+                                                                         `
+                                        }
+                                    }else {
+                                        listTipoHcAlmacen.innerHTML += `
+                             <h4>Sin Registros</h4>
+                         `
+                                    }
+                                }
+                            }]
+                        });
+                    }
                     break;
                 case '9':
                     if (codHojaC=='0' && fcI=='' && fcF==''){
@@ -988,6 +1066,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });//HOJAS DE COCA
     function filtrar() {
         TipoHc.innerHTML='';
+        TipoHc.innerHTML+=`<option value="0">
+                                    Seleccionar...
+                                </option>`
         const text=formHc.value.toLowerCase();
         for(let hc of hojasC){
             let val = hc.cod_tipoHoja.toLowerCase();
@@ -998,11 +1079,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                              </option>
                         `
             }
-        }
-        if(TipoHc.innerHTML === ''){
-            TipoHc.innerHTML+= `
-                            <option value="0">Sin registro</option>
-                        `
         }
     }//FILTRAR HC POR COD.
 
@@ -1029,7 +1105,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
 
         }else if (val=='10'){
-            if (su!='0'&& fcInicio.value!=''&&fcFin.value!=''){
+            if (su!='0'){
                 btnReport.disabled=false
                 btnReport.style.visibility = 'visible'
                 btnReport.className = 'btn btn-danger'
@@ -1040,7 +1116,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 btnReport.style.visibility = 'visible'
                 btnReport.className = 'btn btn-danger'
                 btnReport.innerHTML='Descargar<span class="fas fa-fw fa-file-pdf"></span>';
-                spanACTA.innerHTML='<span style="color: red"><span class="fas fa-fw fa-exclamation-circle"></span> Acta requiere: Oficina, fecha inicio y fecha fin </span>'
+                spanACTA.innerHTML='<span style="color: #ff0000"><span class="fas fa-fw fa-exclamation-circle"></span> Acta requiere: Oficina </span>'
             }
         }
     }//BOTON REPORTE EXCEL & PDF
@@ -1058,13 +1134,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
             case '0':
                 inputDlt.style.visibility='hidden'
                 inputDlt2.style.visibility='hidden'
+                fecha1.style.visibility='hidden'
+                fecha2.style.visibility='hidden'
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3><span class="fas fa-fw fa-exclamation-circle"></span>Seleccionar reporte</h3>`
                 thTable.innerHTML=''
                 break;
             case '1':
-                inputDlt.style.visibility='visible'
-                inputDlt2.style.visibility='visible'
+                x();
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Registros Kardex</h3>`
                 thTable.innerHTML=`
@@ -1082,8 +1159,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '4':
-                inputDlt.style.visibility='visible'
-                inputDlt2.style.visibility='visible'
+                x();
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Registros de compras en oficina</h3>`
                 thTable.innerHTML=`
@@ -1099,8 +1175,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '5':
-                inputDlt.style.visibility='visible'
-                inputDlt2.style.visibility='visible'
+                x();
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Registros de demasías</h3>`
                 thTable.innerHTML=`
@@ -1115,8 +1190,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '6':
-                inputDlt.style.visibility='visible'
-                inputDlt2.style.visibility='visible'
+                x();
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Registros de decomisos</h3>`
                 thTable.innerHTML=`
@@ -1131,8 +1205,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '7':
-                inputDlt.style.visibility='visible'
-                inputDlt2.style.visibility='visible'
+                x();
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Registros de mermas</h3>`
                 thTable.innerHTML=`
@@ -1146,8 +1219,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '8':
-                inputDlt.style.visibility='hidden'
-                inputDlt2.style.visibility='hidden'
+                y();
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Movimientos de caja bóveda</h3>`
                 thTable.innerHTML=`
@@ -1163,8 +1235,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '9':
-                inputDlt.style.visibility='visible'
-                inputDlt2.style.visibility='visible'
+                x();
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Salidas por transferencia</h3>`
                 thTable.innerHTML=`
@@ -1181,12 +1252,107 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 `
                 break;
             case '10':
-                inputDlt.style.visibility='hidden'
-                inputDlt2.style.visibility='hidden'
+                z();
                 listTipoHcAlmacen.innerHTML=``
                 registrosTabla.innerHTML=`<br><h3>Acta inventario de Hoja de Coca</h3>`
                 thTable.innerHTML=``
                 break;
+        }
+        function x() {
+            inputDlt.style.visibility='visible'
+            inputDlt2.style.visibility='visible'
+
+            fecha1.style.visibility='visible'
+            fecha2.style.visibility='visible'
+
+            nombreLabel.innerHTML=`FILTRAR TIPO HOJA DE COCA:`
+            TipoHc.setAttribute("name","codHc");
+            TipoHc.innerHTML=''
+            TipoHc.innerHTML+=`<option value="0">
+                                    Seleccionar...
+                                </option>`
+            for (let hc of hojasC){
+                TipoHc.innerHTML += `
+                            <option value="${hc.cod_tipoHoja}">
+                                        <span>${hc.cod_tipoHoja}</span>---<span>${hc.nombre}</span>
+                             </option>
+                        `
+            }
+        }
+        function y() {
+            fecha1.style.visibility='visible'
+            fecha2.style.visibility='visible'
+            inputDlt.style.visibility='hidden'
+            inputDlt2.style.visibility='visible'
+            nombreLabel.innerHTML=`FILTRAR TIPO TRANSACCION`
+            TipoHc.setAttribute("name","transaccion");
+            TipoHc.innerHTML=`
+                    <select class="form-control" id="TipoHc">
+                                <option value="0">
+                                    Seleccionar...
+                                </option>
+                                <option value="1">
+                                    Ingreso
+                                </option>
+                                <option value="2">
+                                    Reembolso
+                                </option>
+                                <option value="3">
+                                    Liquidacion compra
+                                </option>
+                            </select>
+                    `
+        }
+        function z() {
+            inputDlt.style.visibility='hidden'
+            inputDlt2.style.visibility='visible'
+
+            fecha1.style.visibility='hidden'
+            fecha2.style.visibility='hidden'
+
+            nombreLabel.innerHTML=`SELECCIONAR PERIODO`
+            TipoHc.setAttribute("name","periodo");
+            TipoHc.innerHTML=`
+                    <select class="form-control" id="TipoHc">
+                                <option value="0">
+                                    Enero
+                                </option>
+                                <option value="1">
+                                    Febrero
+                                </option>
+                                <option value="2">
+                                    Marzo
+                                </option>
+                                <option value="3">
+                                    Abril
+                                </option>
+                                <option value="4">
+                                    Mayo
+                                </option>
+                                <option value="5">
+                                    Junio
+                                </option>
+                                <option value=6>
+                                    Julio
+                                </option>
+                                <option value="7">
+                                    Agosto
+                                </option>
+                                <option value="8">
+                                    Septiembre
+                                </option>
+                                <option value="9">
+                                    Octubre
+                                </option>
+                                <option value="10">
+                                    Noviembre
+                                </option>
+                                <option value="11">
+                                    Diciembre
+                                </option>
+                            </select>
+                    `
+
         }
     }//THEAD DE TABLA
 
@@ -1215,7 +1381,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     if(btnBuscarAlmacen!=null){
         btnBuscarAlmacen.addEventListener('click',registers)
-        /*
-        btnBuscarAlmacen.addEventListener('click',registros)*/
     }
 });

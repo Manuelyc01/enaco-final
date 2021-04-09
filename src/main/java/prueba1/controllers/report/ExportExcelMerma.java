@@ -9,6 +9,7 @@ import prueba1.models.Reporte;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class ExportExcelMerma {
@@ -67,12 +68,14 @@ public class ExportExcelMerma {
                 cell.setCellStyle(headerCellStyle);
 
                 cell = row.createCell(4);
-                cell.setCellValue("Cantidad Kg");
+                cell.setCellValue("Cantidad (KG)");
                 cell.setCellStyle(headerCellStyle);
 
                 for(int i = 0; i < mermas.size(); i++) {
                     Row dataRow = sheet.createRow(i + 3);
-                    dataRow.createCell(0).setCellValue(mermas.get(i).getFecha());
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    dataRow.createCell(0).setCellValue(formatter.format(mermas.get(i).getFecha()));
                     dataRow.createCell(1).setCellValue(mermas.get(i).getCod_uniOpe().getNom_uniOpe());
                     dataRow.createCell(2).setCellValue(mermas.get(i).getId_usuario().getNombre());
                     dataRow.createCell(3).setCellValue(mermas.get(i).getCod_tipoHoja().getNombre());

@@ -26,13 +26,14 @@ public interface InventarioService {
     List<Inventario> listByUni(String cod_uniOpe);
 
     //ACTA DE INVERTARIO
-    List<TipoHojaCoca> actaHojas(String inicio, String fin, String cod) throws ParseException;
+    List<TipoHojaCoca> actaHojas(Integer periodo, String cod) throws ParseException;
 
-    Double actaSaldo(String inicio, String fin, String cod, String codHc) throws ParseException;
+    Double actaSaldo(Integer periodo, String cod, String codHc) throws ParseException;
 
-    List<Ingreso> actaIngreso(String inicio, String fin, String cod, String codHc) throws ParseException;
+    List<Ingreso> actaIngreso(Integer periodo, String cod, String codHc) throws ParseException;
 
-    List<IngresoSalida> actaIngresoSalida(String inicio, String fin, String cod, String codHc) throws ParseException;
+
+    List<IngresoSalida> actaIngresoSalida(Integer periodo, String cod, String codHc) throws ParseException;
 
     void exportReport(List<ActaRegistro> actaRegistros, HttpServletResponse response) throws IOException, JRException;
 }

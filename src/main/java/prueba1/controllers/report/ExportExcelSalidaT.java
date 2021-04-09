@@ -8,6 +8,7 @@ import prueba1.models.Transferencia;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class ExportExcelSalidaT {
@@ -84,7 +85,9 @@ public class ExportExcelSalidaT {
 
                 for(int i = 0; i < transferencias.size(); i++) {
                     Row dataRow = sheet.createRow(i + 3);
-                    dataRow.createCell(0).setCellValue(transferencias.get(i).getFecha());
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    dataRow.createCell(0).setCellValue(formatter.format(transferencias.get(i).getFecha()));
                     dataRow.createCell(1).setCellValue(transferencias.get(i).getOrigen().getNom_uniOpe());
                     dataRow.createCell(2).setCellValue(transferencias.get(i).getId_usuario().getNombre());
                     dataRow.createCell(3).setCellValue(transferencias.get(i).getDestino().getNom_uniOpe());
