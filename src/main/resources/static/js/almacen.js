@@ -1106,16 +1106,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         }else if (val=='10'){
             if (su!='0'){
-                btnReport.disabled=false
-                btnReport.style.visibility = 'visible'
-                btnReport.className = 'btn btn-danger'
-                btnReport.innerHTML='Descargar<span class="fas fa-fw fa-file-pdf"></span>';
+                btnReport.disabled=true
+                btnReport.style.visibility = 'hidden'
                 spanACTA.innerHTML=''
+                spanACTA.innerHTML+=`<a class="btn btn-danger" href="/auth/reportActa/${su}/${st}">Descargar<span class="fas fa-fw fa-file-pdf"></span></a>`
             }else {
                 btnReport.disabled=true
-                btnReport.style.visibility = 'visible'
-                btnReport.className = 'btn btn-danger'
-                btnReport.innerHTML='Descargar<span class="fas fa-fw fa-file-pdf"></span>';
+                btnReport.style.visibility = 'hidden'
                 spanACTA.innerHTML='<span style="color: #ff0000"><span class="fas fa-fw fa-exclamation-circle"></span> Acta requiere: Oficina </span>'
             }
         }

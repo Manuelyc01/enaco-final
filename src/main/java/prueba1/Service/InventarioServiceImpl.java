@@ -198,6 +198,7 @@ public class InventarioServiceImpl implements InventarioService{
     @Override
     public void exportReport(List<ActaRegistro> actaRegistros, HttpServletResponse response) throws IOException, JRException {
 
+        response.setContentType("text/html");
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource( actaRegistros);
 
         InputStream jrmxmlInput=this.getClass().getResourceAsStream("/report/pruebaActa.jrxml");
@@ -213,7 +214,7 @@ public class InventarioServiceImpl implements InventarioService{
 
         response.setContentType("application/pdf");
         response.setHeader("Content-Length",String.valueOf(pdfReportStream.size()));
-        response.addHeader("Content-Disposition","inline; filename=ACTA");
+        response.addHeader("Content-Disposition","inline; filename=ACTA.pdf;");
 
         OutputStream responseOutputStream = response.getOutputStream();
         responseOutputStream.write(pdfReportStream.toByteArray());

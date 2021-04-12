@@ -73,11 +73,11 @@ public class ExportExcelCajaBoveda {
                 cell.setCellStyle(headerCellStyle);
 
                 cell = row.createCell(5);
-                cell.setCellValue("Saldo Inicial");
+                cell.setCellValue("Saldo Inicial ( S/ )");
                 cell.setCellStyle(headerCellStyle);
 
                 cell = row.createCell(6);
-                cell.setCellValue("Saldo Final");
+                cell.setCellValue("Saldo Final ( S/ )");
                 cell.setCellStyle(headerCellStyle);
 
                 for(int i = 0; i < cajaBovedas  .size(); i++) {

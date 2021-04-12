@@ -771,7 +771,7 @@ public class privateController {
         return "menu";
     }
 
-    //REPORTES
+    //REPORTES EXCEL//
     @PostMapping("/download/reporte")
     public void downloadCsv(Reporte reporte,HttpServletResponse response,Authentication auth) throws IOException, ParseException, JRException {
         switch (reporte.getCodRep()){
@@ -817,27 +817,19 @@ public class privateController {
                 stream = ExportExcelSalidaT.listToExcelFile(reporteTransferencia(reporte),reporte);
                 IOUtils.copy(stream, response.getOutputStream());
                 break;
-            case 10:
-                inventarioService.exportReport(reporteActaRegistro(reporte,auth),response);
-                break;
 
         }
     }
-    //REPORTE LISTAS//
-    public List<Inventario> reporteInventario(Reporte reporte) throws ParseException {
-        List<Inventario> inventarios= new ArrayList<>();
-        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
-            inventarios =inventarioService.listByUni(reporte.getCodUni().getCod_uniOpe());
-        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
-            inventarios =inventarioService.registrosFechaAlmacen(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
-        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD y TIPO HC
-            inventarios=inventarioService.listByProductAlmacen(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
-        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD, TIPO HC y FECHAS
-            inventarios=inventarioService.registrosFechaAlmacenHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
-        }
-        return inventarios;
+    //REPORTE PDF ACTA//
+    @GetMapping("/auth/reportActa/{cod}/{period}")
+    public void generarACTA(@PathVariable String cod,@PathVariable Integer period, HttpServletResponse response,Authentication auth) throws IOException, JRException, ParseException {
+        inventarioService.exportReport(reporteActaRegistro(cod,period,auth),response);
     }
-    public List<ActaRegistro> reporteActaRegistro(Reporte reporte,Authentication auth) throws ParseException {
+    public List<ActaRegistro> reporteActaRegistro(String cod,Integer per,Authentication auth) throws ParseException {
+        Reporte reporte=new Reporte();
+        UnidadOperativa uni = unidadOpeService.findByCod(cod);
+        reporte.setCodUni(uni);
+        reporte.setPeriodo(per);
         List<ActaRegistro> actaRegistros=new ArrayList<>();
 
         List<TipoHojaCoca> tipoHojaCocas = inventarioService.actaHojas(reporte.getPeriodo(), reporte.getCodUni().getCod_uniOpe());//HOJAS DE COCA
@@ -919,6 +911,20 @@ public class privateController {
             actaRegistros.get(0).setFechaFin(year);
         }
         return actaRegistros;
+    }
+
+    public List<Inventario> reporteInventario(Reporte reporte) throws ParseException {
+        List<Inventario> inventarios= new ArrayList<>();
+        if (reporte.getCodHc()==null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD
+            inventarios =inventarioService.listByUni(reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()==null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD y FECHA
+            inventarios =inventarioService.registrosFechaAlmacen(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()=="" && reporte.getFcFin()=="" && reporte.getCodUni()!=null){//POR UNIDAD y TIPO HC
+            inventarios=inventarioService.listByProductAlmacen(reporte.getCodHc().getCod_tipoHoja(),reporte.getCodUni().getCod_uniOpe());
+        }else if (reporte.getCodHc()!=null && reporte.getFcInicio()!="" && reporte.getFcFin()!="" && reporte.getCodUni()!=null){//POR UNIDAD, TIPO HC y FECHAS
+            inventarios=inventarioService.registrosFechaAlmacenHc(reporte.getFcInicio(),reporte.getFcFin(),reporte.getCodUni().getCod_uniOpe(),reporte.getCodHc().getCod_tipoHoja());
+        }
+        return inventarios;
     }
     public List<Compra> reporteCompra(Reporte reporte) throws ParseException {
         List<Compra> compras=new ArrayList<>();
